@@ -1,0 +1,213 @@
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  margin:0;
+  background:#f4f7fb;
+  color:#222;
+}
+
+header{
+  background:#1565c0;
+  color:white;
+  padding:18px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+h1{
+  margin:0;
+}
+
+header p{
+  margin:5px 0 0;
+}
+
+header button{
+  background:white;
+  color:#1565c0;
+  border:0;
+  padding:9px 13px;
+  border-radius:9px;
+}
+
+main{
+  max-width:650px;
+  margin:auto;
+  padding:15px;
+}
+
+.card{
+  background:white;
+  padding:18px;
+  margin-bottom:15px;
+  border-radius:16px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.balance-card{
+  text-align:center;
+}
+
+.balance-card h2{
+  font-size:35px;
+  color:#1565c0;
+}
+
+.summary{
+  display:flex;
+  gap:10px;
+}
+
+.summary div{
+  flex:1;
+  background:#f5f7fa;
+  padding:14px;
+  border-radius:12px;
+}
+
+.summary span,
+.summary strong{
+  display:block;
+}
+
+.income{
+  color:#159447;
+}
+
+.expense{
+  color:#d32f2f;
+}
+
+input,
+select,
+button{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+
+button{
+  border:0;
+  font-weight:bold;
+}
+
+.primary{
+  background:#1565c0;
+  color:white;
+}
+
+.incomeBtn{
+  background:#159447;
+  color:white;
+}
+
+.expenseBtn{
+  background:#d32f2f;
+  color:white;
+}
+
+.paytm{
+  background:#00a86b;
+  color:white;
+}
+
+.phonepe{
+  background:#6739b7;
+  color:white;
+}
+
+.secondary{
+  background:#555;
+  color:white;
+}
+
+.myqr{
+  width:220px;
+  max-width:100%;
+  display:block;
+  margin:15px auto;
+  border-radius:12px;
+}
+
+#reader{
+  margin-top:15px;
+}
+
+.shopBox{
+  background:#f1f8ff;
+  padding:15px;
+  border-radius:12px;
+  margin-top:15px;
+}
+
+.hidden{
+  display:none;
+}
+
+.muted{
+  color:#666;
+  font-size:14px;
+}
+
+.categoryGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.categoryGrid div{
+  background:#f5f7fa;
+  padding:14px;
+  border-radius:10px;
+}
+
+.categoryGrid b{
+  display:block;
+  margin-top:5px;
+}
+
+.transaction{
+  padding:14px 5px;
+  border-bottom:1px solid #eee;
+}
+
+.transaction:last-child{
+  border-bottom:0;
+}
+
+.transaction .amount{
+  float:right;
+  font-weight:bold;
+}
+
+.incomeAmount{
+  color:#159447;
+}
+
+.expenseAmount{
+  color:#d32f2f;
+}
+
+.date{
+  display:block;
+  color:#777;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.reportRow{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
