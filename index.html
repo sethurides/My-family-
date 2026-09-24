@@ -2,350 +2,945 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <meta name="theme-color" content="#1565c0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <meta
+    name="description"
+    content="My Money - Income, Expenses, UPI Payments and Reports"
+  >
 
   <title>My Money</title>
 
-  <meta name="theme-color" content="#1565c0">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- QR Scanner -->
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
 </head>
 
 <body>
 
-<header>
-  <div class="topbar">
+  <!-- ================= HEADER ================= -->
+
+  <header class="app-header">
+
     <div>
-      <h1>My Money</h1>
-      <p>Income & Expenses</p>
+      <h1>💰 My Money</h1>
+      <p id="headerSubtitle">Income & Expenses</p>
     </div>
 
-    <button onclick="toggleLanguage()" id="languageBtn">
+    <button
+      class="language-btn"
+      id="languageBtn"
+      onclick="toggleLanguage()"
+    >
       తెలుగు
     </button>
-  </div>
-</header>
+
+  </header>
 
 
-<main>
+  <!-- ================= MAIN ================= -->
 
-  <!-- BALANCE -->
-
-  <section class="card balance-card">
-
-    <p id="balanceLabel">Total Balance</p>
-
-    <h2>₹<span id="totalBalance">0</span></h2>
-
-    <div class="summary">
-
-      <div>
-        <span id="incomeLabel">Income</span>
-        <strong class="income">
-          ₹<span id="totalIncome">0</span>
-        </strong>
-      </div>
-
-      <div>
-        <span id="expenseLabel">Expenses</span>
-        <strong class="expense">
-          ₹<span id="totalExpense">0</span>
-        </strong>
-      </div>
-
-    </div>
-
-  </section>
+  <main class="container">
 
 
-  <!-- RECEIVE MONEY -->
+    <!-- ================= INSTALL APP ================= -->
 
-  <section class="card">
+    <section class="card install-card" id="installBox">
 
-    <h2>💰 <span id="receiveTitle">Receive Money</span></h2>
+      <h2>📲 Install My Money</h2>
 
-    <p class="muted">
-      Show your QR and receive money directly to your UPI-linked bank account.
-    </p>
-
-    <img
-      src="my-qr.png"
-      class="myqr"
-      alt="My UPI QR">
-
-    <button
-      class="primary"
-      onclick="showReceiveQR()">
-
-      📱 Show My QR
-
-    </button>
-
-  </section>
-
-
-  <!-- INCOME -->
-
-  <section class="card">
-
-    <h2>➕ <span id="incomeTitle">Add Income</span></h2>
-
-    <select id="incomeType">
-
-      <option value="upi">QR / UPI Income</option>
-
-      <option value="cash">Cash Income</option>
-
-      <option value="other">Other Income</option>
-
-    </select>
-
-    <input
-      id="incomeAmount"
-      type="number"
-      inputmode="decimal"
-      placeholder="Amount ₹">
-
-    <input
-      id="incomeNote"
-      type="text"
-      placeholder="Income note">
-
-    <button
-      class="incomeBtn"
-      onclick="addIncome()">
-
-      Add Income
-
-    </button>
-
-  </section>
-
-
-  <!-- PAY SHOP -->
-
-  <section class="card">
-
-    <h2>📷 <span id="paymentTitle">Pay Shop</span></h2>
-
-    <p class="muted">
-      Scan shop UPI QR and pay using a UPI app.
-    </p>
-
-    <button
-      class="primary"
-      onclick="startScanner()">
-
-      📷 Scan Shop QR
-
-    </button>
-
-    <div id="reader"></div>
-
-    <div
-      id="shopBox"
-      class="shopBox hidden">
-
-      <p>
-        <b>Shop:</b>
-        <span id="shopName"></span>
+      <p class="muted">
+        Install the app on your phone for quick access.
       </p>
 
-      <p>
-        <b>UPI:</b>
-        <span id="shopUPI"></span>
+      <button
+        class="primary"
+        id="installBtn"
+        onclick="installApp()"
+      >
+        📲 Install App
+      </button>
+
+    </section>
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <section class="dashboard-grid">
+
+      <div class="balance-card">
+
+        <span id="balanceLabel">
+          Current Balance
+        </span>
+
+        <strong id="balance">
+          ₹0.00
+        </strong>
+
+      </div>
+
+
+      <div class="income-card">
+
+        <span id="incomeLabel">
+          Total Income
+        </span>
+
+        <strong id="totalIncome">
+          ₹0.00
+        </strong>
+
+      </div>
+
+
+      <div class="expense-card">
+
+        <span id="expenseLabel">
+          Total Expenses
+        </span>
+
+        <strong id="totalExpense">
+          ₹0.00
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= RECEIVE MONEY ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>📥 Receive Money</h2>
+
+      </div>
+
+      <p class="muted">
+        Scan this QR to send money to your bank account.
       </p>
 
-      <input
-        id="expenseAmount"
-        type="number"
-        inputmode="decimal"
-        placeholder="Amount ₹">
 
-      <select id="expenseCategory">
+      <div class="my-qr-box">
 
-        <option value="Food">🍔 Food</option>
+        <img
+          src="./my-qr.png"
+          alt="My UPI QR Code"
+          class="my-qr"
+          id="myQrImage"
+        >
 
-        <option value="Travel">🚕 Travel</option>
+      </div>
 
-        <option value="Shopping">🛍️ Shopping</option>
 
-        <option value="Bills">💡 Bills</option>
-
-        <option value="Education">🎓 Education</option>
-
-        <option value="Medical">🏥 Medical</option>
-
-        <option value="Groceries">🛒 Groceries</option>
-
-        <option value="Recharge">📱 Recharge</option>
-
-        <option value="Other">📦 Other</option>
-
-      </select>
-
-      <button
-        class="paytm"
-        onclick="payByUPI('paytm')">
-
-        Pay with Paytm
-
-      </button>
-
-      <button
-        class="phonepe"
-        onclick="payByUPI('phonepe')">
-
-        Pay with PhonePe
-
-      </button>
+      <p class="qr-note">
+        💡 Money received through this QR goes to your
+        UPI-linked bank account.
+      </p>
 
       <button
         class="secondary"
-        onclick="closeShop()">
-
-        Close
-
+        onclick="openMyQR()"
+      >
+        🔍 View QR
       </button>
 
+    </section>
+
+
+    <!-- ================= ADD INCOME ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>➕ Add Income</h2>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="incomeAmount">
+          Amount (₹)
+        </label>
+
+        <input
+          type="number"
+          id="incomeAmount"
+          placeholder="Enter amount"
+          min="0"
+          step="0.01"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="incomeType">
+          Income Type
+        </label>
+
+        <select id="incomeType">
+
+          <option value="UPI">
+            UPI / QR Received
+          </option>
+
+          <option value="Cash">
+            Cash
+          </option>
+
+          <option value="Other Income">
+            Other Income
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="incomeNote">
+          Note
+        </label>
+
+        <input
+          type="text"
+          id="incomeNote"
+          placeholder="Example: Salary, customer payment"
+          maxlength="100"
+        >
+
+      </div>
+
+
+      <button
+        class="primary full-btn"
+        onclick="addIncome()"
+      >
+        ➕ Add Income
+      </button>
+
+    </section>
+
+
+    <!-- ================= SHOP QR PAYMENT ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>📷 Pay Shop by QR</h2>
+
+      </div>
+
+      <p class="muted">
+        Scan the shop's UPI QR code.
+      </p>
+
+
+      <!-- Scanner -->
+
+      <div
+        id="qr-reader"
+        class="qr-reader"
+      ></div>
+
+
+      <button
+        class="primary full-btn"
+        id="startScannerBtn"
+        onclick="startQRScanner()"
+      >
+        📷 Scan Shop QR
+      </button>
+
+
+      <button
+        class="secondary full-btn hidden"
+        id="stopScannerBtn"
+        onclick="stopQRScanner()"
+      >
+        ⛔ Stop Scanner
+      </button>
+
+
+      <!-- Shop Details -->
+
+      <div
+        id="shopDetails"
+        class="shop-details hidden"
+      >
+
+        <h3>🏪 Shop Details</h3>
+
+
+        <div class="detail-row">
+
+          <span>Shop Name</span>
+
+          <strong id="shopName">
+            -
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>UPI ID</span>
+
+          <strong id="shopUpi">
+            -
+          </strong>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>Detected Category</span>
+
+          <strong id="detectedCategory">
+            Other
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- Payment Amount -->
+
+      <div
+        id="paymentForm"
+        class="hidden"
+      >
+
+        <div class="form-group">
+
+          <label for="expenseAmount">
+            Amount (₹)
+          </label>
+
+          <input
+            type="number"
+            id="expenseAmount"
+            placeholder="Enter amount"
+            min="1"
+            step="0.01"
+            inputmode="decimal"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="expenseCategory">
+            Category
+          </label>
+
+          <select id="expenseCategory">
+
+            <option value="Auto">
+              🤖 Auto Detect
+            </option>
+
+            <option value="Food">
+              🍔 Food
+            </option>
+
+            <option value="Travel">
+              🚗 Travel
+            </option>
+
+            <option value="Shopping">
+              🛍️ Shopping
+            </option>
+
+            <option value="Bills">
+              💡 Bills
+            </option>
+
+            <option value="Education">
+              🎓 Education
+            </option>
+
+            <option value="Medical">
+              🏥 Medical
+            </option>
+
+            <option value="Groceries">
+              🛒 Groceries
+            </option>
+
+            <option value="Recharge">
+              📱 Recharge
+            </option>
+
+            <option value="Other">
+              📦 Other
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="paymentNote">
+            Note
+          </label>
+
+          <input
+            type="text"
+            id="paymentNote"
+            placeholder="Optional note"
+            maxlength="100"
+          >
+
+        </div>
+
+
+        <div class="payment-buttons">
+
+          <button
+            class="paytm-btn"
+            onclick="payByUPI('paytm')"
+          >
+            💙 Pay with Paytm
+          </button>
+
+
+          <button
+            class="phonepe-btn"
+            onclick="payByUPI('phonepe')"
+          >
+            💜 Pay with PhonePe
+          </button>
+
+        </div>
+
+
+        <button
+          class="secondary full-btn"
+          onclick="saveShopExpenseWithoutPayment()"
+        >
+          💾 Save Expense Only
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= MANUAL EXPENSE ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>💸 Add Expense</h2>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="manualExpenseAmount">
+          Amount (₹)
+        </label>
+
+        <input
+          type="number"
+          id="manualExpenseAmount"
+          placeholder="Enter amount"
+          min="1"
+          step="0.01"
+          inputmode="decimal"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="manualExpenseCategory">
+          Category
+        </label>
+
+        <select id="manualExpenseCategory">
+
+          <option value="Food">
+            🍔 Food
+          </option>
+
+          <option value="Travel">
+            🚗 Travel
+          </option>
+
+          <option value="Shopping">
+            🛍️ Shopping
+          </option>
+
+          <option value="Bills">
+            💡 Bills
+          </option>
+
+          <option value="Education">
+            🎓 Education
+          </option>
+
+          <option value="Medical">
+            🏥 Medical
+          </option>
+
+          <option value="Groceries">
+            🛒 Groceries
+          </option>
+
+          <option value="Recharge">
+            📱 Recharge
+          </option>
+
+          <option value="Other">
+            📦 Other
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="manualExpenseNote">
+          Description
+        </label>
+
+        <input
+          type="text"
+          id="manualExpenseNote"
+          placeholder="Example: Vegetables, electricity bill"
+          maxlength="100"
+        >
+
+      </div>
+
+
+      <button
+        class="primary full-btn"
+        onclick="addManualExpense()"
+      >
+        💸 Add Expense
+      </button>
+
+    </section>
+
+
+    <!-- ================= CATEGORY TOTALS ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>📊 Category-wise Expenses</h2>
+
+      </div>
+
+
+      <div class="category-grid">
+
+        <div class="category-box">
+
+          <span>🍔</span>
+
+          <small>Food</small>
+
+          <strong id="catFood">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>🚗</span>
+
+          <small>Travel</small>
+
+          <strong id="catTravel">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>🛍️</span>
+
+          <small>Shopping</small>
+
+          <strong id="catShopping">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>💡</span>
+
+          <small>Bills</small>
+
+          <strong id="catBills">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>🎓</span>
+
+          <small>Education</small>
+
+          <strong id="catEducation">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>🏥</span>
+
+          <small>Medical</small>
+
+          <strong id="catMedical">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>🛒</span>
+
+          <small>Groceries</small>
+
+          <strong id="catGroceries">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>📱</span>
+
+          <small>Recharge</small>
+
+          <strong id="catRecharge">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="category-box">
+
+          <span>📦</span>
+
+          <small>Other</small>
+
+          <strong id="catOther">
+            ₹0.00
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= REPORTS ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>📈 Reports</h2>
+
+      </div>
+
+
+      <div class="report-buttons">
+
+        <button
+          class="report-btn active"
+          onclick="generateReport('date', this)"
+        >
+          📅 Date
+        </button>
+
+
+        <button
+          class="report-btn"
+          onclick="generateReport('week', this)"
+        >
+          📆 Weekly
+        </button>
+
+
+        <button
+          class="report-btn"
+          onclick="generateReport('month', this)"
+        >
+          🗓️ Monthly
+        </button>
+
+
+        <button
+          class="report-btn"
+          onclick="generateReport('year', this)"
+        >
+          📊 Yearly
+        </button>
+
+      </div>
+
+
+      <div
+        id="dateReportBox"
+        class="date-report-box"
+      >
+
+        <label for="reportDate">
+          Select Date
+        </label>
+
+        <input
+          type="date"
+          id="reportDate"
+        >
+
+      </div>
+
+
+      <div
+        id="reportResult"
+        class="report-result"
+      >
+
+        <div class="report-row">
+
+          <span>Total Income</span>
+
+          <strong id="reportIncome">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="report-row">
+
+          <span>Total Expenses</span>
+
+          <strong id="reportExpense">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <div class="report-row">
+
+          <span>Remaining Balance</span>
+
+          <strong id="reportBalance">
+            ₹0.00
+          </strong>
+
+        </div>
+
+
+        <h3>
+          Category Breakdown
+        </h3>
+
+
+        <div id="reportCategories">
+
+          <p class="muted">
+            No transactions found.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= TRANSACTION HISTORY ================= -->
+
+    <section class="card">
+
+      <div class="section-title">
+
+        <h2>🧾 Transaction History</h2>
+
+        <button
+          class="small-btn"
+          onclick="clearAllTransactions()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+
+      <div id="transactionList">
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            💰
+          </div>
+
+          <p>
+            No transactions yet.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- ================= QR MODAL ================= -->
+
+  <div
+    id="qrModal"
+    class="modal hidden"
+  >
+
+    <div class="modal-content">
+
+      <button
+        class="close-btn"
+        onclick="closeMyQR()"
+      >
+        ✕
+      </button>
+
+      <h2>
+        📥 My Payment QR
+      </h2>
+
+      <img
+        src="./my-qr.png"
+        alt="My UPI QR"
+        class="modal-qr"
+      >
+
+      <p class="muted">
+        Scan this QR to send money.
+      </p>
+
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- MANUAL EXPENSE -->
+  <!-- ================= FOOTER ================= -->
 
-  <section class="card">
+  <footer>
 
-    <h2>➖ Add Expense</h2>
+    <p>
+      My Money • Income & Expenses
+    </p>
 
-    <input
-      id="manualExpenseAmount"
-      type="number"
-      inputmode="decimal"
-      placeholder="Amount ₹">
+    <p class="muted">
+      Your transactions are stored on this device.
+    </p>
 
-    <select id="manualCategory">
-
-      <option value="Food">🍔 Food</option>
-      <option value="Travel">🚕 Travel</option>
-      <option value="Shopping">🛍️ Shopping</option>
-      <option value="Bills">💡 Bills</option>
-      <option value="Education">🎓 Education</option>
-      <option value="Medical">🏥 Medical</option>
-      <option value="Groceries">🛒 Groceries</option>
-      <option value="Recharge">📱 Recharge</option>
-      <option value="Other">📦 Other</option>
-
-    </select>
-
-    <input
-      id="manualExpenseNote"
-      type="text"
-      placeholder="Expense note">
-
-    <button
-      class="expenseBtn"
-      onclick="addManualExpense()">
-
-      Add Expense
-
-    </button>
-
-  </section>
+  </footer>
 
 
-  <!-- TOTAL PAYMENT -->
+  <!-- ================= APP JS ================= -->
 
-  <section class="card">
-
-    <h2>📊 Total Payment</h2>
-
-    <div class="categoryGrid">
-
-      <div>
-        Food
-        <b>₹<span id="catFood">0</span></b>
-      </div>
-
-      <div>
-        Travel
-        <b>₹<span id="catTravel">0</span></b>
-      </div>
-
-      <div>
-        Shopping
-        <b>₹<span id="catShopping">0</span></b>
-      </div>
-
-      <div>
-        Bills
-        <b>₹<span id="catBills">0</span></b>
-      </div>
-
-      <div>
-        Education
-        <b>₹<span id="catEducation">0</span></b>
-      </div>
-
-      <div>
-        Medical
-        <b>₹<span id="catMedical">0</span></b>
-      </div>
-
-      <div>
-        Groceries
-        <b>₹<span id="catGroceries">0</span></b>
-      </div>
-
-      <div>
-        Other
-        <b>₹<span id="catOther">0</span></b>
-      </div>
-
-    </div>
-
-  </section>
+  <script src="./app.js"></script>
 
 
-  <!-- REPORTS -->
+  <!-- ================= SERVICE WORKER ================= -->
 
-  <section class="card">
+  <script>
 
-    <h2>📈 Reports</h2>
+    if ("serviceWorker" in navigator) {
 
-    <select id="reportPeriod" onchange="generateReport()">
+      window.addEventListener("load", function () {
 
-      <option value="all">All Time</option>
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(function () {
 
-      <option value="today">Today</option>
+            console.log("Service Worker registered");
 
-      <option value="month">This Month</option>
+          })
+          .catch(function (error) {
 
-      <option value="year">This Year</option>
+            console.log(
+              "Service Worker registration failed:",
+              error
+            );
 
-    </select>
+          });
 
-    <div id="report"></div>
+      });
 
-  </section>
+    }
 
-
-  <!-- HISTORY -->
-
-  <section class="card">
-
-    <h2>🧾 Transaction History</h2>
-
-    <div id="history"></div>
-
-  </section>
-
-</main>
-
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="app.js"></script>
+  </script>
 
 </body>
 </html>
