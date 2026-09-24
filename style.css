@@ -1,213 +1,1050 @@
-*{
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
+/* =====================================================
+   MY MONEY - INCOME & EXPENSES
+   COMPLETE PWA STYLESHEET
+   ===================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body{
-  margin:0;
-  background:#f4f7fb;
-  color:#222;
+html {
+  scroll-behavior: smooth;
 }
 
-header{
-  background:#1565c0;
-  color:white;
-  padding:18px;
+body {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #f4f7fb;
+  color: #172033;
+
+  min-height: 100vh;
+
+  line-height: 1.5;
 }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+
+  background: #1565c0;
+  color: white;
+
+  padding: 15px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
-h1{
-  margin:0;
+.app-header h1 {
+  font-size: 23px;
+  font-weight: 700;
 }
 
-header p{
-  margin:5px 0 0;
+.app-header p {
+  font-size: 13px;
+  opacity: 0.9;
 }
 
-header button{
-  background:white;
-  color:#1565c0;
-  border:0;
-  padding:9px 13px;
-  border-radius:9px;
+.language-btn {
+  border: none;
+  background: white;
+  color: #1565c0;
+
+  padding: 9px 13px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
-main{
-  max-width:650px;
-  margin:auto;
-  padding:15px;
+.language-btn:active {
+  transform: scale(0.96);
 }
 
-.card{
-  background:white;
-  padding:18px;
-  margin-bottom:15px;
-  border-radius:16px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+/* =====================================================
+   MAIN CONTAINER
+   ===================================================== */
+
+.container {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+
+  padding: 14px;
 }
 
-.balance-card{
-  text-align:center;
+/* =====================================================
+   CARDS
+   ===================================================== */
+
+.card {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 17px;
+
+  margin-bottom: 16px;
+
+  box-shadow:
+    0 4px 16px rgba(21, 101, 192, 0.08);
+
+  border: 1px solid #e7edf5;
 }
 
-.balance-card h2{
-  font-size:35px;
-  color:#1565c0;
+.card h2 {
+  font-size: 18px;
+  color: #172033;
+
+  margin-bottom: 8px;
 }
 
-.summary{
-  display:flex;
-  gap:10px;
+.card h3 {
+  font-size: 15px;
+  margin-top: 18px;
+  margin-bottom: 10px;
 }
 
-.summary div{
-  flex:1;
-  background:#f5f7fa;
-  padding:14px;
-  border-radius:12px;
+.section-title {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 12px;
 }
 
-.summary span,
-.summary strong{
-  display:block;
+.section-title h2 {
+  margin-bottom: 0;
 }
 
-.income{
-  color:#159447;
+/* =====================================================
+   MUTED TEXT
+   ===================================================== */
+
+.muted {
+  color: #718096;
+
+  font-size: 13px;
 }
 
-.expense{
-  color:#d32f2f;
+/* =====================================================
+   INSTALL CARD
+   ===================================================== */
+
+.install-card {
+  background: linear-gradient(
+    135deg,
+    #e3f2fd,
+    #ffffff
+  );
+
+  border: 1px solid #bbdefb;
+}
+
+.install-card h2 {
+  color: #1565c0;
+}
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+.balance-card,
+.income-card,
+.expense-card {
+  border-radius: 18px;
+
+  padding: 18px;
+
+  min-height: 105px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.balance-card {
+  background: linear-gradient(
+    135deg,
+    #1565c0,
+    #1976d2
+  );
+
+  color: white;
+
+  box-shadow:
+    0 6px 18px rgba(21, 101, 192, 0.25);
+}
+
+.income-card {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.expense-card {
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.balance-card span,
+.income-card span,
+.expense-card span {
+  font-size: 13px;
+
+  opacity: 0.9;
+
+  margin-bottom: 5px;
+}
+
+.balance-card strong,
+.income-card strong,
+.expense-card strong {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   FORM ELEMENTS
+   ===================================================== */
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #39455a;
+
+  margin-bottom: 6px;
 }
 
 input,
-select,
-button{
-  width:100%;
-  padding:13px;
-  margin-top:10px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  font-size:16px;
+select {
+  width: 100%;
+
+  min-height: 48px;
+
+  border: 1px solid #d7dfeb;
+
+  background: #fff;
+
+  color: #172033;
+
+  border-radius: 12px;
+
+  padding: 12px 13px;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-button{
-  border:0;
-  font-weight:bold;
+input:focus,
+select:focus {
+  border-color: #1565c0;
+
+  box-shadow:
+    0 0 0 3px rgba(21, 101, 192, 0.10);
 }
 
-.primary{
-  background:#1565c0;
-  color:white;
+input::placeholder {
+  color: #9aa6b5;
 }
 
-.incomeBtn{
-  background:#159447;
-  color:white;
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+button {
+  font-family: inherit;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
-.expenseBtn{
-  background:#d32f2f;
-  color:white;
+.primary,
+.secondary,
+.paytm-btn,
+.phonepe-btn {
+  width: 100%;
+
+  min-height: 48px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 12px 15px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.15s,
+    opacity 0.15s,
+    box-shadow 0.15s;
 }
 
-.paytm{
-  background:#00a86b;
-  color:white;
+.primary {
+  background: #1565c0;
+  color: white;
+
+  box-shadow:
+    0 4px 10px rgba(21, 101, 192, 0.18);
 }
 
-.phonepe{
-  background:#6739b7;
-  color:white;
+.secondary {
+  background: #edf3f9;
+  color: #1565c0;
 }
 
-.secondary{
-  background:#555;
-  color:white;
+.full-btn {
+  margin-top: 5px;
 }
 
-.myqr{
-  width:220px;
-  max-width:100%;
-  display:block;
-  margin:15px auto;
-  border-radius:12px;
+.primary:active,
+.secondary:active,
+.paytm-btn:active,
+.phonepe-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
-#reader{
-  margin-top:15px;
+/* =====================================================
+   QR SECTION
+   ===================================================== */
+
+.my-qr-box {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  background: #f8fafc;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  margin: 12px 0;
 }
 
-.shopBox{
-  background:#f1f8ff;
-  padding:15px;
-  border-radius:12px;
-  margin-top:15px;
+.my-qr {
+  width: min(270px, 80vw);
+  height: min(270px, 80vw);
+
+  object-fit: contain;
+
+  background: white;
+
+  border-radius: 10px;
+
+  border: 1px solid #e2e8f0;
 }
 
-.hidden{
-  display:none;
+.qr-note {
+  font-size: 12px;
+
+  color: #5d6879;
+
+  text-align: center;
+
+  margin-bottom: 12px;
 }
 
-.muted{
-  color:#666;
-  font-size:14px;
+/* =====================================================
+   QR SCANNER
+   ===================================================== */
+
+.qr-reader {
+  width: 100%;
+
+  min-height: 0;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  margin-bottom: 10px;
+
+  background: #101820;
 }
 
-.categoryGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.qr-reader video {
+  width: 100% !important;
+
+  border-radius: 14px;
 }
 
-.categoryGrid div{
-  background:#f5f7fa;
-  padding:14px;
-  border-radius:10px;
+.qr-reader img {
+  max-width: 100%;
 }
 
-.categoryGrid b{
-  display:block;
-  margin-top:5px;
+#qr-reader__dashboard_section {
+  padding: 8px !important;
 }
 
-.transaction{
-  padding:14px 5px;
-  border-bottom:1px solid #eee;
+#qr-reader__dashboard_section_csr {
+  display: none !important;
 }
 
-.transaction:last-child{
-  border-bottom:0;
+#qr-reader__dashboard_section_swaplink {
+  color: #1565c0 !important;
 }
 
-.transaction .amount{
-  float:right;
-  font-weight:bold;
+#qr-reader__camera_selection {
+  width: 100% !important;
+
+  min-height: 42px !important;
+
+  margin-bottom: 8px !important;
 }
 
-.incomeAmount{
-  color:#159447;
+/* =====================================================
+   SHOP DETAILS
+   ===================================================== */
+
+.shop-details {
+  background: #f8fbff;
+
+  border: 1px solid #dce9f7;
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  margin-top: 14px;
+
+  margin-bottom: 14px;
 }
 
-.expenseAmount{
-  color:#d32f2f;
+.shop-details h3 {
+  margin: 0 0 10px;
+
+  color: #1565c0;
 }
 
-.date{
-  display:block;
-  color:#777;
-  font-size:12px;
-  margin-top:5px;
+.detail-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 15px;
+
+  padding: 9px 0;
+
+  border-bottom: 1px solid #e7edf5;
 }
 
-.reportRow{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid #eee;
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span {
+  color: #687589;
+
+  font-size: 13px;
+}
+
+.detail-row strong {
+  color: #172033;
+
+  font-size: 13px;
+
+  text-align: right;
+
+  max-width: 60%;
+
+  word-break: break-word;
+}
+
+/* =====================================================
+   PAYMENT BUTTONS
+   ===================================================== */
+
+.payment-buttons {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 10px;
+
+  margin: 14px 0;
+}
+
+.paytm-btn {
+  background: #00a9e8;
+  color: white;
+
+  box-shadow:
+    0 4px 10px rgba(0, 169, 232, 0.18);
+}
+
+.phonepe-btn {
+  background: #5f259f;
+  color: white;
+
+  box-shadow:
+    0 4px 10px rgba(95, 37, 159, 0.18);
+}
+
+/* =====================================================
+   CATEGORY GRID
+   ===================================================== */
+
+.category-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+}
+
+.category-box {
+  background: #f8fafc;
+
+  border: 1px solid #e5ebf2;
+
+  border-radius: 14px;
+
+  min-height: 110px;
+
+  padding: 12px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+.category-box span {
+  font-size: 25px;
+
+  margin-bottom: 3px;
+}
+
+.category-box small {
+  font-size: 12px;
+
+  color: #687589;
+
+  margin-bottom: 3px;
+}
+
+.category-box strong {
+  font-size: 14px;
+
+  color: #172033;
+}
+
+/* =====================================================
+   REPORT BUTTONS
+   ===================================================== */
+
+.report-buttons {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+.report-btn {
+  border: 1px solid #dbe4ee;
+
+  background: #f8fafc;
+
+  color: #4b5a6d;
+
+  border-radius: 10px;
+
+  padding: 11px 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.report-btn.active {
+  background: #1565c0;
+
+  border-color: #1565c0;
+
+  color: white;
+}
+
+.date-report-box {
+  background: #f8fafc;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  margin-bottom: 14px;
+}
+
+.date-report-box label {
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  margin-bottom: 6px;
+
+  color: #536174;
+}
+
+/* =====================================================
+   REPORT RESULT
+   ===================================================== */
+
+.report-result {
+  border-top: 1px solid #e5ebf2;
+
+  padding-top: 8px;
+}
+
+.report-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid #edf1f5;
+}
+
+.report-row span {
+  font-size: 13px;
+
+  color: #657286;
+}
+
+.report-row strong {
+  font-size: 15px;
+
+  color: #172033;
+}
+
+#reportIncome {
+  color: #1b7f36;
+}
+
+#reportExpense {
+  color: #c62828;
+}
+
+#reportBalance {
+  color: #1565c0;
+}
+
+.report-category-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 9px 0;
+
+  border-bottom: 1px solid #edf1f5;
+
+  font-size: 13px;
+}
+
+.report-category-row span {
+  color: #566477;
+}
+
+.report-category-row strong {
+  color: #172033;
+}
+
+/* =====================================================
+   TRANSACTION HISTORY
+   ===================================================== */
+
+.small-btn {
+  border: none;
+
+  background: #ffebee;
+
+  color: #c62828;
+
+  border-radius: 8px;
+
+  padding: 7px 10px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.transaction-item {
+  border: 1px solid #e5ebf2;
+
+  border-radius: 14px;
+
+  padding: 13px;
+
+  margin-bottom: 10px;
+
+  background: #fff;
+}
+
+.transaction-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+.transaction-title {
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #172033;
+}
+
+.transaction-amount {
+  font-size: 15px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+.transaction-amount.income {
+  color: #1b7f36;
+}
+
+.transaction-amount.expense {
+  color: #c62828;
+}
+
+.transaction-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin-top: 7px;
+}
+
+.transaction-tag {
+  background: #edf3f9;
+
+  color: #536174;
+
+  border-radius: 20px;
+
+  padding: 4px 8px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.transaction-date {
+  color: #7b8797;
+
+  font-size: 11px;
+
+  margin-top: 8px;
+}
+
+.transaction-note {
+  color: #5d6879;
+
+  font-size: 12px;
+
+  margin-top: 5px;
+
+  word-break: break-word;
+}
+
+.empty-state {
+  text-align: center;
+
+  padding: 30px 10px;
+
+  color: #7a8798;
+}
+
+.empty-icon {
+  font-size: 38px;
+
+  margin-bottom: 8px;
+}
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+
+.modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 20px;
+}
+
+.modal-content {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 430px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 22px;
+
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+
+  color: #172033;
+}
+
+.modal-qr {
+  width: min(330px, 85vw);
+
+  height: min(330px, 85vw);
+
+  object-fit: contain;
+
+  border-radius: 10px;
+
+  border: 1px solid #e1e7ef;
+}
+
+.close-btn {
+  position: absolute;
+
+  top: 10px;
+
+  right: 10px;
+
+  width: 35px;
+
+  height: 35px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f1f4f8;
+
+  color: #39455a;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+/* =====================================================
+   HIDDEN
+   ===================================================== */
+
+.hidden {
+  display: none !important;
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+footer {
+  text-align: center;
+
+  padding: 12px 15px 30px;
+
+  color: #6f7c8e;
+
+  font-size: 12px;
+}
+
+footer p {
+  margin-bottom: 4px;
+}
+
+/* =====================================================
+   TABLET / DESKTOP
+   ===================================================== */
+
+@media (min-width: 600px) {
+
+  .container {
+    padding: 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+  .category-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+  .report-buttons {
+    grid-template-columns:
+      repeat(4, 1fr);
+  }
+
+  .payment-buttons {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 360px) {
+
+  .app-header h1 {
+    font-size: 20px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .category-grid {
+    gap: 7px;
+  }
+
+  .category-box {
+    min-height: 100px;
+  }
+
+}
+
+/* =====================================================
+   SAFE AREA FOR PHONES
+   ===================================================== */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+
+  footer {
+    padding-bottom:
+      calc(30px + env(safe-area-inset-bottom));
+  }
+
+}
+
+/* =====================================================
+   PRINT
+   ===================================================== */
+
+@media print {
+
+  .app-header,
+  .install-card,
+  .primary,
+  .secondary,
+  button,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .card {
+    box-shadow: none;
+
+    border: 1px solid #ddd;
+  }
+
 }
