@@ -1,732 +1,351 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Money</title><meta name="theme-color" content="#1565c0"><link rel="manifest" href="manifest.json"><style>
-*{
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-  margin:0;
-  background:#f4f7fb;
-  color:#222;
-}
+  <title>My Money</title>
 
-header{
-  background:#1565c0;
-  color:white;
-  padding:18px;
-  text-align:center;
-}
+  <meta name="theme-color" content="#1565c0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
 
-header h1{
-  margin:0;
-  font-size:25px;
-}
+<body>
 
-header p{
-  margin:6px 0 0;
-}
+<header>
+  <div class="topbar">
+    <div>
+      <h1>My Money</h1>
+      <p>Income & Expenses</p>
+    </div>
 
-.container{
-  padding:15px;
-  max-width:650px;
-  margin:auto;
-}
-
-.card{
-  background:white;
-  padding:18px;
-  border-radius:15px;
-  margin-bottom:15px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
-
-.balance{
-  font-size:30px;
-  font-weight:bold;
-  color:#1565c0;
-}
-
-.row{
-  display:flex;
-  gap:10px;
-}
-
-.box{
-  flex:1;
-  padding:12px;
-  border-radius:12px;
-  background:#f1f5f9;
-  text-align:center;
-}
-
-.box b{
-  display:block;
-  margin-top:6px;
-  font-size:20px;
-}
-
-input,select,button{
-  width:100%;
-  padding:13px;
-  margin-top:9px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:16px;
-}
-
-button{
-  background:#1565c0;
-  color:white;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button.green{
-  background:#159447;
-}
-
-button.dark{
-  background:#222;
-}
-
-button.orange{
-  background:#ef6c00;
-}
-
-button.red{
-  background:#d32f2f;
-}
-
-.lang{
-  width:auto;
-  float:right;
-  margin-top:-35px;
-  padding:7px 12px;
-  background:white;
-  color:#1565c0;
-}
-
-.transaction{
-  padding:12px;
-  border-bottom:1px solid #eee;
-}
-
-.transaction:last-child{
-  border-bottom:none;
-}
-
-.income{
-  color:green;
-}
-
-.expense{
-  color:red;
-}
-
-#reader{
-  width:100%;
-  margin-top:12px;
-}
-
-.qr-result{
-  background:#f1f8ff;
-  padding:12px;
-  border-radius:10px;
-  margin-top:12px;
-  display:none;
-}
-
-.small{
-  font-size:13px;
-  color:#666;
-}
-
-.hidden{
-  display:none;
-}
-</style></head><body><header>
-  <button class="lang" onclick="toggleLanguage()" id="langBtn">
-    తెలుగు
-  </button>  <h1 id="title">My Money</h1>
-  <p id="subtitle">Income & Expenses</p>
-</header><div class="container">  <!-- DASHBOARD -->  <div class="card">
-    <h3 id="balanceTitle">Total Balance</h3><div class="balance">
-  ₹<span id="balance">0</span>
-</div>
-
-<br>
-
-<div class="row">
-
-  <div class="box">
-    <span id="incomeTitle">Income</span>
-    <b class="income">₹<span id="income">0</span></b>
+    <button onclick="toggleLanguage()" id="languageBtn">
+      తెలుగు
+    </button>
   </div>
+</header>
 
-  <div class="box">
-    <span id="expenseTitle">Expenses</span>
-    <b class="expense">₹<span id="expense">0</span></b>
-  </div>
 
-</div>
+<main>
 
-  </div>  <!-- ADD TRANSACTION -->  <div class="card"><h3 id="addTitle">Add Transaction</h3>
+  <!-- BALANCE -->
 
-<select id="type">
-  <option value="income">Income</option>
-  <option value="expense">Expense</option>
-</select>
+  <section class="card balance-card">
 
-<input
-  id="amount"
-  type="number"
-  placeholder="Amount"
-  inputmode="decimal"
->
+    <p id="balanceLabel">Total Balance</p>
 
-<input
-  id="category"
-  type="text"
-  placeholder="Category"
->
+    <h2>₹<span id="totalBalance">0</span></h2>
 
-<button onclick="addTransaction()" id="addBtn">
-  Add Transaction
-</button>
+    <div class="summary">
 
-  </div>  <!-- SHOP QR PAYMENT -->  <div class="card"><h3>📷 <span id="scanTitle">Scan Shop QR</span></h3>
-
-<p class="small" id="scanInfo">
-  Scan a shop UPI QR, enter amount and open payment.
-</p>
-
-<button
-  class="green"
-  onclick="startScanner()"
-  id="scanBtn">
-  📷 Scan Shop QR
-</button>
-
-<div id="reader"></div>
-
-<div id="qrResult" class="qr-result">
-
-  <b>Shop Name:</b>
-  <span id="shopName">-</span>
-
-  <br><br>
-
-  <b>UPI ID:</b>
-  <span id="shopUpi">-</span>
-
-  <input
-    id="payAmount"
-    type="number"
-    placeholder="Enter Amount ₹"
-    inputmode="decimal"
-  >
-
-  <button
-    class="orange"
-    onclick="payWithPaytm()">
-    💳 Pay with Paytm
-  </button>
-
-  <button
-    class="dark"
-    onclick="closeScanner()">
-    Close
-  </button>
-
-</div>
-
-  </div>  <!-- TRANSACTION HISTORY -->  <div class="card"><h3 id="historyTitle">Transaction History</h3>
-
-<div id="history">
-  No transactions yet.
-</div>
-
-  </div></div><!-- QR SCANNER LIBRARY --><script src="https://unpkg.com/html5-qrcode"></script><script>
-
-let transactions =
-JSON.parse(localStorage.getItem("transactions") || "[]");
-
-let currentLanguage = "en";
-
-let scannedUPI = null;
-
-let scanner = null;
-
-
-/* -------------------------
-   LANGUAGE
-------------------------- */
-
-function toggleLanguage(){
-
-  if(currentLanguage === "en"){
-    currentLanguage = "te";
-    document.getElementById("langBtn").innerText = "English";
-  }else{
-    currentLanguage = "en";
-    document.getElementById("langBtn").innerText = "తెలుగు";
-  }
-
-  updateLanguage();
-}
-
-
-function updateLanguage(){
-
-  if(currentLanguage === "te"){
-
-    document.getElementById("title").innerText =
-      "మై మనీ";
-
-    document.getElementById("subtitle").innerText =
-      "ఆదాయం & ఖర్చులు";
-
-    document.getElementById("balanceTitle").innerText =
-      "మొత్తం బ్యాలెన్స్";
-
-    document.getElementById("incomeTitle").innerText =
-      "ఆదాయం";
-
-    document.getElementById("expenseTitle").innerText =
-      "ఖర్చులు";
-
-    document.getElementById("addTitle").innerText =
-      "లావాదేవీ జోడించండి";
-
-    document.getElementById("addBtn").innerText =
-      "జోడించండి";
-
-    document.getElementById("scanTitle").innerText =
-      "షాప్ QR స్కాన్";
-
-    document.getElementById("scanInfo").innerText =
-      "షాప్ UPI QR స్కాన్ చేసి, మొత్తం నమోదు చేసి పేమెంట్ చేయండి.";
-
-    document.getElementById("scanBtn").innerText =
-      "📷 షాప్ QR స్కాన్";
-
-    document.getElementById("historyTitle").innerText =
-      "లావాదేవీల చరిత్ర";
-
-  }else{
-
-    document.getElementById("title").innerText =
-      "My Money";
-
-    document.getElementById("subtitle").innerText =
-      "Income & Expenses";
-
-    document.getElementById("balanceTitle").innerText =
-      "Total Balance";
-
-    document.getElementById("incomeTitle").innerText =
-      "Income";
-
-    document.getElementById("expenseTitle").innerText =
-      "Expenses";
-
-    document.getElementById("addTitle").innerText =
-      "Add Transaction";
-
-    document.getElementById("addBtn").innerText =
-      "Add Transaction";
-
-    document.getElementById("scanTitle").innerText =
-      "Scan Shop QR";
-
-    document.getElementById("scanInfo").innerText =
-      "Scan a shop UPI QR, enter amount and open payment.";
-
-    document.getElementById("scanBtn").innerText =
-      "📷 Scan Shop QR";
-
-    document.getElementById("historyTitle").innerText =
-      "Transaction History";
-  }
-}
-
-
-/* -------------------------
-   ADD TRANSACTION
-------------------------- */
-
-function addTransaction(){
-
-  let type =
-    document.getElementById("type").value;
-
-  let amount =
-    Number(document.getElementById("amount").value);
-
-  let category =
-    document.getElementById("category").value.trim();
-
-  if(!amount || amount <= 0){
-
-    alert("Please enter amount");
-
-    return;
-  }
-
-  transactions.unshift({
-
-    id:Date.now(),
-
-    type:type,
-
-    amount:amount,
-
-    category:category || "Other",
-
-    date:new Date().toLocaleString()
-
-  });
-
-  localStorage.setItem(
-    "transactions",
-    JSON.stringify(transactions)
-  );
-
-  document.getElementById("amount").value = "";
-
-  document.getElementById("category").value = "";
-
-  updateDashboard();
-
-}
-
-
-/* -------------------------
-   DASHBOARD
-------------------------- */
-
-function updateDashboard(){
-
-  let income = 0;
-
-  let expense = 0;
-
-  transactions.forEach(t => {
-
-    if(t.type === "income"){
-      income += Number(t.amount);
-    }
-
-    if(t.type === "expense"){
-      expense += Number(t.amount);
-    }
-
-  });
-
-  document.getElementById("income").innerText =
-    income.toLocaleString("en-IN");
-
-  document.getElementById("expense").innerText =
-    expense.toLocaleString("en-IN");
-
-  document.getElementById("balance").innerText =
-    (income - expense).toLocaleString("en-IN");
-
-
-  let history =
-    document.getElementById("history");
-
-  if(transactions.length === 0){
-
-    history.innerHTML =
-      "No transactions yet.";
-
-    return;
-  }
-
-
-  history.innerHTML = transactions.map(t => {
-
-    let sign =
-      t.type === "income" ? "+" : "-";
-
-    let cls =
-      t.type === "income" ? "income" : "expense";
-
-    return `
-
-      <div class="transaction">
-
-        <b>${t.category}</b>
-
-        <span class="${cls}"
-              style="float:right">
-
-          ${sign} ₹${Number(t.amount)
-            .toLocaleString("en-IN")}
-
-        </span>
-
-        <br>
-
-        <span class="small">
-          ${t.date}
-        </span>
-
+      <div>
+        <span id="incomeLabel">Income</span>
+        <strong class="income">
+          ₹<span id="totalIncome">0</span>
+        </strong>
       </div>
 
-    `;
+      <div>
+        <span id="expenseLabel">Expenses</span>
+        <strong class="expense">
+          ₹<span id="totalExpense">0</span>
+        </strong>
+      </div>
 
-  }).join("");
+    </div>
 
-}
+  </section>
 
 
-/* -------------------------
-   START QR SCANNER
-------------------------- */
+  <!-- RECEIVE MONEY -->
 
-function startScanner(){
+  <section class="card">
 
-  document.getElementById("reader").innerHTML = "";
+    <h2>💰 <span id="receiveTitle">Receive Money</span></h2>
 
-  scanner = new Html5Qrcode("reader");
+    <p class="muted">
+      Show your QR and receive money directly to your UPI-linked bank account.
+    </p>
 
-  scanner.start(
+    <img
+      src="my-qr.png"
+      class="myqr"
+      alt="My UPI QR">
 
-    { facingMode:"environment" },
+    <button
+      class="primary"
+      onclick="showReceiveQR()">
 
-    {
-      fps:10,
-      qrbox:{
-        width:250,
-        height:250
-      }
-    },
+      📱 Show My QR
 
-    qrCodeMessage => {
+    </button>
 
-      handleQR(qrCodeMessage);
+  </section>
 
-    },
 
-    errorMessage => {
+  <!-- INCOME -->
 
-      /* Ignore scanning errors */
+  <section class="card">
 
-    }
+    <h2>➕ <span id="incomeTitle">Add Income</span></h2>
 
-  ).catch(err => {
+    <select id="incomeType">
 
-    alert(
-      "Camera permission ఇవ్వాలి.\n\n" +
-      "Please allow camera permission."
-    );
+      <option value="upi">QR / UPI Income</option>
 
-  });
+      <option value="cash">Cash Income</option>
 
-}
+      <option value="other">Other Income</option>
 
+    </select>
 
-/* -------------------------
-   READ UPI QR
-------------------------- */
+    <input
+      id="incomeAmount"
+      type="number"
+      inputmode="decimal"
+      placeholder="Amount ₹">
 
-function handleQR(text){
+    <input
+      id="incomeNote"
+      type="text"
+      placeholder="Income note">
 
-  if(!text.toLowerCase().startsWith("upi://pay")){
+    <button
+      class="incomeBtn"
+      onclick="addIncome()">
 
-    alert(
-      "This is not a UPI payment QR."
-    );
+      Add Income
 
-    return;
-  }
+    </button>
 
+  </section>
 
-  try{
 
-    let url = new URL(text);
+  <!-- PAY SHOP -->
 
-    let pa = url.searchParams.get("pa");
+  <section class="card">
 
-    let pn = url.searchParams.get("pn");
+    <h2>📷 <span id="paymentTitle">Pay Shop</span></h2>
 
-    let existingAmount =
-      url.searchParams.get("am");
+    <p class="muted">
+      Scan shop UPI QR and pay using a UPI app.
+    </p>
 
+    <button
+      class="primary"
+      onclick="startScanner()">
 
-    if(!pa){
+      📷 Scan Shop QR
 
-      alert("UPI ID not found.");
+    </button>
 
-      return;
-    }
+    <div id="reader"></div>
 
+    <div
+      id="shopBox"
+      class="shopBox hidden">
 
-    scannedUPI = {
+      <p>
+        <b>Shop:</b>
+        <span id="shopName"></span>
+      </p>
 
-      pa:pa,
+      <p>
+        <b>UPI:</b>
+        <span id="shopUPI"></span>
+      </p>
 
-      pn:pn || "Shop",
+      <input
+        id="expenseAmount"
+        type="number"
+        inputmode="decimal"
+        placeholder="Amount ₹">
 
-      am:existingAmount || ""
+      <select id="expenseCategory">
 
-    };
+        <option value="Food">🍔 Food</option>
 
+        <option value="Travel">🚕 Travel</option>
 
-    document.getElementById("shopName").innerText =
-      scannedUPI.pn;
+        <option value="Shopping">🛍️ Shopping</option>
 
-    document.getElementById("shopUpi").innerText =
-      scannedUPI.pa;
+        <option value="Bills">💡 Bills</option>
 
+        <option value="Education">🎓 Education</option>
 
-    if(existingAmount){
+        <option value="Medical">🏥 Medical</option>
 
-      document.getElementById("payAmount").value =
-        existingAmount;
+        <option value="Groceries">🛒 Groceries</option>
 
-    }
+        <option value="Recharge">📱 Recharge</option>
 
+        <option value="Other">📦 Other</option>
 
-    document.getElementById("qrResult").style.display =
-      "block";
+      </select>
 
+      <button
+        class="paytm"
+        onclick="payByUPI('paytm')">
 
-    stopScanner();
+        Pay with Paytm
 
-  }catch(error){
+      </button>
 
-    alert(
-      "Unable to read this UPI QR."
-    );
+      <button
+        class="phonepe"
+        onclick="payByUPI('phonepe')">
 
-  }
+        Pay with PhonePe
 
-}
+      </button>
 
+      <button
+        class="secondary"
+        onclick="closeShop()">
 
-/* -------------------------
-   STOP SCANNER
-------------------------- */
+        Close
 
-function stopScanner(){
+      </button>
 
-  if(scanner){
+    </div>
 
-    scanner.stop()
-      .then(() => {
+  </section>
 
-        scanner.clear();
 
-      })
-      .catch(() => {});
+  <!-- MANUAL EXPENSE -->
 
-  }
+  <section class="card">
 
-}
+    <h2>➖ Add Expense</h2>
 
+    <input
+      id="manualExpenseAmount"
+      type="number"
+      inputmode="decimal"
+      placeholder="Amount ₹">
 
-/* -------------------------
-   CLOSE
-------------------------- */
+    <select id="manualCategory">
 
-function closeScanner(){
+      <option value="Food">🍔 Food</option>
+      <option value="Travel">🚕 Travel</option>
+      <option value="Shopping">🛍️ Shopping</option>
+      <option value="Bills">💡 Bills</option>
+      <option value="Education">🎓 Education</option>
+      <option value="Medical">🏥 Medical</option>
+      <option value="Groceries">🛒 Groceries</option>
+      <option value="Recharge">📱 Recharge</option>
+      <option value="Other">📦 Other</option>
 
-  stopScanner();
+    </select>
 
-  document.getElementById("reader").innerHTML = "";
+    <input
+      id="manualExpenseNote"
+      type="text"
+      placeholder="Expense note">
 
-  document.getElementById("qrResult").style.display =
-    "none";
+    <button
+      class="expenseBtn"
+      onclick="addManualExpense()">
 
-}
+      Add Expense
 
+    </button>
 
-/* -------------------------
-   PAY WITH PAYTM
-------------------------- */
+  </section>
 
-function payWithPaytm(){
 
-  if(!scannedUPI){
+  <!-- TOTAL PAYMENT -->
 
-    alert("Please scan shop QR first.");
+  <section class="card">
 
-    return;
-  }
+    <h2>📊 Total Payment</h2>
 
+    <div class="categoryGrid">
 
-  let amount =
-    Number(
-      document.getElementById("payAmount").value
-    );
+      <div>
+        Food
+        <b>₹<span id="catFood">0</span></b>
+      </div>
 
+      <div>
+        Travel
+        <b>₹<span id="catTravel">0</span></b>
+      </div>
 
-  if(!amount || amount <= 0){
+      <div>
+        Shopping
+        <b>₹<span id="catShopping">0</span></b>
+      </div>
 
-    alert("Please enter payment amount.");
+      <div>
+        Bills
+        <b>₹<span id="catBills">0</span></b>
+      </div>
 
-    return;
-  }
+      <div>
+        Education
+        <b>₹<span id="catEducation">0</span></b>
+      </div>
 
+      <div>
+        Medical
+        <b>₹<span id="catMedical">0</span></b>
+      </div>
 
-  /*
-    Standard UPI payment URI.
-    Android will try to open a
-    UPI payment application.
-  */
+      <div>
+        Groceries
+        <b>₹<span id="catGroceries">0</span></b>
+      </div>
 
-  let params = new URLSearchParams();
+      <div>
+        Other
+        <b>₹<span id="catOther">0</span></b>
+      </div>
 
-  params.set("pa", scannedUPI.pa);
+    </div>
 
-  params.set("pn", scannedUPI.pn);
+  </section>
 
-  params.set("am", amount.toFixed(2));
 
-  params.set("cu", "INR");
+  <!-- REPORTS -->
 
+  <section class="card">
 
-  let upiURL =
-    "upi://pay?" + params.toString();
+    <h2>📈 Reports</h2>
 
+    <select id="reportPeriod" onchange="generateReport()">
 
-  /*
-    Try Android UPI handler.
-  */
+      <option value="all">All Time</option>
 
-  window.location.href = upiURL;
+      <option value="today">Today</option>
 
-}
+      <option value="month">This Month</option>
 
+      <option value="year">This Year</option>
 
-/* -------------------------
-   LOAD
-------------------------- */
+    </select>
 
-updateDashboard();
+    <div id="report"></div>
 
+  </section>
 
-/* -------------------------
-   SERVICE WORKER
-------------------------- */
 
-if("serviceWorker" in navigator){
+  <!-- HISTORY -->
 
-  window.addEventListener("load", () => {
+  <section class="card">
 
-    navigator.serviceWorker.register("sw.js")
-      .catch(() => {});
+    <h2>🧾 Transaction History</h2>
 
-  });
+    <div id="history"></div>
 
-}
+  </section>
 
-</script></body>
+</main>
+
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="app.js"></script>
+
+</body>
 </html>
