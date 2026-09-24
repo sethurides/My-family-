@@ -1,38 +1,25 @@
-/* =====================================================
-   MY MONEY - INCOME & EXPENSES
-   COMPLETE APP JAVASCRIPT
-   ===================================================== */
-
 "use strict";
 
 /* =====================================================
-   STORAGE KEYS
+   MY MONEY APP
+   FIXED VERSION
    ===================================================== */
 
 const TRANSACTIONS_KEY = "myMoneyTransactions";
 const LANGUAGE_KEY = "myMoneyLanguage";
 const PENDING_PAYMENT_KEY = "myMoneyPendingPayment";
 
-
-/* =====================================================
-   GLOBAL VARIABLES
-   ===================================================== */
-
 let transactions = [];
-
 let currentLanguage =
   localStorage.getItem(LANGUAGE_KEY) || "en";
 
 let qrScanner = null;
 let scannerRunning = false;
-
 let deferredPrompt = null;
-
-let currentReportType = "date";
 
 
 /* =====================================================
-   CATEGORY LIST
+   CATEGORIES
    ===================================================== */
 
 const categories = [
@@ -47,64 +34,16 @@ const categories = [
   "Other"
 ];
 
-
-/* =====================================================
-   CATEGORY EMOJIS
-   ===================================================== */
-
 const categoryEmoji = {
-
   Food: "🍔",
-
   Travel: "🚗",
-
   Shopping: "🛍️",
-
   Bills: "💡",
-
   Education: "🎓",
-
   Medical: "🏥",
-
   Groceries: "🛒",
-
   Recharge: "📱",
-
   Other: "📦"
-
-};
-
-
-/* =====================================================
-   LANGUAGE TEXT
-   ===================================================== */
-
-const translations = {
-
-  en: {
-
-    headerSubtitle: "Income & Expenses",
-
-    balanceLabel: "Current Balance",
-
-    incomeLabel: "Total Income",
-
-    expenseLabel: "Total Expenses"
-
-  },
-
-  te: {
-
-    headerSubtitle: "ఆదాయం & ఖర్చులు",
-
-    balanceLabel: "ప్రస్తుత బ్యాలెన్స్",
-
-    incomeLabel: "మొత్తం ఆదాయం",
-
-    expenseLabel: "మొత్తం ఖర్చులు"
-
-  }
-
 };
 
 
@@ -112,30 +51,27 @@ const translations = {
    PAGE LOAD
    ===================================================== */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    loadTransactions();
+  loadTransactions();
 
-    setupDateInput();
+  setupInstallPrompt();
 
-    setupInstallPrompt();
+  setupReportDate();
 
-    renderAll();
+  migrateOldTransactions();
 
-    applyLanguage();
+  renderAll();
 
-    checkPendingPayment();
+  applyLanguage();
 
-    setupReportDateListener();
+  checkPendingPayment();
 
-  }
-);
+});
 
 
 /* =====================================================
-   LOAD TRANSACTIONS
+   LOAD DATA
    ===================================================== */
 
 function loadTransactions() {
@@ -143,24 +79,14 @@ function loadTransactions() {
   try {
 
     const saved =
-      localStorage.getItem(
-        TRANSACTIONS_KEY
-      );
+      localStorage.getItem(TRANSACTIONS_KEY);
 
     if (saved) {
 
-      const parsed =
-        JSON.parse(saved);
+      const data = JSON.parse(saved);
 
-      if (Array.isArray(parsed)) {
-
-        transactions = parsed;
-
-      } else {
-
-        transactions = [];
-
-      }
+      transactions =
+        Array.isArray(data) ? data : [];
 
     } else {
 
@@ -170,10 +96,7 @@ function loadTransactions() {
 
   } catch (error) {
 
-    console.error(
-      "Unable to load transactions:",
-      error
-    );
+    console.error(error);
 
     transactions = [];
 
@@ -183,7 +106,7 @@ function loadTransactions() {
 
 
 /* =====================================================
-   SAVE TRANSACTIONS
+   SAVE DATA
    ===================================================== */
 
 function saveTransactions() {
@@ -197,57 +120,219 @@ function saveTransactions() {
 
 
 /* =====================================================
-   DATE / TIME INFORMATION
+   FIX OLD TRANSACTIONS
+   ===================================================== */
+
+function migrateOldTransactions() {
+
+  let changed = false;
+
+  transactions = transactions.map(function (t) {
+
+    let dateObject;
+
+    if (t.timestamp) {
+
+      dateObject =
+        new Date(t.timestamp);
+
+    } else if (t.date) {
+
+      dateObject =
+        new Date(t.date);
+
+    } else {
+
+      dateObject =
+        new Date();
+
+    }
+
+
+    if (!t.timestamp) {
+
+      t.timestamp =
+        dateObject.getTime();
+
+      changed = true;
+
+    }
+
+
+    if (!t.date) {
+
+      t.date =
+        formatDate(dateObject);
+
+      changed = true;
+
+    }
+
+
+    if (!t.time) {
+
+      t.time =
+        dateObject.toLocaleTimeString(
+          "en-IN",
+          {
+            hour: "2-digit",
+            minute: "2-digit"
+          }
+        );
+
+      changed = true;
+
+    }
+
+
+    if (!t.day) {
+
+      t.day =
+        dateObject.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long"
+          }
+        );
+
+      changed = true;
+
+    }
+
+
+    if (!t.month) {
+
+      t.month =
+        dateObject.toLocaleDateString(
+          "en-IN",
+          {
+            month: "long"
+          }
+        );
+
+      changed = true;
+
+    }
+
+
+    if (!t.year) {
+
+      t.year =
+        dateObject.getFullYear();
+
+      changed = true;
+
+    }
+
+
+    if (!t.category) {
+
+      t.category =
+        t.type === "income"
+          ? "Income"
+          : "Other";
+
+      changed = true;
+
+    }
+
+
+    if (!t.status) {
+
+      t.status = "completed";
+
+      changed = true;
+
+    }
+
+
+    return t;
+
+  });
+
+
+  if (changed) {
+
+    saveTransactions();
+
+  }
+
+}
+
+
+/* =====================================================
+   DATE
+   ===================================================== */
+
+function formatDate(date) {
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+  const year =
+    date.getFullYear();
+
+  return (
+    day +
+    "/" +
+    month +
+    "/" +
+    year
+  );
+
+}
+
+
+/* =====================================================
+   DATE INFO
    ===================================================== */
 
 function getDateInfo() {
 
   const now = new Date();
 
-  const date =
-    now.toISOString().split("T")[0];
-
-  const time =
-    now.toLocaleTimeString(
-      "en-IN",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
-      }
-    );
-
-  const day =
-    now.toLocaleDateString(
-      "en-IN",
-      {
-        weekday: "long"
-      }
-    );
-
-  const month =
-    now.toLocaleDateString(
-      "en-IN",
-      {
-        month: "long"
-      }
-    );
-
-  const year =
-    now.getFullYear();
-
   return {
 
-    date: date,
+    date:
+      formatDate(now),
 
-    time: time,
+    time:
+      now.toLocaleTimeString(
+        "en-IN",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      ),
 
-    day: day,
+    day:
+      now.toLocaleDateString(
+        "en-IN",
+        {
+          weekday: "long"
+        }
+      ),
 
-    month: month,
+    month:
+      now.toLocaleDateString(
+        "en-IN",
+        {
+          month: "long"
+        }
+      ),
 
-    year: year,
+    year:
+      now.getFullYear(),
 
-    timestamp: now.getTime()
+    timestamp:
+      now.getTime()
 
   };
 
@@ -255,23 +340,20 @@ function getDateInfo() {
 
 
 /* =====================================================
-   FORMAT MONEY
+   MONEY
    ===================================================== */
 
 function formatMoney(amount) {
 
-  const number =
-    Number(amount) || 0;
-
   return (
     "₹" +
-    number.toLocaleString(
-      "en-IN",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    )
+    Number(amount || 0)
+      .toLocaleString(
+        "en-IN",
+        {
+          maximumFractionDigits: 2
+        }
+      )
   );
 
 }
@@ -298,14 +380,16 @@ function addIncome() {
       "incomeNote"
     );
 
+
+  if (!amountInput) {
+
+    return;
+
+  }
+
+
   const amount =
     Number(amountInput.value);
-
-  const type =
-    typeInput.value;
-
-  const note =
-    noteInput.value.trim();
 
 
   if (
@@ -317,40 +401,45 @@ function addIncome() {
       "Please enter a valid income amount."
     );
 
-    amountInput.focus();
-
     return;
 
   }
 
 
-  const dateInfo =
-    getDateInfo();
-
-
   const transaction = {
 
     id:
-      "INC-" +
-      Date.now(),
+      "INC-" + Date.now(),
 
-    type: "income",
+    type:
+      "income",
 
-    amount: amount,
+    amount:
+      amount,
 
-    incomeType: type,
+    incomeType:
+      typeInput
+        ? typeInput.value
+        : "Income",
 
-    category: "Income",
+    category:
+      "Income",
 
-    merchantName: "",
+    merchantName:
+      "",
 
-    upiId: "",
+    upiId:
+      "",
 
-    note: note,
+    note:
+      noteInput
+        ? noteInput.value.trim()
+        : "",
 
-    status: "completed",
+    status:
+      "completed",
 
-    ...dateInfo
+    ...getDateInfo()
 
   };
 
@@ -359,11 +448,18 @@ function addIncome() {
     transaction
   );
 
+
   saveTransactions();
 
   amountInput.value = "";
 
-  noteInput.value = "";
+
+  if (noteInput) {
+
+    noteInput.value = "";
+
+  }
+
 
   renderAll();
 
@@ -375,7 +471,7 @@ function addIncome() {
 
 
 /* =====================================================
-   ADD MANUAL EXPENSE
+   MANUAL EXPENSE
    ===================================================== */
 
 function addManualExpense() {
@@ -395,14 +491,16 @@ function addManualExpense() {
       "manualExpenseNote"
     );
 
+
+  if (!amountInput) {
+
+    return;
+
+  }
+
+
   const amount =
     Number(amountInput.value);
-
-  const category =
-    categoryInput.value;
-
-  const note =
-    noteInput.value.trim();
 
 
   if (
@@ -414,1001 +512,21 @@ function addManualExpense() {
       "Please enter a valid expense amount."
     );
 
-    amountInput.focus();
-
     return;
 
   }
 
 
-  const dateInfo =
-    getDateInfo();
+  const category =
+    categoryInput
+      ? categoryInput.value
+      : "Other";
 
 
   const transaction = {
 
     id:
-      "EXP-" +
-      Date.now(),
-
-    type: "expense",
-
-    amount: amount,
-
-    category: category,
-
-    merchantName: "",
-
-    upiId: "",
-
-    note: note,
-
-    status: "completed",
-
-    ...dateInfo
-
-  };
-
-
-  transactions.unshift(
-    transaction
-  );
-
-  saveTransactions();
-
-  amountInput.value = "";
-
-  noteInput.value = "";
-
-  renderAll();
-
-  alert(
-    "Expense added successfully."
-  );
-
-}
-
-
-/* =====================================================
-   AUTOMATIC CATEGORY DETECTION
-   ===================================================== */
-
-function detectCategory(
-  merchantName,
-  upiId
-) {
-
-  const text =
-    (
-      String(merchantName || "") +
-      " " +
-      String(upiId || "")
-    )
-      .toLowerCase()
-      .replace(
-        /[^a-z0-9@.\s]/g,
-        " "
-      );
-
-
-  /* FOOD */
-
-  if (
-    /swiggy|zomato|restaurant|hotel|food|cafe|coffee|bakery|biryani|mess|dhaba|tiffin|sweets/.test(
-      text
-    )
-  ) {
-
-    return "Food";
-
-  }
-
-
-  /* TRAVEL */
-
-  if (
-    /uber|ola|rapido|cab|taxi|auto|fuel|petrol|diesel|transport|travels|bus|railway|irctc/.test(
-      text
-    )
-  ) {
-
-    return "Travel";
-
-  }
-
-
-  /* SHOPPING */
-
-  if (
-    /amazon|flipkart|myntra|meesho|shopping|mall|store|fashion|clothing|clothes|garments|electronics/.test(
-      text
-    )
-  ) {
-
-    return "Shopping";
-
-  }
-
-
-  /* BILLS */
-
-  if (
-    /electric|electricity|water|gas|bill|bescom|tsnpdcl|apcpdcl|tsspdcl|discom|lpg/.test(
-      text
-    )
-  ) {
-
-    return "Bills";
-
-  }
-
-
-  /* EDUCATION */
-
-  if (
-    /school|college|university|education|tuition|fees|academy|institute|education/.test(
-      text
-    )
-  ) {
-
-    return "Education";
-
-  }
-
-
-  /* MEDICAL */
-
-  if (
-    /hospital|apollo|pharmacy|medical|clinic|diagnostic|medplus|netmeds|doctor|health/.test(
-      text
-    )
-  ) {
-
-    return "Medical";
-
-  }
-
-
-  /* GROCERIES */
-
-  if (
-    /grocery|groceries|kirana|supermarket|dmart|d mart|reliance fresh|vegetables|vegetable|fruits|fresh/.test(
-      text
-    )
-  ) {
-
-    return "Groceries";
-
-  }
-
-
-  /* RECHARGE */
-
-  if (
-    /recharge|jio|airtel|vi |vodafone|idea|bsnl|mobile recharge|prepaid|postpaid/.test(
-      text
-    )
-  ) {
-
-    return "Recharge";
-
-  }
-
-
-  return "Other";
-
-}
-
-
-/* =====================================================
-   START QR SCANNER
-   ===================================================== */
-
-async function startQRScanner() {
-
-  if (scannerRunning) {
-
-    return;
-
-  }
-
-
-  if (
-    typeof Html5Qrcode ===
-    "undefined"
-  ) {
-
-    alert(
-      "QR scanner is still loading. Please wait a few seconds and try again."
-    );
-
-    return;
-
-  }
-
-
-  const reader =
-    document.getElementById(
-      "qr-reader"
-    );
-
-
-  reader.classList.remove(
-    "hidden"
-  );
-
-
-  document
-    .getElementById(
-      "startScannerBtn"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "stopScannerBtn"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  try {
-
-    qrScanner =
-      new Html5Qrcode(
-        "qr-reader"
-      );
-
-
-    await qrScanner.start(
-
-      {
-        facingMode: "environment"
-      },
-
-      {
-        fps: 10,
-
-        qrbox: {
-          width: 250,
-          height: 250
-        }
-
-      },
-
-      function (decodedText) {
-
-        handleQRResult(
-          decodedText
-        );
-
-      },
-
-      function () {
-
-        /* QR not detected yet */
-
-      }
-
-    );
-
-
-    scannerRunning = true;
-
-  } catch (error) {
-
-    console.error(
-      "QR scanner error:",
-      error
-    );
-
-    alert(
-      "Camera open avvaledu. Camera permission allow cheyyandi."
-    );
-
-    resetScannerUI();
-
-  }
-
-}
-
-
-/* =====================================================
-   STOP QR SCANNER
-   ===================================================== */
-
-async function stopQRScanner() {
-
-  if (
-    qrScanner &&
-    scannerRunning
-  ) {
-
-    try {
-
-      await qrScanner.stop();
-
-      await qrScanner.clear();
-
-    } catch (error) {
-
-      console.log(
-        "Scanner stop:",
-        error
-      );
-
-    }
-
-  }
-
-
-  qrScanner = null;
-
-  scannerRunning = false;
-
-  resetScannerUI();
-
-}
-
-
-/* =====================================================
-   RESET SCANNER UI
-   ===================================================== */
-
-function resetScannerUI() {
-
-  document
-    .getElementById(
-      "startScannerBtn"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "stopScannerBtn"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-}
-
-
-/* =====================================================
-   HANDLE QR RESULT
-   ===================================================== */
-
-async function handleQRResult(
-  decodedText
-) {
-
-  console.log(
-    "QR:",
-    decodedText
-  );
-
-
-  await stopQRScanner();
-
-
-  const paymentData =
-    parseUPIQR(
-      decodedText
-    );
-
-
-  if (!paymentData) {
-
-    alert(
-      "This QR is not a supported UPI payment QR."
-    );
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "shopDetails"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "paymentForm"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "shopName"
-    )
-    .textContent =
-      paymentData.name ||
-      "Unknown Shop";
-
-
-  document
-    .getElementById(
-      "shopUpi"
-    )
-    .textContent =
-      paymentData.upiId ||
-      "-";
-
-
-  const category =
-    detectCategory(
-      paymentData.name,
-      paymentData.upiId
-    );
-
-
-  document
-    .getElementById(
-      "detectedCategory"
-    )
-    .textContent =
-      categoryEmoji[category] +
-      " " +
-      category;
-
-
-  const categorySelect =
-    document.getElementById(
-      "expenseCategory"
-    );
-
-
-  categorySelect.value =
-    "Auto";
-
-
-  categorySelect.dataset.detected =
-    category;
-
-
-  const amountInput =
-    document.getElementById(
-      "expenseAmount"
-    );
-
-
-  if (
-    paymentData.amount &&
-    Number(paymentData.amount) > 0
-  ) {
-
-    amountInput.value =
-      paymentData.amount;
-
-  }
-
-
-  window.currentShopPayment = {
-
-    name:
-      paymentData.name || "",
-
-    upiId:
-      paymentData.upiId || "",
-
-    amount:
-      paymentData.amount || "",
-
-    category:
-      category
-
-  };
-
-}
-
-
-/* =====================================================
-   PARSE UPI QR
-   ===================================================== */
-
-function parseUPIQR(
-  qrText
-) {
-
-  try {
-
-    if (
-      !qrText ||
-      !qrText.toLowerCase().startsWith(
-        "upi://pay"
-      )
-    ) {
-
-      return null;
-
-    }
-
-
-    const url =
-      new URL(qrText);
-
-
-    const params =
-      url.searchParams;
-
-
-    const upiId =
-      params.get("pa") || "";
-
-
-    const name =
-      params.get("pn") || "";
-
-
-    const amount =
-      params.get("am") || "";
-
-
-    if (!upiId) {
-
-      return null;
-
-    }
-
-
-    return {
-
-      upiId:
-        decodeURIComponent(
-          upiId
-        ),
-
-      name:
-        safeDecode(
-          name
-        ),
-
-      amount:
-        amount
-
-    };
-
-  } catch (error) {
-
-    console.error(
-      "UPI QR parse error:",
-      error
-    );
-
-
-    return null;
-
-  }
-
-}
-
-
-/* =====================================================
-   SAFE DECODE
-   ===================================================== */
-
-function safeDecode(value) {
-
-  try {
-
-    return decodeURIComponent(
-      value || ""
-    );
-
-  } catch {
-
-    return value || "";
-
-  }
-
-}
-
-
-/* =====================================================
-   GET SELECTED CATEGORY
-   ===================================================== */
-
-function getSelectedExpenseCategory() {
-
-  const select =
-    document.getElementById(
-      "expenseCategory"
-    );
-
-
-  if (
-    select.value === "Auto"
-  ) {
-
-    return (
-      select.dataset.detected ||
-      "Other"
-    );
-
-  }
-
-
-  return select.value;
-
-}
-
-
-/* =====================================================
-   PAY BY UPI
-   ===================================================== */
-
-function payByUPI(app) {
-
-  const shop =
-    window.currentShopPayment;
-
-
-  if (
-    !shop ||
-    !shop.upiId
-  ) {
-
-    alert(
-      "First scan the shop UPI QR."
-    );
-
-    return;
-
-  }
-
-
-  const amount =
-    Number(
-      document.getElementById(
-        "expenseAmount"
-      ).value
-    );
-
-
-  if (
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Please enter a valid amount."
-    );
-
-    return;
-
-  }
-
-
-  const category =
-    getSelectedExpenseCategory();
-
-
-  const note =
-    document
-      .getElementById(
-        "paymentNote"
-      )
-      .value
-      .trim();
-
-
-  const params =
-    new URLSearchParams();
-
-
-  params.set(
-    "pa",
-    shop.upiId
-  );
-
-
-  params.set(
-    "pn",
-    shop.name ||
-      "Merchant"
-  );
-
-
-  params.set(
-    "am",
-    amount.toFixed(2)
-  );
-
-
-  params.set(
-    "cu",
-    "INR"
-  );
-
-
-  if (note) {
-
-    params.set(
-      "tn",
-      note
-    );
-
-  }
-
-
-  const upiUrl =
-    "upi://pay?" +
-    params.toString();
-
-
-  /*
-    Payment is NOT immediately added
-    to final expenses.
-
-    It is stored as PENDING first.
-    When the user comes back to the app,
-    the app asks whether payment succeeded.
-  */
-
-  const pendingPayment = {
-
-    id:
-      "PENDING-" +
-      Date.now(),
-
-    type: "expense",
-
-    amount:
-      amount,
-
-    category:
-      category,
-
-    merchantName:
-      shop.name || "Merchant",
-
-    upiId:
-      shop.upiId,
-
-    note:
-      note,
-
-    app:
-      app,
-
-    status:
-      "pending",
-
-    createdAt:
-      Date.now(),
-
-    ...getDateInfo()
-
-  };
-
-
-  localStorage.setItem(
-    PENDING_PAYMENT_KEY,
-    JSON.stringify(
-      pendingPayment
-    )
-  );
-
-
-  alert(
-    "Payment app open avutundi. Payment complete chesi My Money app ki return avvandi."
-  );
-
-
-  /*
-    Android will choose the available
-    UPI application.
-  */
-
-  window.location.href =
-    upiUrl;
-
-}
-
-
-/* =====================================================
-   CHECK PENDING PAYMENT
-   ===================================================== */
-
-function checkPendingPayment() {
-
-  const saved =
-    localStorage.getItem(
-      PENDING_PAYMENT_KEY
-    );
-
-
-  if (!saved) {
-
-    return;
-
-  }
-
-
-  let pending;
-
-
-  try {
-
-    pending =
-      JSON.parse(
-        saved
-      );
-
-  } catch {
-
-    localStorage.removeItem(
-      PENDING_PAYMENT_KEY
-    );
-
-    return;
-
-  }
-
-
-  if (!pending) {
-
-    return;
-
-  }
-
-
-  setTimeout(
-    function () {
-
-      const confirmPayment =
-        confirm(
-          "Payment complete ayyinda?\n\n" +
-          pending.merchantName +
-          "\n" +
-          formatMoney(
-            pending.amount
-          )
-        );
-
-
-      if (
-        confirmPayment
-      ) {
-
-        pending.status =
-          "completed";
-
-
-        pending.id =
-          "EXP-" +
-          Date.now();
-
-
-        delete pending.createdAt;
-
-
-        transactions.unshift(
-          pending
-        );
-
-
-        saveTransactions();
-
-
-        localStorage.removeItem(
-          PENDING_PAYMENT_KEY
-        );
-
-
-        renderAll();
-
-
-        alert(
-          "Expense saved successfully."
-        );
-
-      } else {
-
-        const keepPending =
-          confirm(
-            "Payment complete kaaledha?\n\n" +
-            "Later verify cheyyadaniki pending payment ni keep cheyyala?"
-          );
-
-
-        if (!keepPending) {
-
-          localStorage.removeItem(
-            PENDING_PAYMENT_KEY
-          );
-
-        }
-
-      }
-
-    },
-    1200
-  );
-
-}
-
-
-/* =====================================================
-   SAVE SHOP EXPENSE WITHOUT PAYMENT
-   ===================================================== */
-
-function saveShopExpenseWithoutPayment() {
-
-  const shop =
-    window.currentShopPayment;
-
-
-  if (
-    !shop ||
-    !shop.upiId
-  ) {
-
-    alert(
-      "First scan shop QR."
-    );
-
-    return;
-
-  }
-
-
-  const amount =
-    Number(
-      document.getElementById(
-        "expenseAmount"
-      ).value
-    );
-
-
-  if (
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Please enter a valid amount."
-    );
-
-    return;
-
-  }
-
-
-  const category =
-    getSelectedExpenseCategory();
-
-
-  const note =
-    document
-      .getElementById(
-        "paymentNote"
-      )
-      .value
-      .trim();
-
-
-  const transaction = {
-
-    id:
-      "EXP-" +
-      Date.now(),
+      "EXP-" + Date.now(),
 
     type:
       "expense",
@@ -1420,13 +538,15 @@ function saveShopExpenseWithoutPayment() {
       category,
 
     merchantName:
-      shop.name || "Merchant",
+      "",
 
     upiId:
-      shop.upiId,
+      "",
 
     note:
-      note,
+      noteInput
+        ? noteInput.value.trim()
+        : "",
 
     status:
       "completed",
@@ -1443,94 +563,950 @@ function saveShopExpenseWithoutPayment() {
 
   saveTransactions();
 
-  clearShopPaymentForm();
+  amountInput.value = "";
+
+
+  if (noteInput) {
+
+    noteInput.value = "";
+
+  }
+
 
   renderAll();
 
-
   alert(
-    "Expense saved."
+    "Expense added successfully."
   );
 
 }
 
 
 /* =====================================================
-   CLEAR SHOP PAYMENT FORM
+   CATEGORY DETECTION
    ===================================================== */
 
-function clearShopPaymentForm() {
+function detectCategory(
+  merchantName,
+  upiId
+) {
 
-  document
-    .getElementById(
-      "shopDetails"
+  const text =
+    (
+      (merchantName || "") +
+      " " +
+      (upiId || "")
     )
-    .classList.add(
-      "hidden"
-    );
+      .toLowerCase();
 
 
-  document
-    .getElementById(
-      "paymentForm"
-    )
-    .classList.add(
-      "hidden"
-    );
+  if (
+    /swiggy|zomato|restaurant|hotel|food|cafe|bakery|biryani|mess|tiffin|sweets/
+      .test(text)
+  ) {
+
+    return "Food";
+
+  }
 
 
-  document
-    .getElementById(
-      "expenseAmount"
-    )
-    .value = "";
+  if (
+    /uber|ola|rapido|cab|taxi|auto|fuel|petrol|diesel|transport|travels|bus|railway|irctc/
+      .test(text)
+  ) {
+
+    return "Travel";
+
+  }
 
 
-  document
-    .getElementById(
-      "paymentNote"
-    )
-    .value = "";
+  if (
+    /amazon|flipkart|myntra|meesho|shopping|mall|store|fashion|clothing|garments|electronics/
+      .test(text)
+  ) {
+
+    return "Shopping";
+
+  }
 
 
-  window.currentShopPayment =
-    null;
+  if (
+    /electric|electricity|water|gas|bill|apcpdcl|discom|lpg/
+      .test(text)
+  ) {
+
+    return "Bills";
+
+  }
+
+
+  if (
+    /school|college|university|education|tuition|fees|academy|institute/
+      .test(text)
+  ) {
+
+    return "Education";
+
+  }
+
+
+  if (
+    /hospital|apollo|pharmacy|medical|clinic|diagnostic|medplus|netmeds|doctor|health/
+      .test(text)
+  ) {
+
+    return "Medical";
+
+  }
+
+
+  if (
+    /grocery|groceries|kirana|supermarket|dmart|reliance fresh|vegetable|fruits/
+      .test(text)
+  ) {
+
+    return "Groceries";
+
+  }
+
+
+  if (
+    /recharge|jio|airtel|vodafone|idea|bsnl|prepaid|postpaid/
+      .test(text)
+  ) {
+
+    return "Recharge";
+
+  }
+
+
+  return "Other";
 
 }
 
 
 /* =====================================================
-   CALCULATE TOTAL INCOME
+   TOTAL INCOME
    ===================================================== */
 
-function getTotalIncome(
-  list = transactions
-) {
+function getTotalIncome(list) {
+
+  list =
+    list || transactions;
+
 
   return list
-    .filter(
-      transaction =>
-        transaction.type ===
-        "income"
-    )
-    .reduce(
-      (total, transaction) =>
+    .filter(function (t) {
+
+      return t.type === "income";
+
+    })
+    .reduce(function (total, t) {
+
+      return (
         total +
-        Number(
-          transaction.amount
-        ),
+        Number(t.amount || 0)
+      );
+
+    }, 0);
+
+}
+
+
+/* =====================================================
+   TOTAL EXPENSE
+   ===================================================== */
+
+function getTotalExpense(list) {
+
+  list =
+    list || transactions;
+
+
+  return list
+    .filter(function (t) {
+
+      return (
+        t.type === "expense" &&
+        t.status !== "pending"
+      );
+
+    })
+    .reduce(function (total, t) {
+
+      return (
+        total +
+        Number(t.amount || 0)
+      );
+
+    }, 0);
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
+function updateDashboard() {
+
+  const income =
+    getTotalIncome();
+
+
+  const expense =
+    getTotalExpense();
+
+
+  const balance =
+    income - expense;
+
+
+  const balanceElement =
+    document.getElementById(
+      "balance"
+    );
+
+  const incomeElement =
+    document.getElementById(
+      "totalIncome"
+    );
+
+  const expenseElement =
+    document.getElementById(
+      "totalExpense"
+    );
+
+
+  if (balanceElement) {
+
+    balanceElement.textContent =
+      formatMoney(balance);
+
+  }
+
+
+  if (incomeElement) {
+
+    incomeElement.textContent =
+      formatMoney(income);
+
+  }
+
+
+  if (expenseElement) {
+
+    expenseElement.textContent =
+      formatMoney(expense);
+
+  }
+
+}
+
+
+/* =====================================================
+   CATEGORY TOTALS
+   ===================================================== */
+
+function updateCategoryTotals() {
+
+  const totals = {};
+
+
+  categories.forEach(function (category) {
+
+    totals[category] = 0;
+
+  });
+
+
+  transactions.forEach(function (t) {
+
+    if (
+      t.type !== "expense" ||
+      t.status === "pending"
+    ) {
+
+      return;
+
+    }
+
+
+    const category =
+      categories.includes(
+        t.category
+      )
+        ? t.category
+        : "Other";
+
+
+    totals[category] +=
+      Number(t.amount || 0);
+
+  });
+
+
+  categories.forEach(function (category) {
+
+    const element =
+      document.getElementById(
+        "cat" + category
+      );
+
+
+    if (element) {
+
+      element.textContent =
+        formatMoney(
+          totals[category]
+        );
+
+    }
+
+  });
+
+}
+
+
+/* =====================================================
+   REPORT FILTER
+   Supports:
+   All Time
+   Today
+   This Week
+   This Month
+   This Year
+   Selected Date
+   ===================================================== */
+
+function getReportTransactions(type) {
+
+  const now =
+    new Date();
+
+
+  if (
+    type === "all" ||
+    type === "all-time"
+  ) {
+
+    return transactions.slice();
+
+  }
+
+
+  if (
+    type === "today" ||
+    type === "date"
+  ) {
+
+    /*
+      If report date input exists
+      and has a selected date,
+      use that date.
+    */
+
+    const dateInput =
+      document.getElementById(
+        "reportDate"
+      );
+
+
+    if (
+      type === "date" &&
+      dateInput &&
+      dateInput.value
+    ) {
+
+      const selected =
+        dateInput.value;
+
+
+      return transactions.filter(
+        function (t) {
+
+          return normaliseStoredDate(
+            t
+          ) === selected;
+
+        }
+      );
+
+    }
+
+
+    return transactions.filter(
+      function (t) {
+
+        const d =
+          getTransactionDate(t);
+
+
+        return (
+          d.getDate() ===
+            now.getDate() &&
+
+          d.getMonth() ===
+            now.getMonth() &&
+
+          d.getFullYear() ===
+            now.getFullYear()
+        );
+
+      }
+    );
+
+  }
+
+
+  if (
+    type === "week" ||
+    type === "weekly"
+  ) {
+
+    const currentDay =
+      now.getDay();
+
+
+    const difference =
+      currentDay === 0
+        ? -6
+        : 1 - currentDay;
+
+
+    const monday =
+      new Date(now);
+
+
+    monday.setDate(
+      now.getDate() +
+      difference
+    );
+
+
+    monday.setHours(
+      0,
+      0,
+      0,
       0
     );
 
+
+    const sunday =
+      new Date(monday);
+
+
+    sunday.setDate(
+      monday.getDate() +
+      6
+    );
+
+
+    sunday.setHours(
+      23,
+      59,
+      59,
+      999
+    );
+
+
+    return transactions.filter(
+      function (t) {
+
+        const d =
+          getTransactionDate(t);
+
+
+        return (
+          d >= monday &&
+          d <= sunday
+        );
+
+      }
+    );
+
+  }
+
+
+  if (
+    type === "month" ||
+    type === "monthly"
+  ) {
+
+    return transactions.filter(
+      function (t) {
+
+        const d =
+          getTransactionDate(t);
+
+
+        return (
+          d.getMonth() ===
+            now.getMonth() &&
+
+          d.getFullYear() ===
+            now.getFullYear()
+        );
+
+      }
+    );
+
+  }
+
+
+  if (
+    type === "year" ||
+    type === "yearly"
+  ) {
+
+    return transactions.filter(
+      function (t) {
+
+        const d =
+          getTransactionDate(t);
+
+
+        return (
+          d.getFullYear() ===
+          now.getFullYear()
+        );
+
+      }
+    );
+
+  }
+
+
+  return transactions.slice();
+
 }
 
 
 /* =====================================================
-   CALCULATE TOTAL EXPENSE
+   GET TRANSACTION DATE
    ===================================================== */
 
-function getTotalExpense(
-  list = transactions
+function getTransactionDate(t) {
+
+  if (t.timestamp) {
+
+    const d =
+      new Date(
+        Number(t.timestamp)
+      );
+
+
+    if (!isNaN(d.getTime())) {
+
+      return d;
+
+    }
+
+  }
+
+
+  if (t.date) {
+
+    const parts =
+      String(t.date).split("/");
+
+
+    if (
+      parts.length === 3
+    ) {
+
+      const day =
+        Number(parts[0]);
+
+      const month =
+        Number(parts[1]) - 1;
+
+      const year =
+        Number(parts[2]);
+
+
+      const d =
+        new Date(
+          year,
+          month,
+          day
+        );
+
+
+      if (!isNaN(d.getTime())) {
+
+        return d;
+
+      }
+
+    }
+
+  }
+
+
+  return new Date();
+
+}
+
+
+/* =====================================================
+   NORMALISE DATE
+   ===================================================== */
+
+function normaliseStoredDate(t) {
+
+  const d =
+    getTransactionDate(t);
+
+
+  return (
+    d.getFullYear() +
+    "-" +
+    String(
+      d.getMonth() + 1
+    ).padStart(2, "0") +
+    "-" +
+    String(
+      d.getDate()
+    ).padStart(2, "0")
+  );
+
+}
+
+
+/* =====================================================
+   REPORT
+   ===================================================== */
+
+function generateReport(type) {
+
+  const list =
+    getReportTransactions(
+      type
+    );
+
+
+  const income =
+    getTotalIncome(list);
+
+
+  const expense =
+    getTotalExpense(list);
+
+
+  const balance =
+    income - expense;
+
+
+  const incomeElement =
+    document.getElementById(
+      "reportIncome"
+    );
+
+  const expenseElement =
+    document.getElementById(
+      "reportExpense"
+    );
+
+  const balanceElement =
+    document.getElementById(
+      "reportBalance"
+    );
+
+  const countElement =
+    document.getElementById(
+      "reportTransactions"
+    );
+
+
+  if (incomeElement) {
+
+    incomeElement.textContent =
+      formatMoney(income);
+
+  }
+
+
+  if (expenseElement) {
+
+    expenseElement.textContent =
+      formatMoney(expense);
+
+  }
+
+
+  if (balanceElement) {
+
+    balanceElement.textContent =
+      formatMoney(balance);
+
+  }
+
+
+  if (countElement) {
+
+    countElement.textContent =
+      list.length;
+
+  }
+
+
+  renderReportCategories(
+    list
+  );
+
+}
+
+
+/* =====================================================
+   REPORT CATEGORY BREAKDOWN
+   ===================================================== */
+
+function renderReportCategories(
+  list
 ) {
 
-    
+  const box =
+    document.getElementById(
+      "reportCategories"
+    );
+
+
+  if (!box) {
+
+    return;
+
+  }
+
+
+  const totals = {};
+
+
+  categories.forEach(function (c) {
+
+    totals[c] = 0;
+
+  });
+
+
+  list.forEach(function (t) {
+
+    if (
+      t.type !== "expense" ||
+      t.status === "pending"
+    ) {
+
+      return;
+
+    }
+
+
+    const category =
+      categories.includes(
+        t.category
+      )
+        ? t.category
+        : "Other";
+
+
+    totals[category] +=
+      Number(t.amount || 0);
+
+  });
+
+
+  const active =
+    categories.filter(
+      function (c) {
+
+        return totals[c] > 0;
+
+      }
+    );
+
+
+  if (!active.length) {
+
+    box.innerHTML = "";
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    active.map(function (category) {
+
+      return `
+
+        <div class="report-category-row">
+
+          <span>
+            ${categoryEmoji[category]}
+            ${category}
+          </span>
+
+          <strong>
+            ${formatMoney(
+              totals[category]
+            )}
+          </strong>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   HISTORY
+   ===================================================== */
+
+function renderTransactionHistory() {
+
+  const listElement =
+    document.getElementById(
+      "transactionList"
+    );
+
+
+  if (!listElement) {
+
+    return;
+
+  }
+
+
+  if (!transactions.length) {
+
+    listElement.innerHTML = `
+
+      <div class="empty-state">
+        <div class="empty-icon">💰</div>
+        <p>No transactions yet.</p>
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  listElement.innerHTML =
+    transactions.map(
+      function (t) {
+
+        return transactionHTML(t);
+
+      }
+    ).join("");
+
+}
+
+
+/* =====================================================
+   TRANSACTION HTML
+   ===================================================== */
+
+function transactionHTML(t) {
+
+  const income =
+    t.type === "income";
+
+
+  const title =
+    income
+      ? (
+          t.incomeType ||
+          "Income"
+        )
+      : (
+          t.merchantName ||
+          t.category ||
+          "Expense"
+        );
+
+
+  const category =
+    income
+      ? "Income"
+      : (
+          t.category ||
+          "Other"
+        );
+
+
+  const emoji =
+    income
+      ? "💰"
+      : (
+          categoryEmoji[category] ||
+          "📦"
+        );
+
+
+  const dateText =
+    getHistoryDateText(t);
+
+
+  return `
+
+    <div class="transaction-item">
+
+      <div class="transaction-top">
+
+        <div class="transaction-title">
+
+          ${emoji}
+          ${escapeHTML(title)}
+
+        </div>
+
+        <div
+          class="transaction-amount ${
+            income
+              ? "income"
+              : "expense"
+          }"
+        >
+
+          ${
+            income
+              ? "+"
+              : "-"
+          }
+
+          ${formatMoney(t.amount)}
+
+        </div>
+
+      </div>
+
+
+      <div class="transaction-meta">
+
+        <span class="transaction-tag">
+          ${escapeHTML(category)}
+        </span>
+
+        ${
+          t.upiId
+            ? `
+              <span class="transaction-tag">
+                ${escapeHTML(t.upiId)}
+              </span>
+            `
+            : ""
+        }
+
+      </div>
+
+
+      ${
+        t.note
+          ? `
+       
