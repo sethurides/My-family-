@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1565c0">
+  <link rel="manifest" href="manifest.json">
+  <title>My Money</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #1565c0;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      opacity: .9;
+    }
+
+    .container {
+      padding: 15px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .balance {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 12px #0001;
+    }
+
+    .balance h2 {
+      margin: 5px 0;
+      color: #1565c0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      background: white;
+      padding: 16px;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px #0001;
+    }
+
+    .income {
+      color: #16833b;
+    }
+
+    .expense {
+      color: #d32f2f;
+    }
+
+    .section {
+      background: white;
+      margin-top: 15px;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px #0001;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    button {
+      background: #1565c0;
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+
+    .qr {
+      text-align: center;
+    }
+
+    .qr img {
+      width: 220px;
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .transaction {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .language {
+      background: white;
+      color: #1565c0;
+      border: 1px solid #1565c0;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1 id="appTitle">My Money</h1>
+  <p id="subtitle">Income & Expenses</p>
+</header>
+
+<div class="container">
+
+  <button class="language" onclick="toggleLanguage()" id="languageBtn">
+    తెలుగు
+  </button>
+
+  <div class="balance">
+    <small id="balanceText">Current Balance</small>
+    <h2 id="balance">₹0</h2>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <small id="incomeText">Income</small>
+      <h3 class="income" id="income">₹0</h3>
+    </div>
+
+    <div class="card">
+      <small id="expenseText">Expenses</small>
+      <h3 class="expense" id="expense">₹0</h3>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 id="addTitle">Add Transaction</h3>
+
+    <select id="type">
+      <option value="income" id="incomeOption">Income</option>
+      <option value="expense" id="expenseOption">Expense</option>
+    </select>
+
+    <input type="number" id="amount" placeholder="Amount">
+
+    <input type="text" id="category" placeholder="Category">
+
+    <input type="text" id="note" placeholder="Note">
+
+    <button onclick="addTransaction()" id="addBtn">
+      Add Transaction
+    </button>
+  </div>
+
+  <div class="section">
+    <h3 id="bankTitle">Bank / Payment QR</h3>
+
+    <div class="qr">
+      <p id="qrText">
+        Scan this QR to make payment
+      </p>
+
+      <img src="qr.png" alt="Payment QR Code">
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 id="historyTitle">Transaction History</h3>
+
+    <div id="transactions"></div>
+  </div>
+
+</div>
+
+<script>
+
+let transactions =
+  JSON.parse(localStorage.getItem("transactions")) || [];
+
+let telugu = false;
+
+function addTransaction() {
+
+  const type = document.getElementById("type").value;
+  const amount = Number(document.getElementById("amount").value);
+  const category = document.getElementById("category").value;
+  const note = document.getElementById("note").value;
+
+  if (!amount || amount <= 0) {
+    alert("Enter amount");
+    return;
+  }
+
+  const transaction = {
+    id: Date.now(),
+    type: type,
+    amount: amount,
+    category: category || "Other",
+    note: note || "",
+    date: new Date().toLocaleDateString()
+  };
+
+  transactions.unshift(transaction);
+
+  localStorage.setItem(
+    "transactions",
+    JSON.stringify(transactions)
+  );
+
+  document.getElementById("amount").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("note").value = "";
+
+  updateDashboard();
+}
+
+function updateDashboard() {
+
+  let income = 0;
+  let expense = 0;
+
+  transactions.forEach(t => {
+
+    if (t.type === "income") {
+      income += t.amount;
+    } else {
+      expense += t.amount;
+    }
+
+  });
+
+  const balance = income - expense;
+
+  document.getElementById("income").innerText =
+    "₹" + income.toLocaleString("en-IN");
+
+  document.getElementById("expense").innerText =
+    "₹" + expense.toLocaleString("en-IN");
+
+  document.getElementById("balance").innerText =
+    "₹" + balance.toLocaleString("en-IN");
+
+  showTransactions();
+}
+
+function showTransactions() {
+
+  const box = document.getElementById("transactions");
+
+  box.innerHTML = "";
+
+  if (transactions.length === 0) {
+    box.innerHTML = "<p>No transactions yet.</p>";
+    return;
+  }
+
+  transactions.forEach(t => {
+
+    const div = document.createElement("div");
+
+    div.className = "transaction";
+
+    const sign = t.type === "income" ? "+" : "-";
+
+    const color =
+      t.type === "income" ? "income" : "expense";
+
+    div.innerHTML = `
+      <div>
+        <b>${t.category}</b><br>
+        <small>${t.note}</small><br>
+        <small>${t.date}</small>
+      </div>
+
+      <strong class="${color}">
+        ${sign} ₹${t.amount.toLocaleString("en-IN")}
+      </strong>
+    `;
+
+    box.appendChild(div);
+
+  });
+}
+
+function toggleLanguage() {
+
+  telugu = !telugu;
+
+  if (telugu) {
+
+    document.getElementById("appTitle").innerText =
+      "నా మనీ";
+
+    document.getElementById("subtitle").innerText =
+      "ఆదాయం & ఖర్చులు";
+
+    document.getElementById("languageBtn").innerText =
+      "English";
+
+    document.getElementById("balanceText").innerText =
+      "ప్రస్తుత బ్యాలెన్స్";
+
+    document.getElementById("incomeText").innerText =
+      "ఆదాయం";
+
+    document.getElementById("expenseText").innerText =
+      "ఖర్చులు";
+
+    document.getElementById("addTitle").innerText =
+      "లావాదేవీ జోడించండి";
+
+    document.getElementById("incomeOption").innerText =
+      "ఆదాయం";
+
+    document.getElementById("expenseOption").innerText =
+      "ఖర్చు";
+
+    document.getElementById("addBtn").innerText =
+      "జోడించండి";
+
+    document.getElementById("bankTitle").innerText =
+      "బ్యాంక్ / పేమెంట్ QR";
+
+    document.getElementById("qrText").innerText =
+      "పేమెంట్ కోసం ఈ QR స్కాన్ చేయండి";
+
+    document.getElementById("historyTitle").innerText =
+      "లావాదేవీల చరిత్ర";
+
+  } else {
+
+    document.getElementById("appTitle").innerText =
+      "My Money";
+
+    document.getElementById("subtitle").innerText =
+      "Income & Expenses";
+
+    document.getElementById("languageBtn").innerText =
+      "తెలుగు";
+
+    document.getElementById("balanceText").innerText =
+      "Current Balance";
+
+    document.getElementById("incomeText").innerText =
+      "Income";
+
+    document.getElementById("expenseText").innerText =
+      "Expenses";
+
+    document.getElementById("addTitle").innerText =
+      "Add Transaction";
+
+    document.getElementById("incomeOption").innerText =
+      "Income";
+
+    document.getElementById("expenseOption").innerText =
+      "Expense";
+
+    document.getElementById("addBtn").innerText =
+      "Add Transaction";
+
+    document.getElementById("bankTitle").innerText =
+      "Bank / Payment QR";
+
+    document.getElementById("qrText").innerText =
+      "Scan this QR to make payment";
+
+    document.getElementById("historyTitle").innerText =
+      "Transaction History";
+
+  }
+}
+
+updateDashboard();
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+
+</script>
+
+</body>
+  </html>
