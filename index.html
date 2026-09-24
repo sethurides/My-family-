@@ -2,235 +2,386 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f5b700">
-
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>My Money</title>
 
+<meta name="theme-color" content="#0f9d58">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="manifest" href="manifest.json">
+
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
+}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f6f8;
+  background:#f4f7f6;
   color:#222;
+  min-height:100vh;
 }
 
 header{
-  background:linear-gradient(135deg,#f5b700,#ffd84d);
-  padding:24px 18px;
+  background:#0f9d58;
+  color:white;
+  padding:18px 16px;
   text-align:center;
-  border-radius:0 0 28px 28px;
-}
-
-header h1{
-  margin:0;
-  font-size:30px;
-}
-
-header p{
-  margin:7px 0 0;
-  font-size:14px;
+  font-size:24px;
+  font-weight:bold;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
 .container{
+  padding:16px;
   max-width:600px;
   margin:auto;
-  padding:16px;
+}
+
+.balance-card{
+  background:white;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+  margin-bottom:18px;
+  text-align:center;
+}
+
+.balance-title{
+  color:#666;
+  font-size:14px;
 }
 
 .balance{
-  background:#fff;
-  padding:22px;
-  border-radius:20px;
-  text-align:center;
-  margin-top:10px;
-  box-shadow:0 4px 15px #0001;
-}
-
-.balance small{
-  color:#777;
-}
-
-.balance h2{
-  margin:7px 0 0;
-  font-size:34px;
+  font-size:32px;
+  font-weight:bold;
+  margin:8px 0 16px;
 }
 
 .summary{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:15px;
+  display:flex;
+  gap:10px;
 }
 
-.box{
-  background:white;
-  padding:17px;
-  border-radius:17px;
-  text-align:center;
-  box-shadow:0 3px 12px #0001;
+.summary-box{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  background:#f5f5f5;
+}
+
+.summary-box small{
+  display:block;
+  color:#666;
+  margin-bottom:5px;
 }
 
 .income{
-  color:#16863a;
+  color:#0f9d58;
+  font-weight:bold;
 }
 
 .expense{
-  color:#d62828;
+  color:#d93025;
+  font-weight:bold;
 }
 
-.mainButtons{
+.main-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
-  margin-top:18px;
 }
 
-.mainButton{
-  min-height:115px;
-  border:0;
-  border-radius:20px;
-  font-size:18px;
+.main-btn{
+  border:none;
+  border-radius:18px;
+  padding:25px 12px;
+  font-size:17px;
   font-weight:bold;
-  box-shadow:0 4px 14px #0002;
+  background:white;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+  cursor:pointer;
 }
 
-.receiveBtn{
-  background:#16863a;
-  color:white;
+.main-btn:active{
+  transform:scale(.97);
 }
 
-.paymentBtn{
-  background:#d62828;
-  color:white;
+.receive{
+  color:#0f9d58;
 }
 
-.reportBtn{
-  background:#333;
-  color:white;
-  width:100%;
+.payment{
+  color:#d93025;
+}
+
+.reports{
+  color:#1565c0;
+}
+
+.install{
+  color:#6a1b9a;
+}
+
+.section-btn{
   margin-top:14px;
-}
-
-.installBtn{
-  background:#f5b700;
   width:100%;
-  margin-top:14px;
-  display:none;
-}
-
-section{
-  background:#fff;
-  padding:18px;
-  margin-top:18px;
-  border-radius:20px;
-  box-shadow:0 3px 12px #0001;
-}
-
-section h3{
-  margin-top:0;
-}
-
-.transaction{
-  padding:12px 0;
-  border-bottom:1px solid #eee;
-}
-
-.empty{
-  text-align:center;
-  color:#888;
-  padding:18px;
+  border:none;
+  border-radius:16px;
+  padding:17px;
+  background:white;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:#0008;
+  background:rgba(0,0,0,.65);
   z-index:1000;
-  padding:18px;
-  overflow:auto;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
 }
 
-.modalBox{
-  max-width:500px;
-  margin:30px auto;
+.modal-box{
   background:white;
-  padding:22px;
+  width:100%;
+  max-width:500px;
+  max-height:90vh;
+  overflow:auto;
   border-radius:22px;
+  padding:22px;
+  position:relative;
 }
 
-.modalBox h2{
-  margin-top:0;
+.close{
+  position:absolute;
+  right:15px;
+  top:12px;
+  border:none;
+  background:#eee;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
 }
 
-.qrArea{
+.modal-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:18px;
+  padding-right:40px;
+}
+
+.upi-box{
+  background:#f5f5f5;
+  padding:12px;
+  border-radius:12px;
   text-align:center;
-  padding:10px;
+  margin-bottom:15px;
+}
+
+.upi-id{
+  font-weight:bold;
+  color:#0f9d58;
+  margin-top:5px;
+}
+
+.qr-wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  background:white;
 }
 
 #receiveQR{
   width:280px;
-  height:280px;
+  min-height:280px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+#receiveQR img,
+#receiveQR canvas{
+  width:280px !important;
+  height:280px !important;
   max-width:100%;
 }
 
-input,select{
+.qr-note{
+  text-align:center;
+  color:#666;
+  font-size:13px;
+  margin:10px 0 15px;
+  line-height:1.5;
+}
+
+.action-btn{
+  width:100%;
+  border:none;
+  padding:15px;
+  border-radius:13px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.green-btn{
+  background:#0f9d58;
+  color:white;
+}
+
+.red-btn{
+  background:#d93025;
+  color:white;
+}
+
+.blue-btn{
+  background:#1565c0;
+  color:white;
+}
+
+.gray-btn{
+  background:#eee;
+  color:#333;
+}
+
+input,textarea,select{
   width:100%;
   padding:14px;
-  margin:7px 0 12px;
   border:1px solid #ddd;
-  border-radius:11px;
+  border-radius:12px;
+  margin-top:7px;
+  margin-bottom:13px;
   font-size:16px;
 }
 
-.action{
-  width:100%;
-  border:0;
-  border-radius:13px;
-  padding:15px;
-  font-size:16px;
+label{
+  font-size:14px;
   font-weight:bold;
 }
 
-.green{
-  background:#16863a;
-  color:white;
-}
-
-.red{
-  background:#d62828;
-  color:white;
-}
-
-.gray{
-  background:#eee;
-  margin-top:9px;
-}
-
-#scanner{
+#scannerVideo{
   width:100%;
-  border-radius:16px;
+  border-radius:15px;
   background:#111;
+  min-height:260px;
+  object-fit:cover;
 }
 
-.info{
-  background:#f5f5f5;
+.scanner-status{
+  text-align:center;
   padding:12px;
-  border-radius:12px;
-  margin:10px 0;
+  color:#666;
 }
 
-.reportRow{
+.confirm-row{
+  background:#f6f6f6;
+  border-radius:12px;
+  padding:13px;
+  margin-bottom:9px;
+}
+
+.confirm-row small{
+  color:#777;
+  display:block;
+  margin-bottom:4px;
+}
+
+.confirm-row strong{
+  font-size:17px;
+}
+
+.report-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+.report-tab{
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  background:#eee;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.report-tab.active{
+  background:#1565c0;
+  color:white;
+}
+
+.report-summary{
+  background:#f5f5f5;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:15px;
+}
+
+.report-line{
   display:flex;
   justify-content:space-between;
-  padding:11px 0;
+  padding:7px 0;
+}
+
+.transaction{
+  padding:13px;
   border-bottom:1px solid #eee;
+}
+
+.transaction:last-child{
+  border-bottom:none;
+}
+
+.transaction-top{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+}
+
+.transaction-bottom{
+  color:#777;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:#888;
+}
+
+footer{
+  text-align:center;
+  color:#999;
+  font-size:12px;
+  padding:30px 10px;
+}
+
+@media(max-width:380px){
+  .main-grid{
+    grid-template-columns:1fr;
+  }
+
+  #receiveQR,
+  #receiveQR img,
+  #receiveQR canvas{
+    width:250px !important;
+    height:250px !important;
+  }
 }
 </style>
 </head>
@@ -238,138 +389,113 @@ input,select{
 <body>
 
 <header>
-  <h1>💰 My Money</h1>
-  <p>Simple • Smart • Personal Money Manager</p>
+  💰 My Money
 </header>
 
 <div class="container">
 
-  <div class="balance">
-    <small>Current Balance</small>
-    <h2 id="balance">₹0.00</h2>
-  </div>
+  <div class="balance-card">
 
-  <div class="summary">
+    <div class="balance-title">Current Balance</div>
 
-    <div class="box">
-      <div>Total Income</div>
-      <strong class="income" id="totalIncome">
-        ₹0.00
-      </strong>
+    <div class="balance" id="balance">
+      ₹0.00
     </div>
 
-    <div class="box">
-      <div>Total Expense</div>
-      <strong class="expense" id="totalExpense">
-        ₹0.00
-      </strong>
-    </div>
+    <div class="summary">
 
+      <div class="summary-box">
+        <small>Total Income</small>
+        <div class="income" id="totalIncome">
+          ₹0.00
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <small>Total Expense</small>
+        <div class="expense" id="totalExpense">
+          ₹0.00
+        </div>
+      </div>
+
+    </div>
   </div>
 
+  <div class="main-grid">
 
-  <!-- TWO MAIN CATEGORIES -->
-
-  <div class="mainButtons">
-
-    <button
-      class="mainButton receiveBtn"
-      onclick="openReceive()">
-
+    <button class="main-btn receive" onclick="openReceive()">
       💚<br>
       Receive Money
-      <br>
-      <small>My UPI QR</small>
-
     </button>
 
-
-    <button
-      class="mainButton paymentBtn"
-      onclick="openPayment()">
-
+    <button class="main-btn payment" onclick="openPayment()">
       ❤️<br>
       Payment
-      <br>
-      <small>Scan Shop QR</small>
+    </button>
 
+    <button class="main-btn reports" onclick="openReports()">
+      📊<br>
+      Reports
+    </button>
+
+    <button class="main-btn install" onclick="installApp()">
+      📱<br>
+      Install App
     </button>
 
   </div>
 
-
-  <button
-    class="mainButton reportBtn"
-    onclick="openReports()">
-
-    📊 Reports
-
+  <button class="section-btn" onclick="showTransactions()">
+    📋 Transaction History
   </button>
 
-
-  <button
-    id="installBtn"
-    class="mainButton installBtn"
-    onclick="installApp()">
-
-    📱 Install My Money
-
-  </button>
-
-
-  <section>
-
-    <h3>Recent Transactions</h3>
-
-    <div id="transactions"></div>
-
-  </section>
+  <div id="transactionList"></div>
 
 </div>
 
+<footer>
+  My Money • Simple Money Management
+</footer>
 
-<!-- =========================
-     RECEIVE
-========================= -->
+
+<!-- RECEIVE MODAL -->
 
 <div class="modal" id="receiveModal">
 
-  <div class="modalBox">
+  <div class="modal-box">
 
-    <h2>💚 Receive Money</h2>
-
-    <div class="info">
-      <strong>My UPI ID</strong><br>
-      xyzts@ptyes
-    </div>
-
-    <div class="qrArea">
-
-      <canvas id="receiveQR"></canvas>
-
-      <p>
-        Scan this QR with any UPI app
-        to send money.
-      </p>
-
-    </div>
-
-
-    <button
-      class="action green"
-      onclick="shareUPI()">
-
-      📤 Share UPI
-
+    <button class="close" onclick="closeModal('receiveModal')">
+      ×
     </button>
 
+    <div class="modal-title">
+      💚 Receive Money
+    </div>
 
-    <button
-      class="action gray"
-      onclick="closeModal('receiveModal')">
+    <div class="upi-box">
+      <div>My UPI ID</div>
 
-      Close
+      <div class="upi-id">
+        xyzts@ptyes
+      </div>
+    </div>
 
+    <div class="qr-wrapper">
+
+      <!-- REAL QR WILL BE GENERATED HERE -->
+      <div id="receiveQR"></div>
+
+    </div>
+
+    <div class="qr-note">
+      Scan this QR using PhonePe, Google Pay, Paytm or another
+      UPI app to send money to this UPI ID.
+      <br><br>
+      Amount is entered by the payer in their UPI app.
+    </div>
+
+    <button class="action-btn green-btn" onclick="shareUPI()">
+      📤 Share UPI
     </button>
 
   </div>
@@ -377,36 +503,28 @@ input,select{
 </div>
 
 
-<!-- =========================
-     PAYMENT / SCANNER
-========================= -->
+<!-- PAYMENT / SCANNER MODAL -->
 
 <div class="modal" id="paymentModal">
 
-  <div class="modalBox">
+  <div class="modal-box">
 
-    <h2>❤️ Payment</h2>
+    <button class="close" onclick="closeScanner()">
+      ×
+    </button>
 
-    <p>
-      Scan the shop's UPI QR.
-    </p>
+    <div class="modal-title">
+      ❤️ Scan Shop QR
+    </div>
 
-    <video
-      id="scanner"
-      autoplay
-      playsinline>
-    </video>
+    <video id="scannerVideo" autoplay playsinline></video>
 
-    <p id="scanStatus">
-      Starting camera...
-    </p>
+    <div class="scanner-status" id="scannerStatus">
+      Point camera at the shop UPI QR
+    </div>
 
-    <button
-      class="action gray"
-      onclick="closeScanner()">
-
-      Close
-
+    <button class="action-btn gray-btn" onclick="closeScanner()">
+      Cancel
     </button>
 
   </div>
@@ -414,61 +532,54 @@ input,select{
 </div>
 
 
-<!-- =========================
-     PAYMENT CONFIRM
-========================= -->
+<!-- PAYMENT CONFIRMATION -->
 
 <div class="modal" id="confirmModal">
 
-  <div class="modalBox">
+  <div class="modal-box">
 
-    <h2>💳 Payment Details</h2>
+    <button class="close" onclick="closeModal('confirmModal')">
+      ×
+    </button>
 
-    <div class="info">
-      <strong>Shop</strong><br>
-      <span id="shopName">-</span>
+    <div class="modal-title">
+      💳 Confirm Payment
     </div>
 
-    <div class="info">
-      <strong>UPI ID</strong><br>
-      <span id="shopUPI">-</span>
+    <div class="confirm-row">
+      <small>Shop</small>
+      <strong id="confirmShop">-</strong>
     </div>
 
-    <div id="amountBox">
-
-      <label>Amount</label>
-
-      <input
-        id="paymentAmount"
-        type="number"
-        min="1"
-        placeholder="Enter amount">
-
+    <div class="confirm-row">
+      <small>UPI ID</small>
+      <strong id="confirmUPI">-</strong>
     </div>
+
+    <label>Amount</label>
+
+    <input
+      type="number"
+      id="paymentAmount"
+      placeholder="Enter amount"
+      min="0"
+      step="0.01"
+    >
 
     <label>Note</label>
 
-    <input
+    <textarea
       id="paymentNote"
-      type="text"
-      placeholder="Shopping">
+      placeholder="Optional note"
+      rows="3"
+    ></textarea>
 
-
-    <button
-      class="action red"
-      onclick="payNow()">
-
-      💳 Pay Now
-
+    <button class="action-btn red-btn" onclick="payNow()">
+      💸 Pay Now
     </button>
 
-
-    <button
-      class="action gray"
-      onclick="closeModal('confirmModal')">
-
+    <button class="action-btn gray-btn" onclick="closeModal('confirmModal')">
       Cancel
-
     </button>
 
   </div>
@@ -476,105 +587,68 @@ input,select{
 </div>
 
 
-<!-- =========================
-     REPORT
-========================= -->
+<!-- REPORT MODAL -->
 
 <div class="modal" id="reportModal">
 
-  <div class="modalBox">
+  <div class="modal-box">
 
-    <h2>📊 Reports</h2>
-
-    <select
-      id="reportType"
-      onchange="showReport()">
-
-      <option value="day">
-        Today
-      </option>
-
-      <option value="week">
-        Sunday - Saturday
-      </option>
-
-      <option value="month">
-        This Month
-      </option>
-
-      <option value="year">
-        This Year
-      </option>
-
-    </select>
-
-    <div id="reportResult"></div>
-
-    <button
-      class="action gray"
-      onclick="closeModal('reportModal')">
-
-      Close
-
+    <button class="close" onclick="closeModal('reportModal')">
+      ×
     </button>
+
+    <div class="modal-title">
+      📊 Reports
+    </div>
+
+    <div class="report-tabs">
+
+      <button class="report-tab active" onclick="changeReport('daily',this)">
+        Daily
+      </button>
+
+      <button class="report-tab" onclick="changeReport('weekly',this)">
+        Weekly
+      </button>
+
+      <button class="report-tab" onclick="changeReport('monthly',this)">
+        Monthly
+      </button>
+
+      <button class="report-tab" onclick="changeReport('yearly',this)">
+        Yearly
+      </button>
+
+    </div>
+
+    <div id="reportContent"></div>
 
   </div>
 
 </div>
 
 
-<!-- REAL QR LIBRARY -->
+<!-- QR CODE LIBRARY -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 
 <script>
 
-/* =========================
-   BASIC DATA
-========================= */
-
 const MY_UPI = "xyzts@ptyes";
+const MY_NAME = "My Money";
 
 let transactions =
-  JSON.parse(
-    localStorage.getItem("myMoneyTransactions") || "[]"
-  );
+  JSON.parse(localStorage.getItem("myMoneyTransactions") || "[]");
 
 let currentUPI = "";
 let currentShop = "";
 let currentAmount = "";
 
-let scannerStream = null;
-let detector = null;
+let videoStream = null;
+let scanTimer = null;
 
 let deferredPrompt = null;
-
-
-/* =========================
-   MONEY
-========================= */
-
-function money(value){
-
-  return "₹" +
-    Number(value || 0).toFixed(2);
-
-}
-
-
-/* =========================
-   SAVE
-========================= */
-
-function saveData(){
-
-  localStorage.setItem(
-    "myMoneyTransactions",
-    JSON.stringify(transactions)
-  );
-
-}
 
 
 /* =========================
@@ -583,36 +657,421 @@ function saveData(){
 
 function updateHome(){
 
-  let income =
-    transactions
-      .filter(t => t.type === "income")
-      .reduce(
-        (sum,t) => sum + Number(t.amount),
-        0
-      );
+  let income = 0;
+  let expense = 0;
 
-  let expense =
-    transactions
-      .filter(t => t.type === "expense")
-      .reduce(
-        (sum,t) => sum + Number(t.amount),
-        0
-      );
+  transactions.forEach(t => {
 
-  document.getElementById(
-    "totalIncome"
-  ).textContent = money(income);
+    const amount = Number(t.amount) || 0;
 
-  document.getElementById(
-    "totalExpense"
-  ).textContent = money(expense);
+    if(t.type === "income"){
+      income += amount;
+    }
 
-  document.getElementById(
-    "balance"
-  ).textContent =
-    money(income - expense);
+    if(t.type === "expense" && t.status !== "cancelled"){
+      expense += amount;
+    }
 
-  showTransactions();
+  });
+
+  const balance = income - expense;
+
+  document.getElementById("balance").textContent =
+    "₹" + balance.toFixed(2);
+
+  document.getElementById("totalIncome").textContent =
+    "₹" + income.toFixed(2);
+
+  document.getElementById("totalExpense").textContent =
+    "₹" + expense.toFixed(2);
+}
+
+
+/* =========================
+   RECEIVE
+========================= */
+
+function openReceive(){
+
+  document.getElementById("receiveModal").style.display = "flex";
+
+  generateReceiveQR();
+}
+
+
+function generateReceiveQR(){
+
+  const holder = document.getElementById("receiveQR");
+
+  holder.innerHTML = "";
+
+  const upiURL =
+    "upi://pay" +
+    "?pa=" + encodeURIComponent(MY_UPI) +
+    "&pn=" + encodeURIComponent(MY_NAME) +
+    "&cu=INR";
+
+  /*
+    IMPORTANT:
+    This is a REAL UPI URI.
+    QRCode.js converts this URI into an actual QR code.
+  */
+
+  if(typeof QRCode === "undefined"){
+
+    holder.innerHTML =
+      "<div style='color:#d93025;text-align:center'>" +
+      "QR library could not load.<br>" +
+      "Please connect to internet and try again." +
+      "</div>";
+
+    return;
+  }
+
+  new QRCode(holder,{
+
+    text: upiURL,
+
+    width:280,
+
+    height:280,
+
+    colorDark:"#000000",
+
+    colorLight:"#ffffff",
+
+    correctLevel:QRCode.CorrectLevel.H
+
+  });
+
+}
+
+
+function shareUPI(){
+
+  const text =
+    "My Money UPI ID: " + MY_UPI;
+
+  if(navigator.share){
+
+    navigator.share({
+      title:"My Money UPI",
+      text:text
+    }).catch(()=>{});
+
+  }else{
+
+    navigator.clipboard
+      .writeText(MY_UPI)
+      .then(()=>{
+        alert("UPI ID copied: " + MY_UPI);
+      })
+      .catch(()=>{
+        alert("My UPI ID: " + MY_UPI);
+      });
+
+  }
+
+}
+
+
+/* =========================
+   PAYMENT
+========================= */
+
+async function openPayment(){
+
+  document.getElementById("paymentModal").style.display = "flex";
+
+  document.getElementById("scannerStatus").textContent =
+    "Starting camera...";
+
+  if(!navigator.mediaDevices ||
+     !navigator.mediaDevices.getUserMedia){
+
+    document.getElementById("scannerStatus").textContent =
+      "Camera is not supported in this browser.";
+
+    return;
+  }
+
+  try{
+
+    videoStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:{
+            ideal:"environment"
+          }
+        },
+        audio:false
+      });
+
+    const video =
+      document.getElementById("scannerVideo");
+
+    video.srcObject = videoStream;
+
+    await video.play();
+
+    document.getElementById("scannerStatus").textContent =
+      "Point camera at the shop UPI QR";
+
+    startQRScanning();
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("scannerStatus").textContent =
+      "Camera permission was denied or camera is unavailable.";
+
+  }
+
+}
+
+
+function startQRScanning(){
+
+  if(!("BarcodeDetector" in window)){
+
+    document.getElementById("scannerStatus").innerHTML =
+      "This browser does not support automatic QR scanning.<br><br>" +
+      "Please open the shop QR directly using your phone's QR scanner.";
+
+    return;
+  }
+
+  const detector =
+    new BarcodeDetector({
+      formats:["qr_code"]
+    });
+
+  const video =
+    document.getElementById("scannerVideo");
+
+  scanTimer =
+    setInterval(async()=>{
+
+      if(
+        !video.videoWidth ||
+        !video.videoHeight
+      ){
+        return;
+      }
+
+      try{
+
+        const codes =
+          await detector.detect(video);
+
+        if(codes.length){
+
+          const value =
+            codes[0].rawValue;
+
+          processUPIQR(value);
+
+        }
+
+      }catch(error){
+
+        console.log(error);
+
+      }
+
+    },500);
+
+}
+
+
+function processUPIQR(value){
+
+  if(scanTimer){
+
+    clearInterval(scanTimer);
+    scanTimer = null;
+
+  }
+
+  let data = value.trim();
+
+  if(!data.toLowerCase().startsWith("upi://pay")){
+
+    document.getElementById("scannerStatus").textContent =
+      "This is not a valid UPI payment QR.";
+
+    return;
+
+  }
+
+  try{
+
+    const url = new URL(data);
+
+    currentUPI =
+      url.searchParams.get("pa") || "";
+
+    currentShop =
+      url.searchParams.get("pn") ||
+      currentUPI ||
+      "Shop";
+
+    currentAmount =
+      url.searchParams.get("am") || "";
+
+    if(!currentUPI){
+
+      alert("UPI ID not found in QR.");
+      return;
+
+    }
+
+    closeScanner();
+
+    document.getElementById("confirmShop").textContent =
+      currentShop;
+
+    document.getElementById("confirmUPI").textContent =
+      currentUPI;
+
+    const amountInput =
+      document.getElementById("paymentAmount");
+
+    if(currentAmount){
+
+      amountInput.value =
+        Number(currentAmount).toFixed(2);
+
+      amountInput.readOnly = true;
+
+    }else{
+
+      amountInput.value = "";
+
+      amountInput.readOnly = false;
+
+    }
+
+    document.getElementById("paymentNote").value = "";
+
+    document.getElementById("confirmModal").style.display =
+      "flex";
+
+  }catch(error){
+
+    alert("Unable to read this UPI QR.");
+
+  }
+
+}
+
+
+function payNow(){
+
+  const amountInput =
+    document.getElementById("paymentAmount");
+
+  const amount =
+    Number(amountInput.value);
+
+  if(!amount || amount <= 0){
+
+    alert("Please enter a valid amount.");
+
+    return;
+
+  }
+
+  const note =
+    document.getElementById("paymentNote").value.trim();
+
+  const paymentURL =
+    "upi://pay" +
+    "?pa=" + encodeURIComponent(currentUPI) +
+    "&pn=" + encodeURIComponent(currentShop) +
+    "&am=" + encodeURIComponent(amount.toFixed(2)) +
+    "&cu=INR";
+
+  /*
+    We record the transaction as INITIATED.
+    A browser/PWA cannot independently confirm
+    whether the UPI payment was actually successful.
+  */
+
+  transactions.push({
+
+    id:
+      "MM" +
+      Date.now(),
+
+    type:"expense",
+
+    amount:amount,
+
+    shop:currentShop,
+
+    upi:currentUPI,
+
+    note:note,
+
+    status:"initiated",
+
+    date:new Date().toISOString()
+
+  });
+
+  saveTransactions();
+
+  closeModal("confirmModal");
+
+  window.location.href = paymentURL;
+
+}
+
+
+/* =========================
+   SCANNER CLOSE
+========================= */
+
+function closeScanner(){
+
+  if(scanTimer){
+
+    clearInterval(scanTimer);
+    scanTimer = null;
+
+  }
+
+  if(videoStream){
+
+    videoStream
+      .getTracks()
+      .forEach(track=>track.stop());
+
+    videoStream = null;
+
+  }
+
+  const video =
+    document.getElementById("scannerVideo");
+
+  video.srcObject = null;
+
+  document.getElementById("paymentModal").style.display =
+    "none";
+
+}
+
+
+/* =========================
+   MODAL CLOSE
+========================= */
+
+function closeModal(id){
+
+  document.getElementById(id).style.display =
+    "none";
 
 }
 
@@ -621,69 +1080,89 @@ function updateHome(){
    TRANSACTIONS
 ========================= */
 
-function showTransactions(){
+function saveTransactions(){
 
-  const box =
-    document.getElementById("transactions");
+  localStorage.setItem(
+    "myMoneyTransactions",
+    JSON.stringify(transactions)
+  );
 
-  if(!transactions.length){
-
-    box.innerHTML =
-      '<div class="empty">No transactions yet</div>';
-
-    return;
-  }
-
-  let list =
-    [...transactions]
-      .sort((a,b)=>b.time-a.time)
-      .slice(0,10);
-
-  box.innerHTML =
-    list.map(t=>{
-
-      let sign =
-        t.type === "income"
-        ? "+"
-        : "-";
-
-      let cls =
-        t.type === "income"
-        ? "income"
-        : "expense";
-
-      return `
-        <div class="transaction">
-
-          <strong>
-            ${escapeHTML(t.note || t.type)}
-          </strong>
-
-          <br>
-
-          <small>
-            ${new Date(t.time).toLocaleString()}
-          </small>
-
-          <strong
-            class="${cls}"
-            style="float:right">
-
-            ${sign}${money(t.amount)}
-
-          </strong>
-
-        </div>
-      `;
-
-    }).join("");
+  updateHome();
 
 }
 
 
-/* =========================
-   SAFE TEXT
-========================= */
+function showTransactions(){
+
+  const list =
+    document.getElementById("transactionList");
+
+  if(!transactions.length){
+
+    list.innerHTML =
+      "<div class='empty'>No transactions yet.</div>";
+
+    return;
+
+  }
+
+  const sorted =
+    [...transactions].reverse();
+
+  let html =
+    "<div class='balance-card'>" +
+    "<h3 style='margin-bottom:12px'>Transaction History</h3>";
+
+  sorted.forEach(t=>{
+
+    const sign =
+      t.type === "income" ? "+" : "-";
+
+    const cls =
+      t.type === "income" ? "income" : "expense";
+
+    const date =
+      new Date(t.date).toLocaleString();
+
+    const title =
+      t.type === "income"
+        ? "Received Money"
+        : (t.shop || "Payment");
+
+    html +=
+
+      "<div class='transaction'>" +
+
+      "<div class='transaction-top'>" +
+
+      "<span>" +
+      escapeHTML(title) +
+      "</span>" +
+
+      "<span class='" + cls + "'>" +
+      sign +
+      "₹" +
+      Number(t.amount).toFixed(2) +
+      "</span>" +
+
+      "</div>" +
+
+      "<div class='transaction-bottom'>" +
+      escapeHTML(date) +
+      " • " +
+      escapeHTML(t.status || "completed") +
+      "</div>" +
+
+      "</div>";
+
+  });
+
+  html += "</div>";
+
+  list.innerHTML = html;
+
+}
+
 
 function escapeHTML(text){
 
@@ -698,791 +1177,110 @@ function escapeHTML(text){
 
 
 /* =========================
-   RECEIVE
-========================= */
-
-function openReceive(){
-
-  document.getElementById(
-    "receiveModal"
-  ).style.display = "block";
-
-  generateReceiveQR();
-
-}
-
-
-function generateReceiveQR(){
-
-  const canvas =
-    document.getElementById("receiveQR");
-
-  canvas.getContext("2d")
-    .clearRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-  /*
-    Real UPI payment URI.
-    No amount is included.
-  */
-
-  const upiURL =
-    "upi://pay?pa=" +
-    encodeURIComponent(MY_UPI) +
-    "&pn=" +
-    encodeURIComponent("My Money") +
-    "&cu=INR";
-
-
-  /*
-    qrcode.js draws a real QR
-    containing the UPI URI.
-  */
-
-  if(typeof QRCode === "undefined"){
-
-    alert(
-      "QR library is not loaded. Please check internet connection."
-    );
-
-    return;
-  }
-
-
-  /*
-    qrcode.js normally accepts an element,
-    so create a temporary holder.
-  */
-
-  let old =
-    document.getElementById("qrTemp");
-
-  if(old){
-    old.remove();
-  }
-
-  let holder =
-    document.createElement("div");
-
-  holder.id = "qrTemp";
-
-  holder.style.textAlign = "center";
-
-  document
-    .querySelector(".qrArea")
-    .appendChild(holder);
-
-
-  new QRCode(holder,{
-
-    text:upiURL,
-
-    width:280,
-
-    height:280,
-
-    correctLevel:QRCode.CorrectLevel.H
-
-  });
-
-
-  /*
-    Move generated QR canvas/image
-    into our visible area.
-  */
-
-  setTimeout(()=>{
-
-    const generated =
-      holder.querySelector("canvas, img");
-
-    const target =
-      document.getElementById("receiveQR");
-
-    if(generated){
-
-      if(generated.tagName === "CANVAS"){
-
-        target.width = generated.width;
-        target.height = generated.height;
-
-        target
-          .getContext("2d")
-          .drawImage(
-            generated,
-            0,
-            0
-          );
-
-      }
-
-      if(generated.tagName === "IMG"){
-
-        const ctx =
-          target.getContext("2d");
-
-        const image =
-          new Image();
-
-        image.onload = ()=>{
-
-          target.width = 280;
-          target.height = 280;
-
-          ctx.drawImage(
-            image,
-            0,
-            0,
-            280,
-            280
-          );
-
-        };
-
-        image.src = generated.src;
-
-      }
-
-    }
-
-    holder.remove();
-
-  },100);
-
-}
-
-
-/* =========================
-   SHARE UPI
-========================= */
-
-async function shareUPI(){
-
-  const upiText =
-    "My Money UPI ID: " + MY_UPI;
-
-  if(navigator.share){
-
-    try{
-
-      await navigator.share({
-
-        title:"My Money",
-
-        text:upiText
-
-      });
-
-    }catch(e){}
-
-  }else{
-
-    await navigator.clipboard.writeText(MY_UPI);
-
-    alert(
-      "UPI ID copied:\n" + MY_UPI
-    );
-
-  }
-
-}
-
-
-/* =========================
-   PAYMENT
-========================= */
-
-async function openPayment(){
-
-  document.getElementById(
-    "paymentModal"
-  ).style.display = "block";
-
-  document.getElementById(
-    "scanStatus"
-  ).textContent =
-    "Starting camera...";
-
-
-  if(!navigator.mediaDevices ||
-     !navigator.mediaDevices.getUserMedia){
-
-    document.getElementById(
-      "scanStatus"
-    ).textContent =
-      "Camera is not supported here.";
-
-    return;
-  }
-
-
-  if(!("BarcodeDetector" in window)){
-
-    document.getElementById(
-      "scanStatus"
-    ).textContent =
-      "QR scanning is not supported by this browser. Please use Chrome on Android.";
-
-    return;
-  }
-
-
-  try{
-
-    scannerStream =
-      await navigator.mediaDevices.getUserMedia({
-
-        video:{
-          facingMode:{
-            ideal:"environment"
-          }
-        },
-
-        audio:false
-
-      });
-
-
-    const video =
-      document.getElementById("scanner");
-
-    video.srcObject =
-      scannerStream;
-
-
-    detector =
-      new BarcodeDetector({
-        formats:["qr_code"]
-      });
-
-
-    document.getElementById(
-      "scanStatus"
-    ).textContent =
-      "Point the camera at the shop QR.";
-
-
-    scanQR();
-
-
-  }catch(error){
-
-    console.log(error);
-
-    document.getElementById(
-      "scanStatus"
-    ).textContent =
-      "Please allow camera permission.";
-
-  }
-
-}
-
-
-/* =========================
-   SCAN LOOP
-========================= */
-
-async function scanQR(){
-
-  if(!scannerStream ||
-     document.getElementById(
-       "paymentModal"
-     ).style.display === "none"){
-
-    return;
-  }
-
-
-  try{
-
-    const video =
-      document.getElementById("scanner");
-
-    const codes =
-      await detector.detect(video);
-
-
-    if(codes.length){
-
-      processUPIQR(
-        codes[0].rawValue
-      );
-
-      return;
-
-    }
-
-  }catch(error){
-
-    console.log(error);
-
-  }
-
-
-  requestAnimationFrame(scanQR);
-
-}
-
-
-/* =========================
-   PROCESS SHOP QR
-========================= */
-
-function processUPIQR(value){
-
-  closeScanner();
-
-
-  if(!value ||
-     !value.toLowerCase()
-       .startsWith("upi://pay")){
-
-    alert(
-      "This is not a UPI payment QR."
-    );
-
-    return;
-
-  }
-
-
-  try{
-
-    const url =
-      new URL(value);
-
-
-    currentUPI =
-      url.searchParams.get("pa") || "";
-
-
-    currentShop =
-      url.searchParams.get("pn") ||
-      "Shop";
-
-
-    currentAmount =
-      url.searchParams.get("am") ||
-      "";
-
-
-    document.getElementById(
-      "shopName"
-    ).textContent =
-      currentShop;
-
-
-    document.getElementById(
-      "shopUPI"
-    ).textContent =
-      currentUPI;
-
-
-    const amountInput =
-      document.getElementById(
-        "paymentAmount"
-      );
-
-
-    /*
-      If shop QR contains amount,
-      no manual entry is needed.
-    */
-
-    if(currentAmount){
-
-      amountInput.value =
-        currentAmount;
-
-      amountInput.readOnly = true;
-
-      amountInput.placeholder =
-        "Amount from QR";
-
-    }else{
-
-      amountInput.value = "";
-
-      amountInput.readOnly = false;
-
-      amountInput.placeholder =
-        "Enter payment amount";
-
-    }
-
-
-    document.getElementById(
-      "paymentNote"
-    ).value = "";
-
-
-    document.getElementById(
-      "confirmModal"
-    ).style.display =
-      "block";
-
-
-  }catch(error){
-
-    alert(
-      "Invalid UPI QR."
-    );
-
-  }
-
-}
-
-
-/* =========================
-   PAY NOW
-========================= */
-
-function payNow(){
-
-  const amount =
-    Number(
-      document.getElementById(
-        "paymentAmount"
-      ).value
-    );
-
-
-  const note =
-    document.getElementById(
-      "paymentNote"
-    ).value.trim();
-
-
-  if(!currentUPI){
-
-    alert(
-      "Shop UPI ID not found."
-    );
-
-    return;
-
-  }
-
-
-  if(!amount || amount <= 0){
-
-    alert(
-      "Please enter payment amount."
-    );
-
-    return;
-
-  }
-
-
-  /*
-    Record payment as initiated.
-    PWA cannot independently verify
-    bank success.
-  */
-
-  transactions.push({
-
-    type:"expense",
-
-    method:"UPI",
-
-    amount:amount,
-
-    note:
-      note ||
-      ("Payment to " + currentShop),
-
-    merchant:currentShop,
-
-    upi:currentUPI,
-
-    status:"initiated",
-
-    time:Date.now()
-
-  });
-
-
-  saveData();
-
-  updateHome();
-
-
-  const paymentURL =
-    "upi://pay" +
-    "?pa=" +
-    encodeURIComponent(currentUPI) +
-    "&pn=" +
-    encodeURIComponent(currentShop) +
-    "&am=" +
-    encodeURIComponent(
-      amount.toFixed(2)
-    ) +
-    "&cu=INR";
-
-
-  closeModal(
-    "confirmModal"
-  );
-
-
-  alert(
-    "Opening your UPI payment app."
-  );
-
-
-  /*
-    Android will choose an installed
-    UPI application that handles
-    upi:// links.
-  */
-
-  window.location.href =
-    paymentURL;
-
-}
-
-
-/* =========================
-   CLOSE SCANNER
-========================= */
-
-function closeScanner(){
-
-  document.getElementById(
-    "paymentModal"
-  ).style.display =
-    "none";
-
-
-  if(scannerStream){
-
-    scannerStream
-      .getTracks()
-      .forEach(track =>
-        track.stop()
-      );
-
-    scannerStream = null;
-
-  }
-
-}
-
-
-/* =========================
-   MODAL CLOSE
-========================= */
-
-function closeModal(id){
-
-  document.getElementById(id)
-    .style.display =
-    "none";
-
-}
-
-
-/* =========================
    REPORTS
 ========================= */
 
 function openReports(){
 
-  document.getElementById(
-    "reportModal"
-  ).style.display =
-    "block";
+  document.getElementById("reportModal").style.display =
+    "flex";
 
-  showReport();
-
-}
-
-
-function startDay(d){
-
-  d = new Date(d);
-
-  d.setHours(
-    0,0,0,0
-  );
-
-  return d.getTime();
+  changeReport("daily",
+    document.querySelector(".report-tab"));
 
 }
 
 
-function startWeek(d){
+function changeReport(type,button){
 
-  d = new Date(d);
+  document
+    .querySelectorAll(".report-tab")
+    .forEach(b=>b.classList.remove("active"));
 
-  const day =
-    d.getDay();
+  if(button){
+    button.classList.add("active");
+  }
 
-  d.setDate(
-    d.getDate() - day
-  );
-
-  d.setHours(
-    0,0,0,0
-  );
-
-  return d.getTime();
-
-}
-
-
-function startMonth(d){
-
-  d = new Date(d);
-
-  d.setDate(1);
-
-  d.setHours(
-    0,0,0,0
-  );
-
-  return d.getTime();
-
-}
-
-
-function startYear(d){
-
-  d = new Date(d);
-
-  d.setMonth(0,1);
-
-  d.setHours(
-    0,0,0,0
-  );
-
-  return d.getTime();
-
-}
-
-
-function showReport(){
-
-  const type =
-    document.getElementById(
-      "reportType"
-    ).value;
-
-
-  const now =
-    new Date();
-
+  let now = new Date();
 
   let start;
+  let end;
 
+  if(type === "daily"){
 
-  if(type === "day")
-    start = startDay(now);
-
-  if(type === "week")
-    start = startWeek(now);
-
-  if(type === "month")
-    start = startMonth(now);
-
-  if(type === "year")
-    start = startYear(now);
-
-
-  const list =
-    transactions.filter(
-      t => t.time >= start
-    );
-
-
-  const income =
-    list
-      .filter(t=>t.type==="income")
-      .reduce(
-        (s,t)=>s+Number(t.amount),
-        0
+    start =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
       );
 
-
-  const expense =
-    list
-      .filter(t=>t.type==="expense")
-      .reduce(
-        (s,t)=>s+Number(t.amount),
-        0
+    end =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()+1
       );
-
-
-  document.getElementById(
-    "reportResult"
-  ).innerHTML = `
-
-    <div class="reportRow">
-      <span>Income</span>
-      <strong class="income">
-        ${money(income)}
-      </strong>
-    </div>
-
-    <div class="reportRow">
-      <span>Expense</span>
-      <strong class="expense">
-        ${money(expense)}
-      </strong>
-    </div>
-
-    <div class="reportRow">
-      <span>Balance</span>
-      <strong>
-        ${money(income-expense)}
-      </strong>
-    </div>
-
-  `;
-
-}
-
-
-/* =========================
-   INSTALL
-========================= */
-
-window.addEventListener(
-  "beforeinstallprompt",
-  event => {
-
-    event.preventDefault();
-
-    deferredPrompt =
-      event;
-
-    document.getElementById(
-      "installBtn"
-    ).style.display =
-      "block";
-
-  }
-);
-
-
-async function installApp(){
-
-  if(!deferredPrompt){
-
-    alert(
-      "Open this website in Chrome and use Chrome menu → Add to Home screen."
-    );
-
-    return;
 
   }
 
+  if(type === "weekly"){
 
-  deferredPrompt.prompt();
+    const day =
+      now.getDay();
+
+    const diff =
+      day === 0 ? -6 : 1-day;
+
+    start =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()+diff
+      );
+
+    end =
+      new Date(start);
+
+    end.setDate(end.getDate()+7);
+
+  }
+
+  if(type === "monthly"){
+
+    start =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      );
+
+    end =
+      new Date(
+        now.getFullYear(),
+        now.getMonth()+1,
+        1
+      );
+
+  }
+
+  if(type === "yearly"){
+
+    start =
+      new Date(
+        now.getFullYear(),
+        0,
+        1
+      );
+
+    end =
+      new Date(
+        now.getFullYear()+1,
+        0,
+        1
+      );
+
+  }
+
+  const filtered =
+    transactio
