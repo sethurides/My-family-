@@ -1,13 +1,19 @@
 {
   "name": "My Money - Income & Expenses",
   "short_name": "My Money",
-  "description": "Income, expenses, UPI payments and reports",
+  "description": "Income, expenses, UPI payments and financial reports",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f4f7fb",
   "theme_color": "#1565c0",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": [
+    "finance",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "./icon-192.png",
