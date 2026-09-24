@@ -1,231 +1,395 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1565c0">
-  <link rel="manifest" href="manifest.json">
-  <title>My Money</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Money</title><meta name="theme-color" content="#1565c0"><link rel="manifest" href="manifest.json"><style>
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+body{
+  margin:0;
+  background:#f4f7fb;
+  color:#222;
+}
 
-    body {
-      margin: 0;
-      background: #f4f7fb;
-      color: #222;
-    }
+header{
+  background:#1565c0;
+  color:white;
+  padding:18px;
+  text-align:center;
+}
 
-    header {
-      background: #1565c0;
-      color: white;
-      padding: 18px;
-      text-align: center;
-    }
+header h1{
+  margin:0;
+  font-size:25px;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+header p{
+  margin:6px 0 0;
+}
 
-    header p {
-      margin: 5px 0 0;
-      opacity: .9;
-    }
+.container{
+  padding:15px;
+  max-width:650px;
+  margin:auto;
+}
 
-    .container {
-      padding: 15px;
-      max-width: 600px;
-      margin: auto;
-    }
+.card{
+  background:white;
+  padding:18px;
+  border-radius:15px;
+  margin-bottom:15px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
 
-    .balance {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      margin-bottom: 15px;
-      box-shadow: 0 3px 12px #0001;
-    }
+.balance{
+  font-size:30px;
+  font-weight:bold;
+  color:#1565c0;
+}
 
-    .balance h2 {
-      margin: 5px 0;
-      color: #1565c0;
-    }
+.row{
+  display:flex;
+  gap:10px;
+}
 
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+.box{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  background:#f1f5f9;
+  text-align:center;
+}
 
-    .card {
-      background: white;
-      padding: 16px;
-      border-radius: 14px;
-      box-shadow: 0 3px 10px #0001;
-    }
+.box b{
+  display:block;
+  margin-top:6px;
+  font-size:20px;
+}
 
-    .income {
-      color: #16833b;
-    }
+input,select,button{
+  width:100%;
+  padding:13px;
+  margin-top:9px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
 
-    .expense {
-      color: #d32f2f;
-    }
+button{
+  background:#1565c0;
+  color:white;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .section {
-      background: white;
-      margin-top: 15px;
-      padding: 18px;
-      border-radius: 16px;
-      box-shadow: 0 3px 12px #0001;
-    }
+button.green{
+  background:#159447;
+}
 
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      font-size: 15px;
-    }
+button.dark{
+  background:#222;
+}
 
-    button {
-      background: #1565c0;
-      color: white;
-      border: none;
-      font-weight: bold;
-    }
+button.orange{
+  background:#ef6c00;
+}
 
-    .qr {
-      text-align: center;
-    }
+button.red{
+  background:#d32f2f;
+}
 
-    .qr img {
-      width: 220px;
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
+.lang{
+  width:auto;
+  float:right;
+  margin-top:-35px;
+  padding:7px 12px;
+  background:white;
+  color:#1565c0;
+}
 
-    .transaction {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-      display: flex;
-      justify-content: space-between;
-    }
+.transaction{
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
 
-    .language {
-      background: white;
-      color: #1565c0;
-      border: 1px solid #1565c0;
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
+.transaction:last-child{
+  border-bottom:none;
+}
 
-<body>
+.income{
+  color:green;
+}
 
-<header>
-  <h1 id="appTitle">My Money</h1>
-  <p id="subtitle">Income & Expenses</p>
-</header>
+.expense{
+  color:red;
+}
 
-<div class="container">
+#reader{
+  width:100%;
+  margin-top:12px;
+}
 
-  <button class="language" onclick="toggleLanguage()" id="languageBtn">
+.qr-result{
+  background:#f1f8ff;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+  display:none;
+}
+
+.small{
+  font-size:13px;
+  color:#666;
+}
+
+.hidden{
+  display:none;
+}
+</style></head><body><header>
+  <button class="lang" onclick="toggleLanguage()" id="langBtn">
     తెలుగు
-  </button>
+  </button>  <h1 id="title">My Money</h1>
+  <p id="subtitle">Income & Expenses</p>
+</header><div class="container">  <!-- DASHBOARD -->  <div class="card">
+    <h3 id="balanceTitle">Total Balance</h3><div class="balance">
+  ₹<span id="balance">0</span>
+</div>
 
-  <div class="balance">
-    <small id="balanceText">Current Balance</small>
-    <h2 id="balance">₹0</h2>
+<br>
+
+<div class="row">
+
+  <div class="box">
+    <span id="incomeTitle">Income</span>
+    <b class="income">₹<span id="income">0</span></b>
   </div>
 
-  <div class="cards">
-    <div class="card">
-      <small id="incomeText">Income</small>
-      <h3 class="income" id="income">₹0</h3>
-    </div>
-
-    <div class="card">
-      <small id="expenseText">Expenses</small>
-      <h3 class="expense" id="expense">₹0</h3>
-    </div>
-  </div>
-
-  <div class="section">
-    <h3 id="addTitle">Add Transaction</h3>
-
-    <select id="type">
-      <option value="income" id="incomeOption">Income</option>
-      <option value="expense" id="expenseOption">Expense</option>
-    </select>
-
-    <input type="number" id="amount" placeholder="Amount">
-
-    <input type="text" id="category" placeholder="Category">
-
-    <input type="text" id="note" placeholder="Note">
-
-    <button onclick="addTransaction()" id="addBtn">
-      Add Transaction
-    </button>
-  </div>
-
-  <div class="section">
-    <h3 id="bankTitle">Bank / Payment QR</h3>
-
-    <div class="qr">
-      <p id="qrText">
-        Scan this QR to make payment
-      </p>
-
-      <img src="qr.png" alt="Payment QR Code">
-    </div>
-  </div>
-
-  <div class="section">
-    <h3 id="historyTitle">Transaction History</h3>
-
-    <div id="transactions"></div>
+  <div class="box">
+    <span id="expenseTitle">Expenses</span>
+    <b class="expense">₹<span id="expense">0</span></b>
   </div>
 
 </div>
 
-<script>
+  </div>  <!-- ADD TRANSACTION -->  <div class="card"><h3 id="addTitle">Add Transaction</h3>
+
+<select id="type">
+  <option value="income">Income</option>
+  <option value="expense">Expense</option>
+</select>
+
+<input
+  id="amount"
+  type="number"
+  placeholder="Amount"
+  inputmode="decimal"
+>
+
+<input
+  id="category"
+  type="text"
+  placeholder="Category"
+>
+
+<button onclick="addTransaction()" id="addBtn">
+  Add Transaction
+</button>
+
+  </div>  <!-- SHOP QR PAYMENT -->  <div class="card"><h3>📷 <span id="scanTitle">Scan Shop QR</span></h3>
+
+<p class="small" id="scanInfo">
+  Scan a shop UPI QR, enter amount and open payment.
+</p>
+
+<button
+  class="green"
+  onclick="startScanner()"
+  id="scanBtn">
+  📷 Scan Shop QR
+</button>
+
+<div id="reader"></div>
+
+<div id="qrResult" class="qr-result">
+
+  <b>Shop Name:</b>
+  <span id="shopName">-</span>
+
+  <br><br>
+
+  <b>UPI ID:</b>
+  <span id="shopUpi">-</span>
+
+  <input
+    id="payAmount"
+    type="number"
+    placeholder="Enter Amount ₹"
+    inputmode="decimal"
+  >
+
+  <button
+    class="orange"
+    onclick="payWithPaytm()">
+    💳 Pay with Paytm
+  </button>
+
+  <button
+    class="dark"
+    onclick="closeScanner()">
+    Close
+  </button>
+
+</div>
+
+  </div>  <!-- TRANSACTION HISTORY -->  <div class="card"><h3 id="historyTitle">Transaction History</h3>
+
+<div id="history">
+  No transactions yet.
+</div>
+
+  </div></div><!-- QR SCANNER LIBRARY --><script src="https://unpkg.com/html5-qrcode"></script><script>
 
 let transactions =
-  JSON.parse(localStorage.getItem("transactions")) || [];
+JSON.parse(localStorage.getItem("transactions") || "[]");
 
-let telugu = false;
+let currentLanguage = "en";
 
-function addTransaction() {
+let scannedUPI = null;
 
-  const type = document.getElementById("type").value;
-  const amount = Number(document.getElementById("amount").value);
-  const category = document.getElementById("category").value;
-  const note = document.getElementById("note").value;
+let scanner = null;
 
-  if (!amount || amount <= 0) {
-    alert("Enter amount");
+
+/* -------------------------
+   LANGUAGE
+------------------------- */
+
+function toggleLanguage(){
+
+  if(currentLanguage === "en"){
+    currentLanguage = "te";
+    document.getElementById("langBtn").innerText = "English";
+  }else{
+    currentLanguage = "en";
+    document.getElementById("langBtn").innerText = "తెలుగు";
+  }
+
+  updateLanguage();
+}
+
+
+function updateLanguage(){
+
+  if(currentLanguage === "te"){
+
+    document.getElementById("title").innerText =
+      "మై మనీ";
+
+    document.getElementById("subtitle").innerText =
+      "ఆదాయం & ఖర్చులు";
+
+    document.getElementById("balanceTitle").innerText =
+      "మొత్తం బ్యాలెన్స్";
+
+    document.getElementById("incomeTitle").innerText =
+      "ఆదాయం";
+
+    document.getElementById("expenseTitle").innerText =
+      "ఖర్చులు";
+
+    document.getElementById("addTitle").innerText =
+      "లావాదేవీ జోడించండి";
+
+    document.getElementById("addBtn").innerText =
+      "జోడించండి";
+
+    document.getElementById("scanTitle").innerText =
+      "షాప్ QR స్కాన్";
+
+    document.getElementById("scanInfo").innerText =
+      "షాప్ UPI QR స్కాన్ చేసి, మొత్తం నమోదు చేసి పేమెంట్ చేయండి.";
+
+    document.getElementById("scanBtn").innerText =
+      "📷 షాప్ QR స్కాన్";
+
+    document.getElementById("historyTitle").innerText =
+      "లావాదేవీల చరిత్ర";
+
+  }else{
+
+    document.getElementById("title").innerText =
+      "My Money";
+
+    document.getElementById("subtitle").innerText =
+      "Income & Expenses";
+
+    document.getElementById("balanceTitle").innerText =
+      "Total Balance";
+
+    document.getElementById("incomeTitle").innerText =
+      "Income";
+
+    document.getElementById("expenseTitle").innerText =
+      "Expenses";
+
+    document.getElementById("addTitle").innerText =
+      "Add Transaction";
+
+    document.getElementById("addBtn").innerText =
+      "Add Transaction";
+
+    document.getElementById("scanTitle").innerText =
+      "Scan Shop QR";
+
+    document.getElementById("scanInfo").innerText =
+      "Scan a shop UPI QR, enter amount and open payment.";
+
+    document.getElementById("scanBtn").innerText =
+      "📷 Scan Shop QR";
+
+    document.getElementById("historyTitle").innerText =
+      "Transaction History";
+  }
+}
+
+
+/* -------------------------
+   ADD TRANSACTION
+------------------------- */
+
+function addTransaction(){
+
+  let type =
+    document.getElementById("type").value;
+
+  let amount =
+    Number(document.getElementById("amount").value);
+
+  let category =
+    document.getElementById("category").value.trim();
+
+  if(!amount || amount <= 0){
+
+    alert("Please enter amount");
+
     return;
   }
 
-  const transaction = {
-    id: Date.now(),
-    type: type,
-    amount: amount,
-    category: category || "Other",
-    note: note || "",
-    date: new Date().toLocaleDateString()
-  };
+  transactions.unshift({
 
-  transactions.unshift(transaction);
+    id:Date.now(),
+
+    type:type,
+
+    amount:amount,
+
+    category:category || "Other",
+
+    date:new Date().toLocaleString()
+
+  });
 
   localStorage.setItem(
     "transactions",
@@ -233,176 +397,336 @@ function addTransaction() {
   );
 
   document.getElementById("amount").value = "";
+
   document.getElementById("category").value = "";
-  document.getElementById("note").value = "";
 
   updateDashboard();
+
 }
 
-function updateDashboard() {
+
+/* -------------------------
+   DASHBOARD
+------------------------- */
+
+function updateDashboard(){
 
   let income = 0;
+
   let expense = 0;
 
   transactions.forEach(t => {
 
-    if (t.type === "income") {
-      income += t.amount;
-    } else {
-      expense += t.amount;
+    if(t.type === "income"){
+      income += Number(t.amount);
+    }
+
+    if(t.type === "expense"){
+      expense += Number(t.amount);
     }
 
   });
 
-  const balance = income - expense;
-
   document.getElementById("income").innerText =
-    "₹" + income.toLocaleString("en-IN");
+    income.toLocaleString("en-IN");
 
   document.getElementById("expense").innerText =
-    "₹" + expense.toLocaleString("en-IN");
+    expense.toLocaleString("en-IN");
 
   document.getElementById("balance").innerText =
-    "₹" + balance.toLocaleString("en-IN");
+    (income - expense).toLocaleString("en-IN");
 
-  showTransactions();
-}
 
-function showTransactions() {
+  let history =
+    document.getElementById("history");
 
-  const box = document.getElementById("transactions");
+  if(transactions.length === 0){
 
-  box.innerHTML = "";
+    history.innerHTML =
+      "No transactions yet.";
 
-  if (transactions.length === 0) {
-    box.innerHTML = "<p>No transactions yet.</p>";
     return;
   }
 
-  transactions.forEach(t => {
 
-    const div = document.createElement("div");
+  history.innerHTML = transactions.map(t => {
 
-    div.className = "transaction";
+    let sign =
+      t.type === "income" ? "+" : "-";
 
-    const sign = t.type === "income" ? "+" : "-";
-
-    const color =
+    let cls =
       t.type === "income" ? "income" : "expense";
 
-    div.innerHTML = `
-      <div>
-        <b>${t.category}</b><br>
-        <small>${t.note}</small><br>
-        <small>${t.date}</small>
+    return `
+
+      <div class="transaction">
+
+        <b>${t.category}</b>
+
+        <span class="${cls}"
+              style="float:right">
+
+          ${sign} ₹${Number(t.amount)
+            .toLocaleString("en-IN")}
+
+        </span>
+
+        <br>
+
+        <span class="small">
+          ${t.date}
+        </span>
+
       </div>
 
-      <strong class="${color}">
-        ${sign} ₹${t.amount.toLocaleString("en-IN")}
-      </strong>
     `;
 
-    box.appendChild(div);
+  }).join("");
+
+}
+
+
+/* -------------------------
+   START QR SCANNER
+------------------------- */
+
+function startScanner(){
+
+  document.getElementById("reader").innerHTML = "";
+
+  scanner = new Html5Qrcode("reader");
+
+  scanner.start(
+
+    { facingMode:"environment" },
+
+    {
+      fps:10,
+      qrbox:{
+        width:250,
+        height:250
+      }
+    },
+
+    qrCodeMessage => {
+
+      handleQR(qrCodeMessage);
+
+    },
+
+    errorMessage => {
+
+      /* Ignore scanning errors */
+
+    }
+
+  ).catch(err => {
+
+    alert(
+      "Camera permission ఇవ్వాలి.\n\n" +
+      "Please allow camera permission."
+    );
 
   });
+
 }
 
-function toggleLanguage() {
 
-  telugu = !telugu;
+/* -------------------------
+   READ UPI QR
+------------------------- */
 
-  if (telugu) {
+function handleQR(text){
 
-    document.getElementById("appTitle").innerText =
-      "నా మనీ";
+  if(!text.toLowerCase().startsWith("upi://pay")){
 
-    document.getElementById("subtitle").innerText =
-      "ఆదాయం & ఖర్చులు";
+    alert(
+      "This is not a UPI payment QR."
+    );
 
-    document.getElementById("languageBtn").innerText =
-      "English";
+    return;
+  }
 
-    document.getElementById("balanceText").innerText =
-      "ప్రస్తుత బ్యాలెన్స్";
 
-    document.getElementById("incomeText").innerText =
-      "ఆదాయం";
+  try{
 
-    document.getElementById("expenseText").innerText =
-      "ఖర్చులు";
+    let url = new URL(text);
 
-    document.getElementById("addTitle").innerText =
-      "లావాదేవీ జోడించండి";
+    let pa = url.searchParams.get("pa");
 
-    document.getElementById("incomeOption").innerText =
-      "ఆదాయం";
+    let pn = url.searchParams.get("pn");
 
-    document.getElementById("expenseOption").innerText =
-      "ఖర్చు";
+    let existingAmount =
+      url.searchParams.get("am");
 
-    document.getElementById("addBtn").innerText =
-      "జోడించండి";
 
-    document.getElementById("bankTitle").innerText =
-      "బ్యాంక్ / పేమెంట్ QR";
+    if(!pa){
 
-    document.getElementById("qrText").innerText =
-      "పేమెంట్ కోసం ఈ QR స్కాన్ చేయండి";
+      alert("UPI ID not found.");
 
-    document.getElementById("historyTitle").innerText =
-      "లావాదేవీల చరిత్ర";
+      return;
+    }
 
-  } else {
 
-    document.getElementById("appTitle").innerText =
-      "My Money";
+    scannedUPI = {
 
-    document.getElementById("subtitle").innerText =
-      "Income & Expenses";
+      pa:pa,
 
-    document.getElementById("languageBtn").innerText =
-      "తెలుగు";
+      pn:pn || "Shop",
 
-    document.getElementById("balanceText").innerText =
-      "Current Balance";
+      am:existingAmount || ""
 
-    document.getElementById("incomeText").innerText =
-      "Income";
+    };
 
-    document.getElementById("expenseText").innerText =
-      "Expenses";
 
-    document.getElementById("addTitle").innerText =
-      "Add Transaction";
+    document.getElementById("shopName").innerText =
+      scannedUPI.pn;
 
-    document.getElementById("incomeOption").innerText =
-      "Income";
+    document.getElementById("shopUpi").innerText =
+      scannedUPI.pa;
 
-    document.getElementById("expenseOption").innerText =
-      "Expense";
 
-    document.getElementById("addBtn").innerText =
-      "Add Transaction";
+    if(existingAmount){
 
-    document.getElementById("bankTitle").innerText =
-      "Bank / Payment QR";
+      document.getElementById("payAmount").value =
+        existingAmount;
 
-    document.getElementById("qrText").innerText =
-      "Scan this QR to make payment";
+    }
 
-    document.getElementById("historyTitle").innerText =
-      "Transaction History";
+
+    document.getElementById("qrResult").style.display =
+      "block";
+
+
+    stopScanner();
+
+  }catch(error){
+
+    alert(
+      "Unable to read this UPI QR."
+    );
 
   }
+
 }
+
+
+/* -------------------------
+   STOP SCANNER
+------------------------- */
+
+function stopScanner(){
+
+  if(scanner){
+
+    scanner.stop()
+      .then(() => {
+
+        scanner.clear();
+
+      })
+      .catch(() => {});
+
+  }
+
+}
+
+
+/* -------------------------
+   CLOSE
+------------------------- */
+
+function closeScanner(){
+
+  stopScanner();
+
+  document.getElementById("reader").innerHTML = "";
+
+  document.getElementById("qrResult").style.display =
+    "none";
+
+}
+
+
+/* -------------------------
+   PAY WITH PAYTM
+------------------------- */
+
+function payWithPaytm(){
+
+  if(!scannedUPI){
+
+    alert("Please scan shop QR first.");
+
+    return;
+  }
+
+
+  let amount =
+    Number(
+      document.getElementById("payAmount").value
+    );
+
+
+  if(!amount || amount <= 0){
+
+    alert("Please enter payment amount.");
+
+    return;
+  }
+
+
+  /*
+    Standard UPI payment URI.
+    Android will try to open a
+    UPI payment application.
+  */
+
+  let params = new URLSearchParams();
+
+  params.set("pa", scannedUPI.pa);
+
+  params.set("pn", scannedUPI.pn);
+
+  params.set("am", amount.toFixed(2));
+
+  params.set("cu", "INR");
+
+
+  let upiURL =
+    "upi://pay?" + params.toString();
+
+
+  /*
+    Try Android UPI handler.
+  */
+
+  window.location.href = upiURL;
+
+}
+
+
+/* -------------------------
+   LOAD
+------------------------- */
 
 updateDashboard();
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+
+/* -------------------------
+   SERVICE WORKER
+------------------------- */
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker.register("sw.js")
+      .catch(() => {});
+
+  });
+
 }
 
-</script>
-
-</body>
-  </html>
+</script></body>
+</html>
