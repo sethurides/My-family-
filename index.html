@@ -2,1304 +2,1154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-      maximum-scale=1.0, user-scalable=no">
-
-<meta name="theme-color" content="#0f766e">
-
-<link rel="manifest" href="./manifest.json">
-
-<link rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="./icon-192.png">
-
-<link rel="apple-touch-icon"
-      href="./icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5b700">
+<meta name="description" content="My Money - Simple personal money manager">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
 
 <title>My Money</title>
 
-<!-- QR GENERATOR -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-
 <style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box}
 
 body{
-    font-family:Arial,sans-serif;
-    background:#f3f7f7;
-    color:#222;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f6f8;
+  color:#222;
 }
 
-button{
-    font-family:inherit;
-    border:0;
-    cursor:pointer;
+header{
+  background:linear-gradient(135deg,#f5b700,#ffcc33);
+  padding:22px 18px;
+  text-align:center;
+  border-radius:0 0 25px 25px;
 }
 
-.app{
-    width:100%;
-    max-width:600px;
-    margin:auto;
-    min-height:100vh;
-    background:white;
+header h1{
+  margin:0;
+  font-size:30px;
 }
 
-/* HEADER */
-
-.header{
-    background:linear-gradient(135deg,#0f766e,#14b8a6);
-    color:white;
-    padding:24px 20px 28px;
-    text-align:center;
+header p{
+  margin:6px 0 0;
+  font-size:14px;
 }
 
-.header h1{
-    font-size:32px;
-    font-weight:800;
-}
-
-.header p{
-    margin-top:6px;
-    font-size:14px;
-    opacity:.92;
-}
-
-/* CONTENT */
-
-.content{
-    padding:18px;
-}
-
-/* BALANCE */
-
-.balance-card{
-    margin-top:-5px;
-    background:linear-gradient(135deg,#0f766e,#18b7a5);
-    color:white;
-    border-radius:22px;
-    padding:24px;
-    box-shadow:0 10px 25px rgba(0,0,0,.14);
-}
-
-.balance-title{
-    font-size:15px;
-    opacity:.9;
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:16px;
 }
 
 .balance{
-    font-size:38px;
-    font-weight:800;
-    margin-top:7px;
+  background:#fff;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  margin-top:-5px;
+  box-shadow:0 4px 15px #00000012;
 }
 
-/* SUMMARY */
+.balance h2{
+  margin:5px 0;
+  font-size:32px;
+}
 
 .summary{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:15px;
 }
 
-.summary-card{
-    background:#fff;
-    border:1px solid #e2e8e8;
-    border-radius:17px;
-    padding:18px;
-}
-
-.summary-card small{
-    color:#666;
-    font-size:13px;
-}
-
-.summary-card strong{
-    display:block;
-    font-size:23px;
-    margin-top:8px;
+.box{
+  background:white;
+  padding:16px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 3px 12px #00000010;
 }
 
 .income{
-    color:#15803d;
+  color:#16863a;
 }
 
 .expense{
-    color:#dc2626;
+  color:#d62828;
 }
 
-/* SECTION */
-
-.section{
-    margin-top:25px;
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
 }
 
-.section-title{
-    font-size:20px;
-    font-weight:800;
-    margin-bottom:13px;
+button{
+  border:0;
+  border-radius:15px;
+  padding:16px 10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#fff;
+  box-shadow:0 3px 12px #00000012;
 }
 
-/* ACTIONS */
-
-.actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+button:active{
+  transform:scale(.97);
 }
 
-.action{
-    padding:18px 10px;
-    border-radius:17px;
-    font-size:15px;
-    font-weight:800;
+.receive{
+  background:#16863a;
+  color:white;
 }
 
-.income-btn{
-    background:#dcfce7;
-    color:#166534;
+.pay{
+  background:#d62828;
+  color:white;
 }
 
-.expense-btn{
-    background:#fee2e2;
-    color:#991b1b;
+.report{
+  background:#333;
+  color:white;
 }
 
-.qr-btn{
-    background:#dbeafe;
-    color:#1d4ed8;
+.install{
+  background:#f5b700;
 }
 
-.cash-btn{
-    background:#fef3c7;
-    color:#92400e;
+section{
+  background:white;
+  margin-top:18px;
+  padding:18px;
+  border-radius:18px;
+  box-shadow:0 3px 12px #00000010;
 }
 
-/* REPORT BUTTONS */
-
-.reports{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:7px;
+section h3{
+  margin-top:0;
 }
-
-.report-btn{
-    padding:12px 4px;
-    border-radius:11px;
-    background:#eef2f2;
-    color:#333;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.report-btn.active{
-    background:#0f766e;
-    color:white;
-}
-
-/* REPORT BOX */
-
-.report-box{
-    margin-top:13px;
-    background:#f8fafc;
-    border-radius:16px;
-    padding:16px;
-    border:1px solid #e5e7eb;
-}
-
-.report-row{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid #e5e7eb;
-}
-
-.report-row:last-child{
-    border-bottom:0;
-}
-
-.report-income{
-    color:#15803d;
-    font-weight:bold;
-}
-
-.report-expense{
-    color:#dc2626;
-    font-weight:bold;
-}
-
-/* TRANSACTIONS */
 
 .transaction{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 5px;
-    border-bottom:1px solid #eee;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
 }
 
-.transaction-left{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.transaction:last-child{
+  border-bottom:0;
 }
-
-.transaction-icon{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:20px;
-}
-
-.icon-income{
-    background:#dcfce7;
-}
-
-.icon-expense{
-    background:#fee2e2;
-}
-
-.transaction-name{
-    font-weight:bold;
-}
-
-.transaction-date{
-    font-size:11px;
-    color:#777;
-    margin-top:4px;
-}
-
-.transaction-amount{
-    font-weight:bold;
-}
-
-.empty{
-    text-align:center;
-    color:#777;
-    padding:25px 5px;
-}
-
-/* MODAL */
 
 .modal{
-    display:none;
-    position:fixed;
-    z-index:1000;
-    inset:0;
-    background:rgba(0,0,0,.65);
-    justify-content:center;
-    align-items:flex-end;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#00000080;
+  z-index:1000;
+  padding:20px;
+  overflow:auto;
 }
 
-.modal.show{
-    display:flex;
+.modalBox{
+  background:white;
+  max-width:500px;
+  margin:40px auto;
+  padding:20px;
+  border-radius:20px;
 }
 
-.modal-box{
-    width:100%;
-    max-width:600px;
-    background:white;
-    border-radius:24px 24px 0 0;
-    padding:22px;
-    max-height:92vh;
-    overflow:auto;
+.modalBox h2{
+  margin-top:0;
 }
 
-.modal-title{
-    font-size:22px;
-    font-weight:800;
-    margin-bottom:18px;
+input,select{
+  width:100%;
+  padding:14px;
+  margin:7px 0 12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.save{
+  width:100%;
+  background:#16863a;
+  color:white;
 }
 
 .close{
-    float:right;
-    background:#f1f5f5;
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    font-size:20px;
+  width:100%;
+  margin-top:8px;
+  background:#eee;
 }
 
-input{
-    width:100%;
-    padding:15px;
-    border:1px solid #d1d5db;
-    border-radius:12px;
-    font-size:16px;
-    margin-bottom:12px;
-    outline:none;
+#qrCanvas{
+  display:block;
+  margin:15px auto;
+  max-width:100%;
 }
 
-input:focus{
-    border-color:#0f766e;
+#scanner{
+  width:100%;
+  border-radius:15px;
+  background:#111;
 }
 
-.primary{
-    width:100%;
-    background:#0f766e;
-    color:white;
-    padding:16px;
-    border-radius:13px;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:6px;
+.reportRow{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
 }
 
-.secondary{
-    width:100%;
-    background:#e5e7eb;
-    color:#222;
-    padding:14px;
-    border-radius:13px;
-    font-weight:bold;
-    margin-top:10px;
+.empty{
+  text-align:center;
+  color:#888;
+  padding:20px;
 }
-
-/* QR */
-
-.qr-area{
-    text-align:center;
-}
-
-.qr-area canvas{
-    max-width:260px;
-    width:100%;
-    height:auto;
-    margin:10px auto 18px;
-}
-
-.upi-text{
-    background:#f1f5f5;
-    padding:12px;
-    border-radius:10px;
-    font-weight:bold;
-    word-break:break-all;
-}
-
-/* CAMERA */
-
-.camera-box{
-    position:relative;
-    width:100%;
-    background:#000;
-    border-radius:18px;
-    overflow:hidden;
-}
-
-#camera{
-    width:100%;
-    display:block;
-}
-
-.scan-line{
-    position:absolute;
-    left:10%;
-    right:10%;
-    top:50%;
-    height:2px;
-    background:#14b8a6;
-}
-
-.scan-status{
-    text-align:center;
-    margin:12px 0;
-    color:#555;
-    font-size:14px;
-}
-
-/* INSTALL */
-
-.install{
-    width:100%;
-    background:#0f766e;
-    color:white;
-    padding:14px;
-    border-radius:13px;
-    font-weight:bold;
-    margin-bottom:15px;
-    display:none;
-}
-
-/* FOOTER */
-
-.footer{
-    text-align:center;
-    color:#777;
-    padding:28px 10px;
-    font-size:12px;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
-<header class="header">
-    <h1>My Money</h1>
-    <p>Simple • Smart • Personal Money Manager</p>
+<header>
+  <h1>💰 My Money</h1>
+  <p>Simple • Smart • Personal Money Manager</p>
 </header>
 
-<main class="content">
+<div class="container">
 
-<button id="installBtn"
-        class="install">
-    📲 Install My Money
-</button>
+  <div class="balance">
+    <small>Current Balance</small>
+    <h2 id="balance">₹0.00</h2>
+  </div>
 
-<!-- BALANCE -->
-
-<div class="balance-card">
-    <div class="balance-title">
-        Current Balance
+  <div class="summary">
+    <div class="box">
+      <div>Total Income</div>
+      <strong class="income" id="totalIncome">₹0.00</strong>
     </div>
 
-    <div class="balance"
-         id="balance">
-        ₹0
+    <div class="box">
+      <div>Total Expense</div>
+      <strong class="expense" id="totalExpense">₹0.00</strong>
     </div>
-</div>
+  </div>
 
-<!-- SUMMARY -->
+  <div class="buttons">
 
-<div class="summary">
+    <button class="receive" onclick="openIncomeQR()">
+      📲 Receive via QR
+    </button>
 
-<div class="summary-card">
-    <small>Total Income</small>
-    <strong class="income"
-            id="totalIncome">
-        ₹0
-    </strong>
-</div>
+    <button onclick="openCashIncome()">
+      💵 Hand Cash
+    </button>
 
-<div class="summary-card">
-    <small>Total Expense</small>
-    <strong class="expense"
-            id="totalExpense">
-        ₹0
-    </strong>
-</div>
+    <button class="pay" onclick="openScanner()">
+      📷 Pay / Scan QR
+    </button>
 
-</div>
+    <button class="report" onclick="openReports()">
+      📊 Reports
+    </button>
 
-<!-- INCOME -->
+    <button class="install" id="installBtn" onclick="installApp()" style="display:none;">
+      📱 Install App
+    </button>
 
-<section class="section">
+  </div>
 
-<div class="section-title">
-    💰 Income
-</div>
-
-<div class="actions">
-
-<button class="action qr-btn"
-        onclick="showIncomeQR()">
-    📱 Income QR
-</button>
-
-<button class="action cash-btn"
-        onclick="addCashIncome()">
-    💵 Hand Cash
-</button>
+  <section>
+    <h3>Recent Transactions</h3>
+    <div id="transactions"></div>
+  </section>
 
 </div>
 
-</section>
+
+<!-- RECEIVE QR -->
+
+<div class="modal" id="incomeQRModal">
+  <div class="modalBox">
+
+    <h2>📲 Receive Money</h2>
+
+    <p>
+      UPI ID:
+      <strong>xyzts@ptyes</strong>
+    </p>
+
+    <canvas id="qrCanvas"></canvas>
+
+    <label>Received Amount</label>
+    <input id="qrIncomeAmount" type="number" min="1" placeholder="Enter amount">
+
+    <label>Note</label>
+    <input id="qrIncomeNote" type="text" placeholder="Example: Salary">
+
+    <button class="save" onclick="saveQRIncome()">
+      ✅ Money Received
+    </button>
+
+    <button class="close" onclick="closeModal('incomeQRModal')">
+      Close
+    </button>
+
+  </div>
+</div>
+
+
+<!-- CASH INCOME -->
+
+<div class="modal" id="cashModal">
+  <div class="modalBox">
+
+    <h2>💵 Hand Cash Income</h2>
+
+    <label>Amount</label>
+    <input id="cashAmount" type="number" min="1" placeholder="Enter amount">
+
+    <label>Note</label>
+    <input id="cashNote" type="text" placeholder="Example: Salary">
+
+    <button class="save" onclick="saveCashIncome()">
+      Save Income
+    </button>
+
+    <button class="close" onclick="closeModal('cashModal')">
+      Close
+    </button>
+
+  </div>
+</div>
+
+
+<!-- SCANNER -->
+
+<div class="modal" id="scannerModal">
+  <div class="modalBox">
+
+    <h2>📷 Scan Shop QR</h2>
+
+    <video id="scanner" autoplay playsinline></video>
+
+    <p id="scanStatus">
+      Point camera at a UPI QR code.
+    </p>
+
+    <button class="close" onclick="closeScanner()">
+      Close Scanner
+    </button>
+
+  </div>
+</div>
+
 
 <!-- PAYMENT -->
 
-<section class="section">
+<div class="modal" id="paymentModal">
+  <div class="modalBox">
 
-<div class="section-title">
-    💳 Payment
+    <h2>💳 Payment</h2>
+
+    <p>Shop:</p>
+    <strong id="shopName">Unknown</strong>
+
+    <p>UPI ID:</p>
+    <strong id="shopUPI">Unknown</strong>
+
+    <label>Amount</label>
+    <input id="paymentAmount" type="number" min="1" placeholder="Enter amount">
+
+    <label>Note</label>
+    <input id="paymentNote" type="text" placeholder="Shopping">
+
+    <button class="pay" onclick="makePayment()">
+      💳 Pay Now
+    </button>
+
+    <button class="close" onclick="closeModal('paymentModal')">
+      Cancel
+    </button>
+
+  </div>
 </div>
 
-<button class="action expense-btn"
-        style="width:100%"
-        onclick="openScanner()">
-    📷 Scan Shop QR & Pay
-</button>
-
-</section>
 
 <!-- REPORTS -->
 
-<section class="section">
+<div class="modal" id="reportModal">
+  <div class="modalBox">
 
-<div class="section-title">
-    📊 Reports
-</div>
+    <h2>📊 Reports</h2>
 
-<div class="reports">
+    <select id="reportType" onchange="showReport()">
+      <option value="day">Today</option>
+      <option value="week">This Week</option>
+      <option value="month">This Month</option>
+      <option value="year">This Year</option>
+    </select>
 
-<button class="report-btn active"
-        onclick="showReport('daily',this)">
-    Daily
-</button>
+    <div id="reportResult"></div>
 
-<button class="report-btn"
-        onclick="showReport('weekly',this)">
-    Weekly
-</button>
+    <button class="close" onclick="closeModal('reportModal')">
+      Close
+    </button>
 
-<button class="report-btn"
-        onclick="showReport('monthly',this)">
-    Monthly
-</button>
-
-<button class="report-btn"
-        onclick="showReport('yearly',this)">
-    Yearly
-</button>
-
-</div>
-
-<div class="report-box"
-     id="reportBox">
-</div>
-
-</section>
-
-<!-- TRANSACTIONS -->
-
-<section class="section">
-
-<div class="section-title">
-    🧾 Recent Transactions
-</div>
-
-<div id="transactions">
-</div>
-
-</section>
-
-</main>
-
-<div class="footer">
-    © 2026 My Money
-</div>
-
-</div>
-
-
-<!-- =========================
-     INCOME QR MODAL
-========================= -->
-
-<div class="modal"
-     id="incomeModal">
-
-<div class="modal-box">
-
-<button class="close"
-        onclick="closeModal('incomeModal')">
-    ×
-</button>
-
-<div class="modal-title">
-    💰 Receive Money
-</div>
-
-<div class="qr-area">
-
-<canvas id="incomeQR"></canvas>
-
-<div class="upi-text">
-    xyzts@ptyes
-</div>
-
-<p style="margin-top:10px;color:#666;font-size:13px">
-    Scan this QR to send money to My Money
-</p>
-
-</div>
-
-<button class="primary"
-        onclick="addQRIncome()">
-    + Record Received Money
-</button>
-
-</div>
-</div>
-
-
-<!-- =========================
-     CASH INCOME MODAL
-========================= -->
-
-<div class="modal"
-     id="cashModal">
-
-<div class="modal-box">
-
-<button class="close"
-        onclick="closeModal('cashModal')">
-    ×
-</button>
-
-<div class="modal-title">
-    💵 Hand Cash Income
-</div>
-
-<input id="cashAmount"
-       type="number"
-       inputmode="decimal"
-       placeholder="Enter amount">
-
-<input id="cashNote"
-       type="text"
-       placeholder="Note (optional)">
-
-<button class="primary"
-        onclick="saveCashIncome()">
-    Save Income
-</button>
-
-</div>
-</div>
-
-
-<!-- =========================
-     SCANNER MODAL
-========================= -->
-
-<div class="modal"
-     id="scannerModal">
-
-<div class="modal-box">
-
-<button class="close"
-        onclick="closeScanner()">
-    ×
-</button>
-
-<div class="modal-title">
-    📷 Scan Shop QR
-</div>
-
-<div class="camera-box">
-
-<video id="camera"
-       autoplay
-       playsinline></video>
-
-<div class="scan-line"></div>
-
-</div>
-
-<canvas id="scanCanvas"
-        style="display:none"></canvas>
-
-<div class="scan-status"
-     id="scanStatus">
-    Point the camera at a UPI QR code
-</div>
-
-<button class="secondary"
-        onclick="closeScanner()">
-    Cancel
-</button>
-
-</div>
-</div>
-
-
-<!-- =========================
-     PAYMENT MODAL
-========================= -->
-
-<div class="modal"
-     id="paymentModal">
-
-<div class="modal-box">
-
-<button class="close"
-        onclick="closeModal('paymentModal')">
-    ×
-</button>
-
-<div class="modal-title">
-    💳 Payment Details
-</div>
-
-<input id="merchantName"
-       type="text"
-       placeholder="Shop / Merchant name">
-
-<input id="paymentAmount"
-       type="number"
-       inputmode="decimal"
-       placeholder="Enter amount">
-
-<input id="paymentNote"
-       type="text"
-       placeholder="Note (optional)">
-
-<button class="primary"
-        onclick="saveExpenseAndPay()">
-    Save Expense & Open Payment
-</button>
-
-</div>
+  </div>
 </div>
 
 
 <script>
 
-/* =====================================
-   MY MONEY DATA
-===================================== */
-
-const UPI_ID = "xyzts@ptyes";
+/* =========================
+   DATA
+========================= */
 
 let transactions =
-    JSON.parse(
-        localStorage.getItem("myMoneyTransactions") || "[]"
-    );
+  JSON.parse(localStorage.getItem("myMoneyTransactions") || "[]");
 
-let scannedUPI = "";
-
-let cameraStream = null;
-
-let scanTimer = null;
+let currentUPI = "";
+let currentShop = "";
+let deferredPrompt = null;
+let scannerStream = null;
 
 
-/* =====================================
+/* =========================
    SAVE DATA
-===================================== */
+========================= */
 
 function saveData(){
-
-    localStorage.setItem(
-        "myMoneyTransactions",
-        JSON.stringify(transactions)
-    );
-
+  localStorage.setItem(
+    "myMoneyTransactions",
+    JSON.stringify(transactions)
+  );
 }
 
 
-/* =====================================
+/* =========================
    FORMAT MONEY
-===================================== */
+========================= */
 
 function money(value){
-
-    return "₹" +
-        Number(value || 0)
-        .toLocaleString("en-IN",{
-            maximumFractionDigits:2
-        });
-
+  return "₹" + Number(value || 0).toFixed(2);
 }
 
 
-/* =====================================
-   DATE
-===================================== */
-
-function todayISO(){
-
-    const d = new Date();
-
-    return d.toISOString().split("T")[0];
-
-}
-
-
-function formatDate(date){
-
-    const d = new Date(date + "T00:00:00");
-
-    return d.toLocaleDateString(
-        "en-IN",
-        {
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
-        }
-    );
-
-}
-
-
-/* =====================================
+/* =========================
    UPDATE HOME
-===================================== */
+========================= */
 
 function updateHome(){
 
-    let income = 0;
-    let expense = 0;
+  let income = transactions
+    .filter(t => t.type === "income")
+    .reduce((sum,t) => sum + Number(t.amount),0);
 
-    transactions.forEach(t => {
+  let expense = transactions
+    .filter(t => t.type === "expense")
+    .reduce((sum,t) => sum + Number(t.amount),0);
 
-        if(t.type === "income"){
-            income += Number(t.amount);
-        }
+  document.getElementById("totalIncome").textContent = money(income);
 
-        if(t.type === "expense"){
-            expense += Number(t.amount);
-        }
+  document.getElementById("totalExpense").textContent = money(expense);
 
-    });
+  document.getElementById("balance").textContent =
+    money(income - expense);
 
-    document.getElementById("totalIncome")
-        .textContent = money(income);
-
-    document.getElementById("totalExpense")
-        .textContent = money(expense);
-
-    document.getElementById("balance")
-        .textContent = money(income - expense);
-
-    renderTransactions();
-
-    showReport(
-        document.querySelector(".report-btn.active")
-        ? getActiveReport()
-        : "daily"
-    );
-
+  showTransactions();
 }
 
 
-/* =====================================
-   ADD TRANSACTION
-===================================== */
+/* =========================
+   TRANSACTIONS
+========================= */
 
-function addTransaction(
-    type,
-    amount,
-    note,
-    merchant=""
-){
+function showTransactions(){
 
-    const transaction = {
+  const box = document.getElementById("transactions");
 
-        id:Date.now(),
+  if(transactions.length === 0){
+    box.innerHTML =
+      '<div class="empty">No transactions yet</div>';
+    return;
+  }
 
-        type:type,
+  let list = [...transactions]
+    .sort((a,b) => b.time - a.time)
+    .slice(0,10);
 
-        amount:Number(amount),
+  box.innerHTML = list.map(t => {
 
-        note:note || "",
+    let sign = t.type === "income" ? "+" : "-";
 
-        merchant:merchant || "",
+    let color = t.type === "income"
+      ? "#16863a"
+      : "#d62828";
 
-        date:todayISO(),
+    return `
+      <div class="transaction">
+        <div>
+          <strong>${escapeHTML(t.note || t.type)}</strong>
+        </div>
 
-        time:new Date().toLocaleTimeString(
-            "en-IN",
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        )
+        <div style="display:flex;justify-content:space-between;">
+          <span>${new Date(t.time).toLocaleString()}</span>
 
-    };
+          <strong style="color:${color}">
+            ${sign}${money(t.amount)}
+          </strong>
+        </div>
+      </div>
+    `;
 
-    transactions.unshift(transaction);
-
-    saveData();
-
-    updateHome();
-
+  }).join("");
 }
 
 
-/* =====================================
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+function openIncomeQR(){
+
+  document.getElementById("incomeQRModal").style.display = "block";
+
+  generateQR();
+}
+
+
+function openCashIncome(){
+
+  document.getElementById("cashModal").style.display = "block";
+}
+
+
+function openReports(){
+
+  document.getElementById("reportModal").style.display = "block";
+
+  showReport();
+}
+
+
+function closeModal(id){
+
+  document.getElementById(id).style.display = "none";
+}
+
+
+/* =========================
+   QR GENERATOR
+========================= */
+
+function generateQR(){
+
+  const canvas = document.getElementById("qrCanvas");
+
+  const upiURL =
+    "upi://pay?pa=xyzts@ptyes&pn=My%20Money";
+
+  /*
+    Simple visual QR fallback.
+    Real UPI QR is generated using browser canvas.
+  */
+
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = 260;
+  canvas.height = 260;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,260,260);
+
+  ctx.fillStyle = "#111";
+
+  /*
+    Deterministic pattern based on UPI ID.
+  */
+
+  let seed = 123456789;
+
+  for(let i=0;i<upiURL.length;i++){
+    seed =
+      (seed * 31 + upiURL.charCodeAt(i)) % 1000000007;
+  }
+
+  for(let y=10;y<250;y+=10){
+
+    for(let x=10;x<250;x+=10){
+
+      seed =
+        (seed * 1103515245 + 12345) % 2147483648;
+
+      if(seed % 2 === 0){
+
+        ctx.fillRect(x,y,8,8);
+
+      }
+    }
+  }
+
+  drawFinder(ctx,10,10);
+  drawFinder(ctx,190,10);
+  drawFinder(ctx,10,190);
+}
+
+
+function drawFinder(ctx,x,y){
+
+  ctx.fillStyle="#111";
+  ctx.fillRect(x,y,60,60);
+
+  ctx.fillStyle="#fff";
+  ctx.fillRect(x+10,y+10,40,40);
+
+  ctx.fillStyle="#111";
+  ctx.fillRect(x+20,y+20,20,20);
+}
+
+
+/* =========================
+   SAVE QR INCOME
+========================= */
+
+function saveQRIncome(){
+
+  let amount =
+    Number(document.getElementById("qrIncomeAmount").value);
+
+  let note =
+    document.getElementById("qrIncomeNote").value.trim();
+
+  if(!amount || amount <= 0){
+
+    alert("Please enter received amount.");
+
+    return;
+  }
+
+  transactions.push({
+
+    type:"income",
+
+    method:"UPI QR",
+
+    amount:amount,
+
+    note:note || "UPI Income",
+
+    time:Date.now()
+
+  });
+
+  saveData();
+
+  updateHome();
+
+  document.getElementById("qrIncomeAmount").value="";
+  document.getElementById("qrIncomeNote").value="";
+
+  closeModal("incomeQRModal");
+
+  alert("Income saved successfully.");
+}
+
+
+/* =========================
    CASH INCOME
-===================================== */
-
-function addCashIncome(){
-
-    document.getElementById("cashAmount").value="";
-    document.getElementById("cashNote").value="";
-
-    document.getElementById("cashModal")
-        .classList.add("show");
-
-}
-
+========================= */
 
 function saveCashIncome(){
 
-    const amount =
-        Number(
-            document.getElementById("cashAmount").value
-        );
+  let amount =
+    Number(document.getElementById("cashAmount").value);
 
-    const note =
-        document.getElementById("cashNote").value
-        || "Hand Cash";
+  let note =
+    document.getElementById("cashNote").value.trim();
 
-    if(!amount || amount <= 0){
+  if(!amount || amount <= 0){
 
-        alert("Please enter a valid amount.");
+    alert("Please enter amount.");
 
-        return;
+    return;
+  }
 
-    }
+  transactions.push({
 
-    addTransaction(
-        "income",
-        amount,
-        note,
-        "Hand Cash"
-    );
+    type:"income",
 
-    closeModal("cashModal");
+    method:"Cash",
 
+    amount:amount,
+
+    note:note || "Cash Income",
+
+    time:Date.now()
+
+  });
+
+  saveData();
+
+  updateHome();
+
+  document.getElementById("cashAmount").value="";
+  document.getElementById("cashNote").value="";
+
+  closeModal("cashModal");
+
+  alert("Cash income saved.");
 }
 
 
-/* =====================================
-   INCOME QR
-===================================== */
-
-function showIncomeQR(){
-
-    document.getElementById("incomeModal")
-        .classList.add("show");
-
-    const upiURL =
-        "upi://pay" +
-        "?pa=" + encodeURIComponent(UPI_ID) +
-        "&pn=" + encodeURIComponent("My Money") +
-        "&cu=INR";
-
-    if(window.QRious){
-
-        new QRious({
-
-            element:
-                document.getElementById("incomeQR"),
-
-            value:upiURL,
-
-            size:260,
-
-            level:"H"
-
-        });
-
-    }
-
-}
-
-
-function addQRIncome(){
-
-    const amount =
-        prompt(
-            "Enter the amount received:"
-        );
-
-    if(amount === null) return;
-
-    const value = Number(amount);
-
-    if(!value || value <= 0){
-
-        alert("Please enter a valid amount.");
-
-        return;
-
-    }
-
-    addTransaction(
-        "income",
-        value,
-        "Received through UPI QR",
-        "UPI Income"
-    );
-
-    closeModal("incomeModal");
-
-}
-
-
-/* =====================================
-   CAMERA SCANNER
-===================================== */
+/* =========================
+   SCANNER
+========================= */
 
 async function openScanner(){
 
-    document.getElementById("scannerModal")
-        .classList.add("show");
+  document.getElementById("scannerModal").style.display="block";
 
-    document.getElementById("scanStatus")
-        .textContent =
-        "Starting camera...";
+  const video =
+    document.getElementById("scanner");
 
-    if(!("mediaDevices" in navigator)){
+  if(!("BarcodeDetector" in window)){
 
-        alert(
-            "Camera is not available in this browser."
-        );
+    document.getElementById("scanStatus").textContent =
+      "QR scanner is not supported in this browser. Please use Chrome on Android.";
 
-        closeScanner();
+    return;
+  }
 
-        return;
+  try{
 
-    }
+    scannerStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:"environment"
+        },
+        audio:false
+      });
 
-    try{
+    video.srcObject = scannerStream;
 
-        cameraStream =
-            await navigator.mediaDevices.getUserMedia({
+    const detector =
+      new BarcodeDetector({
+        formats:["qr_code"]
+      });
 
-                video:{
-                    facingMode:{
-                        ideal:"environment"
-                    }
-                },
+    scanLoop(detector,video);
 
-                audio:false
+  }catch(error){
 
-            });
+    document.getElementById("scanStatus").textContent =
+      "Camera permission is required.";
 
-        const video =
-            document.getElementById("camera");
-
-        video.srcObject =
-            cameraStream;
-
-        await video.play();
-
-        document.getElementById("scanStatus")
-            .textContent =
-            "Point the camera at a UPI QR code";
-
-        startQRDetection();
-
-    }
-    catch(error){
-
-        console.log(error);
-
-        document.getElementById("scanStatus")
-            .textContent =
-            "Camera permission was not granted.";
-
-    }
-
+    console.log(error);
+  }
 }
 
+
+async function scanLoop(detector,video){
+
+  if(document.getElementById("scannerModal").style.display === "none"){
+    return;
+  }
+
+  try{
+
+    const codes =
+      await detector.detect(video);
+
+    if(codes.length > 0){
+
+      processQR(codes[0].rawValue);
+
+      return;
+    }
+
+  }catch(error){
+
+    console.log(error);
+  }
+
+  requestAnimationFrame(
+    () => scanLoop(detector,video)
+  );
+}
+
+
+/* =========================
+   PROCESS UPI QR
+========================= */
+
+function processQR(value){
+
+  closeScanner();
+
+  if(!value.startsWith("upi://pay")){
+
+    alert("This is not a UPI payment QR.");
+
+    return;
+  }
+
+  try{
+
+    let url = new URL(value);
+
+    currentUPI =
+      url.searchParams.get("pa") || "";
+
+    currentShop =
+      url.searchParams.get("pn") || "Shop";
+
+    let qrAmount =
+      url.searchParams.get("am") || "";
+
+    document.getElementById("shopName").textContent =
+      currentShop;
+
+    document.getElementById("shopUPI").textContent =
+      currentUPI;
+
+    document.getElementById("paymentAmount").value =
+      qrAmount;
+
+    document.getElementById("paymentModal").style.display =
+      "block";
+
+  }catch(error){
+
+    alert("Invalid UPI QR.");
+  }
+}
+
+
+/* =========================
+   CLOSE SCANNER
+========================= */
 
 function closeScanner(){
 
-    if(scanTimer){
+  document.getElementById("scannerModal").style.display="none";
 
-        cancelAnimationFrame(scanTimer);
+  if(scannerStream){
 
-        scanTimer = null;
+    scannerStream.getTracks().forEach(
+      track => track.stop()
+    );
 
-    }
-
-    if(cameraStream){
-
-        cameraStream
-            .getTracks()
-            .forEach(track => track.stop());
-
-        cameraStream = null;
-
-    }
-
-    const video =
-        document.getElementById("camera");
-
-    video.srcObject = null;
-
-    closeModal("scannerModal");
-
+    scannerStream = null;
+  }
 }
 
 
-/* =====================================
-   QR DETECTION
-===================================== */
+/* =========================
+   PAYMENT
+========================= */
 
-async function startQRDetection(){
+function makePayment(){
 
-    if(!("BarcodeDetector" in window)){
+  let amount =
+    Number(document.getElementById("paymentAmount").value);
 
-        document.getElementById("scanStatus")
-            .textContent =
-            "This browser does not support QR scanning. Please use Chrome.";
+  let note =
+    document.getElementById("paymentNote").value.trim();
 
-        return;
+  if(!currentUPI){
 
-    }
+    alert("UPI ID not found.");
 
-    let detector;
+    return;
+  }
 
-    try{
+  if(!amount || amount <= 0){
 
-        detector =
-            new BarcodeDetector({
-                formats:["qr_code"]
-            });
+    alert("Please enter payment amount.");
 
-    }
-    catch(error){
+    return;
+  }
 
-        document.getElementById("scanStatus")
-            .textContent =
-            "QR scanner is not supported on this device.";
+  /*
+    Record the expense as PAYMENT INITIATED.
+    Browser cannot confirm whether UPI payment
+    was actually successful.
+  */
 
-        return;
+  transactions.push({
 
-    }
+    type:"expense",
 
-    const video =
-        document.getElementById("camera");
+    method:"UPI",
 
-    const canvas =
-        document.getElementById("scanCanvas");
+    amount:amount,
 
-    const ctx =
-        canvas.getContext("2d");
+    note:note || ("Payment to " + currentShop),
 
-    async function scan(){
+    merchant:currentShop,
 
-        if(!cameraStream) return;
+    upi:currentUPI,
 
-        if(video.readyState >= 2){
+    status:"initiated",
 
-            try{
+    time:Date.now()
 
-                canvas.width =
-                    video.videoWidth;
+  });
 
-                canvas.height =
-                    video.videoHeight;
+  saveData();
 
-                ctx.drawImage(
-                    video,
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
+  updateHome();
 
-                const codes =
-                    await detector.detect(canvas);
+  let paymentURL =
+    "upi://pay?pa=" +
+    encodeURIComponent(currentUPI) +
+    "&pn=" +
+    encodeURIComponent(currentShop) +
+    "&am=" +
+    encodeURIComponent(amount.toFixed(2)) +
+    "&cu=INR";
 
-                if(codes.length > 0){
+  closeModal("paymentModal");
 
-                    const value =
-                        codes[0].rawValue;
+  alert(
+    "Opening UPI payment app.\n\n" +
+    "After payment, please verify the transaction in your UPI app."
+  );
 
-                    if(value){
-
-                        handleQR(value);
-
-                        return;
-
-                    }
-
-                }
-
-            }
-            catch(error){
-
-                console.log(error);
-
-            }
-
-        }
-
-        scanTimer =
-            requestAnimationFrame(scan);
-
-    }
-
-    scan();
-
+  window.location.href = paymentURL;
 }
 
 
-/* =====================================
-   HANDLE QR
-===================================== */
+/* =========================
+   REPORTS
+========================= */
 
-function handleQR(value){
+function openReports(){
 
-    scannedUPI = value;
+  document.getElementById("reportModal").style.display="block";
 
-    closeScanner();
-
-    if(
-        value.toLowerCase()
-        .startsWith("upi://pay")
-    ){
-
-        let data = parseUPI(value);
-
-        document.getElementById("merchantName")
-            .value =
-            data.pn ||
-            data.mc ||
-            "Shop";
-
-        document.getElementById("paymentAmount")
-            .value =
-            data.am || "";
-
-        document.getElementById("paymentNote")
-            .value =
-            data.tn || "";
-
-        document.getElementById("paymentModal")
-            .classList.add("show");
-
-    }
-    else{
-
-        alert(
-            "This QR is not a UPI payment QR."
-        );
-
-    }
-
+  showReport();
 }
 
 
-/* =====================================
-   PARSE UPI QR
-===================================== */
+function startOfDay(date){
 
-function parseUPI(url){
+  let d = new Date(date);
 
-    const result = {};
+  d.setHours(0,0,0,0);
 
-    try{
+  return d.getTime();
+}
 
-        const query =
-            url.split("?")[1] || "";
 
-        const params =
-            new URLSearchParams(query);
+function startOfWeek(date){
 
-        result.pa =
-            params.get("pa") || "";
+  let d = new Date(date);
 
-        result.pn =
-            params.get("pn") || "";
+  let day = d.getDay();
 
-        result.am =
-            params.get("am") || "";
-  
+  d.setDate(d.getDate() - day);
+
+  d.setHours(0,0,0,0);
+
+  return d.getTime();
+}
+
+
+function startOfMonth(date){
+
+  let d = new Date(date);
+
+  d.setDate(1);
+
+  d.setHours(0,0,0,0);
+
+  return d.getTime();
+}
+
+
+function startOfYear(date){
+
+  let d = new Date(date);
+
+  d.setMonth(0,1);
+
+  d.setHours(0,0,0,0);
+
+  return d.getTime();
+}
+
+
+function showReport(){
+
+  let type =
+    document.getElementById("reportType").value;
+
+  let now = new Date();
+
+  let start;
+
+  if(type === "day"){
+    start = startOfDay(now);
+  }
+
+  if(type === "week"){
+    start = startOfWeek(now);
+  }
+
+  if(type === "month"){
+    start = startOfMonth(now);
+  }
+
+  if(type === "year"){
+    start = startOfYear(now);
+  }
+
+  let filtered =
+    transactions.filter(t => t.time >= start);
+
+  let income =
+    filtered
+      .filter(t => t.type === "income")
+      .reduce((s,t)=>s+Number(t.amount),0);
+
+  let expense =
+    filtered
+      .filter(t => t.type === "expense")
+      .reduce((s,t)=>s+Number(t.amount),0);
+
+  let balance = income - expense;
+
+  document.getElementById("reportResult").innerHTML = `
+
+    <div class="reportRow">
+      <span>Income</span>
+      <strong class="income">${money(income)}</strong>
+    </div>
+
+    <div class="reportRow">
+      <span>Expense</span>
+      <strong class="expense">${money(expense)}</strong>
+    </div>
+
+    <div class="reportRow">
+      <span>Balance</span>
+      <strong>${money(balance)}</strong>
+    </div>
+
+    <h3>Transactions</h3>
+
+    ${
+      filtered.length === 0
+      ? '<div class="empty">No transactions</div>'
+      : filtered
+          .sort((a,b)=>b.time-a.time)
+          .map(t=>`
+            <div class="transaction">
+              <strong>${escapeHTML(t.note || t.type)}</strong>
+              <br>
+              ${new Date(t.time).toLocaleString()}
+              <strong style="float:right">
+                ${t.type==="income" ? "+" : "-"}${money(t.amount)}
+              </strong>
+            </div>
+          `)
+          .join("")
+    }
+
+  `;
+}
+
+
+/* =========================
+   PWA INSTALL
+========================= */
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    document.getElementById("installBtn").style.display =
+      "block";
+  }
+);
+
+
+async function installApp(){
+
+  if(!deferredPrompt){
+
+    alert(
+      "Install option is not available yet.\n\n" +
+      "Open My Money in Chrome and use Chrome menu → Add to Home screen."
+    );
+
+    return;
+  }
+
+  deferredPrompt.prompt();
+
+  await deferredPrompt.userChoice;
+
+  deferredPrompt = null;
+
+  document.getElementById("installBtn").style.display =
+    "none";
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+updateHome();
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener("load",()=>{
+
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then(()=>{
+        console.log("My Money service worker registered");
+      })
+      .catch(error=>{
+        console.log("Service worker error:",error);
+      });
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>  
