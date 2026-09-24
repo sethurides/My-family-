@@ -1,946 +1,186 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
-
-  <meta name="theme-color" content="#1565c0">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-  <meta
-    name="description"
-    content="My Money - Income, Expenses, UPI Payments and Reports"
-  >
-
-  <title>My Money</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-  <link rel="apple-touch-icon" href="./icon-192.png">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css">
-
-  <!-- QR Scanner -->
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Money App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#673ab7">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; background-color: #f1f3f6; color: #333; max-width: 500px; margin: auto; }
+        h1 { text-align: center; color: #673ab7; margin-bottom: 5px; }
+        .subtitle { text-align: center; font-size: 14px; color: #666; margin-top: 0; margin-bottom: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 5px solid #673ab7; }
+        .card-income { border-left-color: #4caf50; }
+        .card-report { border-left-color: #ff9800; }
+        h3 { margin-top: 0; color: #444; }
+        .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn { flex: 1; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
+        .btn-pe { background: #5f259f; }
+        .btn-tm { background: #00baf2; }
+        .btn-save { background: #4caf50; width: 100%; display: block; margin-top: 10px; }
+        .btn-inc { background: #2196f3; width: 100%; display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+        .qr-box { text-align: center; margin: 15px 0; }
+        .qr-box img { width: 180px; height: 180px; border: 1px solid #ddd; padding: 5px; border-radius: 8px; }
+        .report-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 15px; }
+        .tab-btn { background: #e0e0e0; border: none; padding: 8px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .tab-btn.active { background: #ff9800; color: white; }
+        .report-list { text-align: left; max-height: 250px; overflow-y: auto; font-size: 14px; }
+        .report-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
+        .summary-box { display: flex; justify-content: space-between; font-weight: bold; background: #fff3e0; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 15px; }
+    </style>
 </head>
-
 <body>
 
-  <!-- ================= HEADER ================= -->
+    <h1>💰 My Money App</h1>
+    <p class="subtitle">ఆటోమేటిక్ డేట్ & ఈజీ ట్రాకింగ్ PWA</p>
 
-  <header class="app-header">
-
-    <div>
-      <h1>💰 My Money</h1>
-      <p id="headerSubtitle">Income & Expenses</p>
+    <!-- EXPENSE SECTION -->
+    <div class="card">
+        <h3>💸 ఖర్చుల లావాదేవీలు (Expenses)</h3>
+        <div class="btn-group">
+            <!-- గమనిక: YOURUPIID స్థానంలో మీ UPI ID మార్చుకోండి -->
+            <a href="upi://pay?pa=YOURUPIID@ybl&pn=MyMoneyApp" class="btn btn-pe" target="_blank">PhonePe</a>
+            <a href="upi://pay?pa=YOURUPIID@paytm&pn=MyMoneyApp" class="btn btn-tm" target="_blank">Paytm</a>
+        </div>
+        
+        <input type="number" id="expAmount" placeholder="ఎంత అమౌంట్ చెల్లించారు? (₹)">
+        <select id="expCategory">
+            <option value="Food 🍔">Food 🍔</option>
+            <option value="Fuel ⛽">Fuel ⛽</option>
+            <option value="Shopping 🛍️">Shopping 🛍️</option>
+            <option value="Rent 🏠">Rent 🏠</option>
+            <option value="Others 🪙">ఇతరములు 🪙</option>
+        </select>
+        <button class="btn btn-save" onclick="saveTransaction('Expense')">Record Expense</button>
     </div>
 
-    <button
-      class="language-btn"
-      id="languageBtn"
-      onclick="toggleLanguage()"
-    >
-      తెలుగు
-    </button>
-
-  </header>
-
-
-  <!-- ================= MAIN ================= -->
-
-  <main class="container">
-
-
-    <!-- ================= INSTALL APP ================= -->
-
-    <section class="card install-card" id="installBox">
-
-      <h2>📲 Install My Money</h2>
-
-      <p class="muted">
-        Install the app on your phone for quick access.
-      </p>
-
-      <button
-        class="primary"
-        id="installBtn"
-        onclick="installApp()"
-      >
-        📲 Install App
-      </button>
-
-    </section>
-
-
-    <!-- ================= DASHBOARD ================= -->
-
-    <section class="dashboard-grid">
-
-      <div class="balance-card">
-
-        <span id="balanceLabel">
-          Current Balance
-        </span>
-
-        <strong id="balance">
-          ₹0.00
-        </strong>
-
-      </div>
-
-
-      <div class="income-card">
-
-        <span id="incomeLabel">
-          Total Income
-        </span>
-
-        <strong id="totalIncome">
-          ₹0.00
-        </strong>
-
-      </div>
-
-
-      <div class="expense-card">
-
-        <span id="expenseLabel">
-          Total Expenses
-        </span>
-
-        <strong id="totalExpense">
-          ₹0.00
-        </strong>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= RECEIVE MONEY ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>📥 Receive Money</h2>
-
-      </div>
-
-      <p class="muted">
-        Scan this QR to send money to your bank account.
-      </p>
-
-
-      <div class="my-qr-box">
-
-        <img
-          src="./my-qr.png"
-          alt="My UPI QR Code"
-          class="my-qr"
-          id="myQrImage"
-        >
-
-      </div>
-
-
-      <p class="qr-note">
-        💡 Money received through this QR goes to your
-        UPI-linked bank account.
-      </p>
-
-      <button
-        class="secondary"
-        onclick="openMyQR()"
-      >
-        🔍 View QR
-      </button>
-
-    </section>
-
-
-    <!-- ================= ADD INCOME ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>➕ Add Income</h2>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="incomeAmount">
-          Amount (₹)
-        </label>
-
-        <input
-          type="number"
-          id="incomeAmount"
-          placeholder="Enter amount"
-          min="0"
-          step="0.01"
-          inputmode="decimal"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="incomeType">
-          Income Type
-        </label>
-
-        <select id="incomeType">
-
-          <option value="UPI">
-            UPI / QR Received
-          </option>
-
-          <option value="Cash">
-            Cash
-          </option>
-
-          <option value="Other Income">
-            Other Income
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="incomeNote">
-          Note
-        </label>
-
-        <input
-          type="text"
-          id="incomeNote"
-          placeholder="Example: Salary, customer payment"
-          maxlength="100"
-        >
-
-      </div>
-
-
-      <button
-        class="primary full-btn"
-        onclick="addIncome()"
-      >
-        ➕ Add Income
-      </button>
-
-    </section>
-
-
-    <!-- ================= SHOP QR PAYMENT ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>📷 Pay Shop by QR</h2>
-
-      </div>
-
-      <p class="muted">
-        Scan the shop's UPI QR code.
-      </p>
-
-
-      <!-- Scanner -->
-
-      <div
-        id="qr-reader"
-        class="qr-reader"
-      ></div>
-
-
-      <button
-        class="primary full-btn"
-        id="startScannerBtn"
-        onclick="startQRScanner()"
-      >
-        📷 Scan Shop QR
-      </button>
-
-
-      <button
-        class="secondary full-btn hidden"
-        id="stopScannerBtn"
-        onclick="stopQRScanner()"
-      >
-        ⛔ Stop Scanner
-      </button>
-
-
-      <!-- Shop Details -->
-
-      <div
-        id="shopDetails"
-        class="shop-details hidden"
-      >
-
-        <h3>🏪 Shop Details</h3>
-
-
-        <div class="detail-row">
-
-          <span>Shop Name</span>
-
-          <strong id="shopName">
-            -
-          </strong>
-
+    <!-- INCOME SECTION -->
+    <div class="card card-income">
+        <h3>🟩 ఆదాయం (Received Income)</h3>
+        <div class="qr-box">
+            <p style="margin: 0 0 10px 0; font-size: 14px; color: #555;">మీ QR కోడ్‌ను ఇక్కడ స్కాన్ చేయించండి:</p>
+            <!-- మీ QR కోడ్ ఇమేజ్ ఫైల్ పేరు "qr.png" అని పెట్టి గిట్ హబ్ లో అప్లోడ్ చేయండి -->
+            <img src="qr.png" alt="మీ QR కోడ్ ఇక్కడ యాడ్ చేయండి" onerror="this.src='https://dummyimage.com'">
         </div>
-
-
-        <div class="detail-row">
-
-          <span>UPI ID</span>
-
-          <strong id="shopUpi">
-            -
-          </strong>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span>Detected Category</span>
-
-          <strong id="detectedCategory">
-            Other
-          </strong>
-
-        </div>
-
-      </div>
-
-
-      <!-- Payment Amount -->
-
-      <div
-        id="paymentForm"
-        class="hidden"
-      >
-
-        <div class="form-group">
-
-          <label for="expenseAmount">
-            Amount (₹)
-          </label>
-
-          <input
-            type="number"
-            id="expenseAmount"
-            placeholder="Enter amount"
-            min="1"
-            step="0.01"
-            inputmode="decimal"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="expenseCategory">
-            Category
-          </label>
-
-          <select id="expenseCategory">
-
-            <option value="Auto">
-              🤖 Auto Detect
-            </option>
-
-            <option value="Food">
-              🍔 Food
-            </option>
-
-            <option value="Travel">
-              🚗 Travel
-            </option>
-
-            <option value="Shopping">
-              🛍️ Shopping
-            </option>
-
-            <option value="Bills">
-              💡 Bills
-            </option>
-
-            <option value="Education">
-              🎓 Education
-            </option>
-
-            <option value="Medical">
-              🏥 Medical
-            </option>
-
-            <option value="Groceries">
-              🛒 Groceries
-            </option>
-
-            <option value="Recharge">
-              📱 Recharge
-            </option>
-
-            <option value="Other">
-              📦 Other
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="paymentNote">
-            Note
-          </label>
-
-          <input
-            type="text"
-            id="paymentNote"
-            placeholder="Optional note"
-            maxlength="100"
-          >
-
-        </div>
-
-
-        <div class="payment-buttons">
-
-          <button
-            class="paytm-btn"
-            onclick="payByUPI('paytm')"
-          >
-            💙 Pay with Paytm
-          </button>
-
-
-          <button
-            class="phonepe-btn"
-            onclick="payByUPI('phonepe')"
-          >
-            💜 Pay with PhonePe
-          </button>
-
-        </div>
-
-
-        <button
-          class="secondary full-btn"
-          onclick="saveShopExpenseWithoutPayment()"
-        >
-          💾 Save Expense Only
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= MANUAL EXPENSE ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>💸 Add Expense</h2>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="manualExpenseAmount">
-          Amount (₹)
-        </label>
-
-        <input
-          type="number"
-          id="manualExpenseAmount"
-          placeholder="Enter amount"
-          min="1"
-          step="0.01"
-          inputmode="decimal"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="manualExpenseCategory">
-          Category
-        </label>
-
-        <select id="manualExpenseCategory">
-
-          <option value="Food">
-            🍔 Food
-          </option>
-
-          <option value="Travel">
-            🚗 Travel
-          </option>
-
-          <option value="Shopping">
-            🛍️ Shopping
-          </option>
-
-          <option value="Bills">
-            💡 Bills
-          </option>
-
-          <option value="Education">
-            🎓 Education
-          </option>
-
-          <option value="Medical">
-            🏥 Medical
-          </option>
-
-          <option value="Groceries">
-            🛒 Groceries
-          </option>
-
-          <option value="Recharge">
-            📱 Recharge
-          </option>
-
-          <option value="Other">
-            📦 Other
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="manualExpenseNote">
-          Description
-        </label>
-
-        <input
-          type="text"
-          id="manualExpenseNote"
-          placeholder="Example: Vegetables, electricity bill"
-          maxlength="100"
-        >
-
-      </div>
-
-
-      <button
-        class="primary full-btn"
-        onclick="addManualExpense()"
-      >
-        💸 Add Expense
-      </button>
-
-    </section>
-
-
-    <!-- ================= CATEGORY TOTALS ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>📊 Category-wise Expenses</h2>
-
-      </div>
-
-
-      <div class="category-grid">
-
-        <div class="category-box">
-
-          <span>🍔</span>
-
-          <small>Food</small>
-
-          <strong id="catFood">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>🚗</span>
-
-          <small>Travel</small>
-
-          <strong id="catTravel">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>🛍️</span>
-
-          <small>Shopping</small>
-
-          <strong id="catShopping">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>💡</span>
-
-          <small>Bills</small>
-
-          <strong id="catBills">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>🎓</span>
-
-          <small>Education</small>
-
-          <strong id="catEducation">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>🏥</span>
-
-          <small>Medical</small>
-
-          <strong id="catMedical">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>🛒</span>
-
-          <small>Groceries</small>
-
-          <strong id="catGroceries">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>📱</span>
-
-          <small>Recharge</small>
-
-          <strong id="catRecharge">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="category-box">
-
-          <span>📦</span>
-
-          <small>Other</small>
-
-          <strong id="catOther">
-            ₹0.00
-          </strong>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= REPORTS ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>📈 Reports</h2>
-
-      </div>
-
-
-      <div class="report-buttons">
-
-        <button
-          class="report-btn active"
-          onclick="generateReport('date', this)"
-        >
-          📅 Date
-        </button>
-
-
-        <button
-          class="report-btn"
-          onclick="generateReport('week', this)"
-        >
-          📆 Weekly
-        </button>
-
-
-        <button
-          class="report-btn"
-          onclick="generateReport('month', this)"
-        >
-          🗓️ Monthly
-        </button>
-
-
-        <button
-          class="report-btn"
-          onclick="generateReport('year', this)"
-        >
-          📊 Yearly
-        </button>
-
-      </div>
-
-
-      <div
-        id="dateReportBox"
-        class="date-report-box"
-      >
-
-        <label for="reportDate">
-          Select Date
-        </label>
-
-        <input
-          type="date"
-          id="reportDate"
-        >
-
-      </div>
-
-
-      <div
-        id="reportResult"
-        class="report-result"
-      >
-
-        <div class="report-row">
-
-          <span>Total Income</span>
-
-          <strong id="reportIncome">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="report-row">
-
-          <span>Total Expenses</span>
-
-          <strong id="reportExpense">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <div class="report-row">
-
-          <span>Remaining Balance</span>
-
-          <strong id="reportBalance">
-            ₹0.00
-          </strong>
-
-        </div>
-
-
-        <h3>
-          Category Breakdown
-        </h3>
-
-
-        <div id="reportCategories">
-
-          <p class="muted">
-            No transactions found.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= TRANSACTION HISTORY ================= -->
-
-    <section class="card">
-
-      <div class="section-title">
-
-        <h2>🧾 Transaction History</h2>
-
-        <button
-          class="small-btn"
-          onclick="clearAllTransactions()"
-        >
-          Clear
-        </button>
-
-      </div>
-
-
-      <div id="transactionList">
-
-        <div class="empty-state">
-
-          <div class="empty-icon">
-            💰
-          </div>
-
-          <p>
-            No transactions yet.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-  </main>
-
-
-  <!-- ================= QR MODAL ================= -->
-
-  <div
-    id="qrModal"
-    class="modal hidden"
-  >
-
-    <div class="modal-content">
-
-      <button
-        class="close-btn"
-        onclick="closeMyQR()"
-      >
-        ✕
-      </button>
-
-      <h2>
-        📥 My Payment QR
-      </h2>
-
-      <img
-        src="./my-qr.png"
-        alt="My UPI QR"
-        class="modal-qr"
-      >
-
-      <p class="muted">
-        Scan this QR to send money.
-      </p>
-
+        
+        <input type="number" id="incAmount" placeholder="వచ్చిన ఆదాయం ఎంత? (₹)">
+        <button class="btn btn-inc" onclick="saveTransaction('Income')">Record Income</button>
     </div>
 
-  </div>
+    <!-- REPORTS SECTION -->
+    <div class="card card-report">
+        <h3>📊 రిపోర్ట్స్ డ్యాష్‌బోర్డ్ (Reports)</h3>
+        <div class="report-tabs">
+            <button class="tab-btn active" id="tab-daily" onclick="loadReport('daily')">Date</button>
+            <button class="tab-btn" id="tab-weekly" onclick="loadReport('weekly')">Weekly</button>
+            <button class="tab-btn" id="tab-monthly" onclick="loadReport('monthly')">Monthly</button>
+            <button class="tab-btn" id="tab-yearly" onclick="loadReport('yearly')">Yearly</button>
+        </div>
 
+        <div class="summary-box">
+            <span style="color: green;" id="totalInc">In: ₹0</span>
+            <span style="color: red;" id="totalExp">Out: ₹0</span>
+        </div>
 
-  <!-- ================= FOOTER ================= -->
+        <div class="report-list" id="reportOutput">
+            <!-- రిపోర్ట్ డేటా ఇక్కడ లోడ్ అవుతుంది -->
+        </div>
+    </div>
 
-  <footer>
+    <script>
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+            .then(() => console.log("Service Worker Registered"));
+        }
 
-    <p>
-      My Money • Income & Expenses
-    </p>
+        let transactions = JSON.parse(localStorage.getItem('my_money_txs')) || [];
 
-    <p class="muted">
-      Your transactions are stored on this device.
-    </p>
+        function saveTransaction(type) {
+            let amtInput = type === 'Expense' ? document.getElementById('expAmount') : document.getElementById('incAmount');
+            let amt = amtInput.value;
+            let cat = type === 'Expense' ? document.getElementById('expCategory').value : 'Income 📥';
+            
+            if(!amt || amt <= 0) { alert("దయచేసి సరైన అమౌంట్ ఎంటర్ చేయండి!"); return; }
 
-  </footer>
+            let tx = {
+                id: Date.now(),
+                amount: parseFloat(amt),
+                category: cat,
+                type: type,
+                date: new Date().toISOString() // ఆటోమేటిక్ కరెంట్ డేట్ & టైమ్
+            };
 
+            transactions.push(tx);
+            localStorage.setItem('my_money_txs', JSON.stringify(transactions));
+            alert(type + " విజయవంతంగా రికార్డ్ చేయబడింది!");
+            
+            amtInput.value = '';
+            // ప్రస్తుతం ఉన్న యాక్టివ్ ట్యాబ్ రిపోర్ట్ రీలోడ్ అవుతుంది
+            let activeTab = document.querySelector('.tab-btn.active').id.replace('tab-', '');
+            loadReport(activeTab);
+        }
 
-  <!-- ================= APP JS ================= -->
+        function loadReport(filter) {
+            // ట్యాబ్ కలర్స్ మార్చడం
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + filter).classList.add('active');
 
-  <script src="./app.js"></script>
+            let now = new Date();
+            let filtered = transactions.filter(tx => {
+                let txDate = new Date(tx.date);
+                if (filter === 'daily') {
+                    return txDate.toDateString() === now.toDateString();
+                } else if (filter === 'weekly') {
+                    let oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(now.getDate() - 7);
+                    return txDate >= oneWeekAgo;
+                } else if (filter === 'monthly') {
+                    return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
+                } else if (filter === 'yearly') {
+                    return txDate.getFullYear() === now.getFullYear();
+                }
+                return true;
+            });
 
+            // టోటల్స్ లెక్కించడం
+            let incSum = filtered.filter(t => t.type === 'Income').reduce((s, t) => s + t.amount, 0);
+            let expSum = filtered.filter(t => t.type === 'Expense').reduce((s, t) => s + t.amount, 0);
 
-  <!-- ================= SERVICE WORKER ================= -->
+            document.getElementById('totalInc').innerText = `In: ₹${incSum}`;
+            document.getElementById('totalExp').innerText = `Out: ₹${expSum}`;
 
-  <script>
+            // లిస్ట్ డిస్‌ప్లే చేయడం
+            let html = '';
+            if(filtered.length === 0) {
+                html = '<p style="text-align:center; color:#999;">ఈ కాలానికి ఎటువంటి డేటా లేదు.</p>';
+            } else {
+                // కొత్తవి పైన కనిపించేలా రివర్స్ ఆర్డర్
+                filtered.slice().reverse().forEach(tx => {
+                    let d = new Date(tx.date);
+                    let timeStr = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    let dateStr = d.toLocaleDateString([], {month: 'short', day: 'numeric'});
+                    let color = tx.type === 'Income' ? 'green' : 'red';
+                    let prefix = tx.type === 'Income' ? '+' : '-';
+                    
+                    html += `
+                        <div class="report-item">
+                            <div>
+                                <strong>${tx.category}</strong><br>
+                                <small style="color:#888;">${dateStr} | ${timeStr}</small>
+                            </div>
+                            <span style="color: ${color}; font-weight:bold;">${prefix}₹${tx.amount}</span>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('reportOutput').innerHTML = html;
+        }
 
-    if ("serviceWorker" in navigator) {
-
-      window.addEventListener("load", function () {
-
-        navigator.serviceWorker
-          .register("./sw.js")
-          .then(function () {
-
-            console.log("Service Worker registered");
-
-          })
-          .catch(function (error) {
-
-            console.log(
-              "Service Worker registration failed:",
-              error
-            );
-
-          });
-
-      });
-
-    }
-
-  </script>
-
+        // యాప్ ఓపెన్ అవ్వగానే డైలీ రిపోర్ట్ చూపిస్తుంది
+        window.onload = function() { loadReport('daily'); };
+    </script>
 </body>
 </html>
