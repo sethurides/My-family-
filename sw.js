@@ -1,4 +1,4 @@
-const CACHE_NAME = "my-money-v3";
+const CACHE_NAME = "my-money-v5";
 
 const APP_FILES = [
   "./",
@@ -11,161 +11,60 @@ const APP_FILES = [
   "./my-qr.png"
 ];
 
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_FILES))
+  );
 
-/* ===============================
-   INSTALL
-   =============================== */
+  self.skipWaiting();
+});
 
-self.addEventListener(
-  "install",
-  function (event) {
-
-    event.waitUntil(
-
-      caches
-        .open(CACHE_NAME)
-        .then(function (cache) {
-
-          return cache.addAll(
-            APP_FILES
-          );
-
-        })
-
-    );
-
-    self.skipWaiting();
-
-  }
-);
-
-
-/* ===============================
-   ACTIVATE
-   =============================== */
-
-self.addEventListener(
-  "activate",
-  function (event) {
-
-    event.waitUntil(
-
-      caches.keys()
-        .then(function (cacheNames) {
-
-          return Promise.all(
-
-            cacheNames
-              .filter(function (cacheName) {
-
-                return (
-                  cacheName !==
-                  CACHE_NAME
-                );
-
-              })
-              .map(function (cacheName) {
-
-                return caches.delete(
-                  cacheName
-                );
-
-              })
-
-          );
-
-        })
-
-    );
-
-    self.clients.claim();
-
-  }
-);
-
-
-/* ===============================
-   FETCH
-   =============================== */
-
-self.addEventListener(
-  "fetch",
-  function (event) {
-
-    if (
-      event.request.method !==
-      "GET"
-    ) {
-
-      return;
-
-    }
-
-
-    event.respondWith(
-
-      caches.match(
-        event.request
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(names =>
+      Promise.all(
+        names
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
       )
-      .then(function (cachedResponse) {
+    )
+  );
 
-        if (cachedResponse) {
+  self.clients.claim();
+});
 
-          return cachedResponse;
+self.addEventListener("fetch", event => {
 
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+
+        if (
+          response &&
+          response.status === 200 &&
+          response.type === "basic"
+        ) {
+          const copy = response.clone();
+
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, copy);
+            });
         }
 
-
-        return fetch(
-          event.request
-        )
-        .then(function (networkResponse) {
-
-          /*
-             Save only successful
-             same-origin responses.
-          */
-
-          if (
-            networkResponse &&
-            networkResponse.status === 200 &&
-            networkResponse.type ===
-              "basic"
-          ) {
-
-            const responseClone =
-              networkResponse.clone();
-
-
-            caches.open(
-              CACHE_NAME
-            )
-            .then(function (cache) {
-
-              cache.put(
-                event.request,
-                responseClone
-              );
-
-            });
-
-          }
-
-
-          return networkResponse;
-
-        })
-        .catch(function () {
-
-          return caches.match(
-            "./index.html"
-          );
-
-        });
-
+        return response;
       })
+      .catch(() => {
+        return caches.match(event.request)
+          .then(cached => {
+            return cached || caches.match("./index.html");
+          });
+      })
+  );
 
-    );
-
-  }
-);
+});
