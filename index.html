@@ -1,428 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f5b400">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4b400">
 
-<title>Family Money Manager</title>
+  <title>My Money</title>
 
-<link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json">
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f6f8;
-  color:#222;
-  min-height:100vh;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-header{
-  background:linear-gradient(135deg,#f5b400,#ffcc33);
-  padding:18px 16px;
-  text-align:center;
-  color:#111;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
+    body {
+      background: #f5f6f8;
+      color: #222;
+    }
 
-header h1{
-  font-size:22px;
-  font-weight:800;
-}
+    header {
+      background: #f4b400;
+      color: #fff;
+      padding: 18px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-header p{
-  font-size:13px;
-  margin-top:5px;
-}
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 15px;
+    }
 
-.container{
-  max-width:600px;
-  margin:auto;
-  padding:15px;
-  padding-bottom:90px;
-}
+    .page {
+      display: none;
+    }
 
-.card{
-  background:#fff;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
+    .page.active {
+      display: block;
+    }
 
-.balance{
-  text-align:center;
-}
+    .balance-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 25px 20px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
 
-.balance-title{
-  font-size:14px;
-  color:#777;
-}
+    .balance-title {
+      font-size: 15px;
+      color: #777;
+    }
 
-.balance-amount{
-  font-size:32px;
-  font-weight:800;
-  margin-top:7px;
-}
+    .balance {
+      font-size: 34px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
 
-.summary{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-.summary-box{
-  padding:14px;
-  border-radius:12px;
-  text-align:center;
-}
+    .summary-box {
+      background: #fff;
+      padding: 18px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
 
-.income-box{
-  background:#e9f8ee;
-  color:#16803b;
-}
+    .income {
+      color: #159447;
+    }
 
-.expense-box{
-  background:#fff0f0;
-  color:#c62828;
-}
+    .expense {
+      color: #d93025;
+    }
 
-.summary-box small{
-  display:block;
-  font-size:12px;
-}
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0 12px;
+    }
 
-.summary-box strong{
-  display:block;
-  margin-top:5px;
-  font-size:19px;
-}
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-h2{
-  font-size:18px;
-  margin-bottom:13px;
-}
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-h3{
-  font-size:16px;
-  margin-bottom:10px;
-}
+    .action-btn {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-label{
-  display:block;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:5px;
-}
+    .primary {
+      background: #f4b400;
+      color: #fff;
+    }
 
-input,
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:15px;
-  margin-bottom:12px;
-  background:#fff;
-}
+    .green {
+      background: #159447;
+      color: #fff;
+    }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:12px 15px;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer;
-}
+    .red {
+      background: #d93025;
+      color: #fff;
+    }
 
-.primary{
-  width:100%;
-  background:#f5b400;
-  color:#111;
-}
+    .blue {
+      background: #1976d2;
+      color: #fff;
+    }
 
-.green{
-  background:#16803b;
-  color:#fff;
-}
+    .back-btn {
+      background: #666;
+      color: #fff;
+      margin-bottom: 15px;
+    }
 
-.red{
-  background:#c62828;
-  color:#fff;
-}
+    .form-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
 
-.dark{
-  background:#222;
-  color:#fff;
-}
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
 
-.outline{
-  background:#fff;
-  border:1px solid #ddd;
-}
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+    }
 
-.button-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+    .form-card button {
+      width: 100%;
+      margin-top: 18px;
+    }
 
-.transaction{
-  border:1px solid #eee;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:9px;
-}
+    .qr-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
 
-.transaction-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
 
-.transaction-name{
-  font-weight:700;
-}
+    #reader {
+      width: 100%;
+      margin-top: 15px;
+    }
 
-.transaction-date{
-  color:#888;
-  font-size:11px;
-  margin-top:4px;
-}
+    .transaction {
+      background: #fff;
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.06);
+    }
 
-.income-text{
-  color:#16803b;
-  font-weight:800;
-}
+    .transaction-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-.expense-text{
-  color:#c62828;
-  font-weight:800;
-}
+    .transaction-name {
+      font-weight: bold;
+    }
 
-.qr-area{
-  text-align:center;
-}
+    .transaction-date {
+      font-size: 12px;
+      color: #888;
+    }
 
-#receiveQR{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin:15px auto;
-  min-height:260px;
-}
+    .amount-income {
+      color: #159447;
+      font-weight: bold;
+    }
 
-.upi-id{
-  background:#f5f5f5;
-  border-radius:10px;
-  padding:11px;
-  font-weight:700;
-  margin:10px 0;
-  word-break:break-all;
-}
+    .amount-expense {
+      color: #d93025;
+      font-weight: bold;
+    }
 
-.qr-note{
-  font-size:12px;
-  color:#777;
-  line-height:1.5;
-}
+    .empty {
+      background: #fff;
+      padding: 25px;
+      text-align: center;
+      border-radius: 15px;
+      color: #777;
+    }
 
-#reader{
-  width:100%;
-  overflow:hidden;
-  border-radius:12px;
-}
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 5px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 20;
+    }
 
-.scan-result{
-  display:none;
-  margin-top:12px;
-}
+    nav button {
+      background: transparent;
+      color: #555;
+      padding: 8px;
+      font-size: 12px;
+    }
 
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#fff;
-  border-top:1px solid #ddd;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  padding:8px 5px calc(8px + env(safe-area-inset-bottom));
-  z-index:100;
-}
+    nav button.active-nav {
+      color: #f4b400;
+      font-weight: bold;
+    }
 
-.nav button{
-  background:transparent;
-  color:#555;
-  padding:8px 4px;
-  font-size:11px;
-}
+    main {
+      padding-bottom: 75px;
+    }
 
-.nav button.active{
-  color:#c58c00;
-  font-weight:800;
-}
+    .note {
+      background: #fff8df;
+      border-left: 4px solid #f4b400;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #555;
+    }
 
-.page{
-  display:none;
-}
+    .upi-id {
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 8px;
+      word-break: break-all;
+    }
 
-.page.active{
-  display:block;
-}
+    .report-box {
+      background: #fff;
+      padding: 18px;
+      border-radius: 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
 
-.empty{
-  text-align:center;
-  color:#888;
-  padding:25px 10px;
-}
+    .report-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
 
-.small{
-  font-size:12px;
-  color:#777;
-}
-
-.row{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-.row > *{
-  flex:1;
-}
-
-.language{
-  text-align:right;
-  margin-bottom:10px;
-}
-
-.language button{
-  padding:7px 10px;
-  font-size:12px;
-}
-
-.report-row{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid #eee;
-}
-
-.category-list{
-  margin-top:10px;
-}
-
-.success{
-  background:#e9f8ee;
-  color:#166534;
-  padding:12px;
-  border-radius:10px;
-  margin-top:10px;
-  display:none;
-}
-
-.warning{
-  background:#fff8df;
-  color:#7a5a00;
-  padding:12px;
-  border-radius:10px;
-  margin-top:10px;
-}
-
-@media(max-width:380px){
-  .button-grid{
-    grid-template-columns:1fr;
-  }
-
-  .summary{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+    .report-row:last-child {
+      border-bottom: none;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Family Money Manager</h1>
-  <p>Income • Expense • Payments • Reports</p>
+  My Money
 </header>
 
-<div class="container">
-
-  <div class="language">
-    <button class="outline" onclick="toggleLanguage()" id="languageBtn">
-      తెలుగు
-    </button>
-  </div>
+<main class="container">
 
   <!-- HOME -->
   <section id="homePage" class="page active">
 
-    <div class="card balance">
-      <div class="balance-title" data-en="Current Balance" data-te="ప్రస్తుత బ్యాలెన్స్">
-        Current Balance
-      </div>
-
-      <div class="balance-amount" id="balance">₹0</div>
-
-      <div class="summary">
-
-        <div class="summary-box income-box">
-          <small data-en="Income" data-te="ఆదాయం">Income</small>
-          <strong id="totalIncome">₹0</strong>
-        </div>
-
-        <div class="summary-box expense-box">
-          <small data-en="Expense" data-te="ఖర్చు">Expense</small>
-          <strong id="totalExpense">₹0</strong>
-        </div>
-
-      </div>
+    <div class="balance-card">
+      <div class="balance-title">Current Balance</div>
+      <div class="balance" id="balance">₹0.00</div>
     </div>
 
-    <div class="card">
-      <h2 data-en="Quick Actions" data-te="త్వరిత చర్యలు">
-        Quick Actions
-      </h2>
+    <div class="summary">
 
-      <div class="button-grid">
-
-        <button class="green" onclick="showPage('addPage');setType('income')">
-          + Income
-        </button>
-
-        <button class="red" onclick="showPage('addPage');setType('expense')">
-          + Expense
-        </button>
-
-        <button class="primary" onclick="showPage('receivePage')">
-          Receive Money
-        </button>
-
-        <button class="dark" onclick="showPage('scanPage');startScanner()">
-          Scan Shop QR
-        </button>
-
+      <div class="summary-box">
+        <div>Income</div>
+        <div class="income" id="totalIncome">₹0.00</div>
       </div>
+
+      <div class="summary-box">
+        <div>Expense</div>
+        <div class="expense" id="totalExpense">₹0.00</div>
+      </div>
+
     </div>
 
-    <div class="card">
-      <h2 data-en="Recent Transactions" data-te="ఇటీవలి లావాదేవీలు">
-        Recent Transactions
-      </h2>
+    <div class="section-title">
+      Quick Actions
+    </div>
 
-      <div id="recentTransactions"></div>
+    <div class="actions">
+
+      <button class="action-btn income" onclick="showPage('addPage'); setType('income')">
+        + Income
+      </button>
+
+      <button class="action-btn expense" onclick="showPage('addPage'); setType('expense')">
+        − Expense
+      </button>
+
+      <button class="action-btn" onclick="showPage('receivePage')">
+        Receive Money
+      </button>
+
+      <button class="action-btn" onclick="showPage('scanPage')">
+        Scan Shop QR
+      </button>
+
     </div>
 
   </section>
@@ -431,41 +364,37 @@ button{
   <!-- ADD TRANSACTION -->
   <section id="addPage" class="page">
 
-    <div class="card">
+    <button class="back-btn" onclick="showPage('homePage')">
+      ← Back
+    </button>
 
-      <h2 data-en="Add Transaction" data-te="లావాదేవీ జోడించండి">
-        Add Transaction
-      </h2>
+    <div class="form-card">
 
-      <label data-en="Type" data-te="రకం">Type</label>
+      <h2 id="transactionTitle">Add Transaction</h2>
 
-      <select id="transactionType" onchange="updateCategories()">
-        <option value="income">Income / ఆదాయం</option>
-        <option value="expense">Expense / ఖర్చు</option>
+      <label>Type</label>
+
+      <select id="transactionType">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
       </select>
 
-      <label data-en="Amount" data-te="మొత్తం">Amount</label>
+      <label>Amount</label>
 
       <input
-        id="amount"
         type="number"
+        id="amount"
+        placeholder="Enter amount"
         min="0"
         step="0.01"
-        placeholder="₹ Amount"
       >
 
-      <label data-en="Category" data-te="కేటగిరీ">Category</label>
-
-      <select id="category"></select>
-
-      <label data-en="Description" data-te="వివరణ">
-        Description
-      </label>
+      <label>Description</label>
 
       <input
-        id="description"
         type="text"
-        placeholder="Example: Salary / Grocery"
+        id="description"
+        placeholder="Example: Salary, Grocery, School fees"
       >
 
       <button class="primary" onclick="saveTransaction()">
@@ -477,40 +406,33 @@ button{
   </section>
 
 
-  <!-- RECEIVE -->
+  <!-- RECEIVE MONEY -->
   <section id="receivePage" class="page">
 
-    <div class="card qr-area">
+    <button class="back-btn" onclick="showPage('homePage')">
+      ← Back
+    </button>
 
-      <h2 data-en="Receive Money" data-te="డబ్బులు స్వీకరించండి">
-        Receive Money
-      </h2>
+    <div class="qr-box">
 
-      <p class="small">
-        Scan this QR from PhonePe, Paytm or another UPI app.
+      <h2>Receive Money</h2>
+
+      <p style="margin-top:10px;">
+        Scan this QR to send money to My Money
       </p>
 
       <div class="upi-id">
-        UPI ID: <span id="displayUpi">xyzts@ptyes</span>
+        xyzts@ptyes
       </div>
 
-      <div id="receiveQR"></div>
+      <div id="qrcode"></div>
 
-      <div class="warning">
-        This is a real UPI QR generated from the UPI ID above.
-        Verify the displayed UPI ID before receiving money.
-      </div>
+      <button class="green" onclick="copyUPI()">
+        Copy UPI ID
+      </button>
 
-      <br>
-
-      <div class="row">
-        <button class="primary" onclick="downloadQR()">
-          Save QR
-        </button>
-
-        <button class="outline" onclick="copyUPI()">
-          Copy UPI
-        </button>
+      <div class="note">
+        This QR is generated from the UPI ID shown above.
       </div>
 
     </div>
@@ -518,46 +440,24 @@ button{
   </section>
 
 
-  <!-- SCAN SHOP QR -->
+  <!-- SCAN QR -->
   <section id="scanPage" class="page">
 
-    <div class="card">
+    <button class="back-btn" onclick="stopScanner(); showPage('homePage')">
+      ← Back
+    </button>
 
-      <h2 data-en="Scan Shop QR" data-te="షాప్ QR స్కాన్">
-        Scan Shop QR
-      </h2>
+    <div class="form-card">
 
-      <p class="small">
-        Scan a shop's UPI QR. The detected UPI payment address will be used
-        to open the installed UPI payment app.
+      <h2>Scan Shop QR</h2>
+
+      <p style="margin-top:10px;">
+        Scan a UPI QR code to make a payment.
       </p>
-
-      <br>
 
       <div id="reader"></div>
 
-      <div id="scanResult" class="scan-result">
-
-        <div class="upi-id">
-          <strong>Detected UPI:</strong>
-          <div id="detectedUPI"></div>
-        </div>
-
-        <label>Amount</label>
-
-        <input
-          id="scanAmount"
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="Enter amount"
-        >
-
-        <button class="primary" onclick="payDetectedUPI()">
-          Open UPI Payment
-        </button>
-
-      </div>
+      <div id="scanResult" style="margin-top:15px;"></div>
 
     </div>
 
@@ -567,657 +467,728 @@ button{
   <!-- HISTORY -->
   <section id="historyPage" class="page">
 
-    <div class="card">
+    <h2 style="margin-bottom:15px;">
+      Transaction History
+    </h2>
 
-      <h2 data-en="Transaction History" data-te="లావాదేవీల చరిత్ర">
-        Transaction History
-      </h2>
-
-      <div id="allTransactions"></div>
-
-    </div>
+    <div id="historyList"></div>
 
   </section>
 
 
-  <!-- REPORT -->
-  <section id="reportPage" class="page">
+  <!-- REPORTS -->
+  <section id="reportsPage" class="page">
 
-    <div class="card">
+    <h2 style="margin-bottom:15px;">
+      Reports
+    </h2>
 
-      <h2 data-en="Reports" data-te="రిపోర్టులు">
-        Reports
-      </h2>
+    <div class="report-box">
 
       <div class="report-row">
         <span>Total Income</span>
-        <strong class="income-text" id="reportIncome">₹0</strong>
+        <strong class="income" id="reportIncome">
+          ₹0.00
+        </strong>
       </div>
 
       <div class="report-row">
         <span>Total Expense</span>
-        <strong class="expense-text" id="reportExpense">₹0</strong>
+        <strong class="expense" id="reportExpense">
+          ₹0.00
+        </strong>
       </div>
 
       <div class="report-row">
         <span>Balance</span>
-        <strong id="reportBalance">₹0</strong>
+        <strong id="reportBalance">
+          ₹0.00
+        </strong>
       </div>
-
-      <h3 style="margin-top:20px;">
-        Expense by Category
-      </h3>
-
-      <div id="categoryReport" class="category-list"></div>
 
     </div>
 
   </section>
 
-</div>
+</main>
 
 
-<!-- BOTTOM NAV -->
-<nav class="nav">
+<!-- BOTTOM NAVIGATION -->
+<nav>
 
-  <button id="navHome" class="active" onclick="showPage('homePage')">
-    🏠<br>Home
+  <button onclick="showPage('homePage')" id="navHome">
+    🏠<br>
+    Home
   </button>
 
-  <button id="navAdd" onclick="showPage('addPage')">
-    ➕<br>Add
+  <button onclick="showPage('historyPage')" id="navHistory">
+    📋<br>
+    History
   </button>
 
-  <button id="navHistory" onclick="showPage('historyPage')">
-    📋<br>History
+  <button onclick="showPage('reportsPage')" id="navReports">
+    📊<br>
+    Reports
   </button>
 
-  <button id="navReport" onclick="showPage('reportPage')">
-    📊<br>Reports
+  <button onclick="showPage('receivePage')" id="navReceive">
+    💰<br>
+    Receive
   </button>
 
 </nav>
 
 
-<!-- QR CODE LIBRARY -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<!-- QR SCANNER -->
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-
 <script>
 
-/* =========================
-   BASIC SETTINGS
-========================= */
+  const RECEIVE_UPI = "xyzts@ptyes";
 
-const RECEIVE_UPI = "xyzts@ptyes";
+  let transactions =
+    JSON.parse(localStorage.getItem("myMoneyTransactions")) || [];
 
-let transactions =
-  JSON.parse(localStorage.getItem("familyTransactions") || "[]");
-
-let currentLanguage =
-  localStorage.getItem("familyLanguage") || "en";
-
-let scanner = null;
-let detectedUPI = "";
+  let scanner = null;
 
 
-/* =========================
-   MONEY FORMAT
-========================= */
+  function formatMoney(amount) {
 
-function money(value){
-  return "₹" + Number(value || 0).toLocaleString("en-IN",{
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-  });
-}
-
-
-/* =========================
-   PAGE NAVIGATION
-========================= */
-
-function showPage(pageId){
-
-  document.querySelectorAll(".page").forEach(page=>{
-    page.classList.remove("active");
-  });
-
-  const page = document.getElementById(pageId);
-
-  if(page){
-    page.classList.add("active");
-  }
-
-  document.querySelectorAll(".nav button").forEach(btn=>{
-    btn.classList.remove("active");
-  });
-
-  if(pageId === "homePage"){
-    document.getElementById("navHome").classList.add("active");
-  }
-
-  if(pageId === "addPage"){
-    document.getElementById("navAdd").classList.add("active");
-  }
-
-  if(pageId === "historyPage"){
-    document.getElementById("navHistory").classList.add("active");
-  }
-
-  if(pageId === "reportPage"){
-    document.getElementById("navReport").classList.add("active");
-  }
-
-  if(pageId === "receivePage"){
-    generateReceiveQR();
-  }
-
-  if(pageId === "historyPage"){
-    renderHistory();
-  }
-
-  if(pageId === "reportPage"){
-    renderReports();
-  }
-}
-
-
-/* =========================
-   TRANSACTION TYPE
-========================= */
-
-function setType(type){
-
-  document.getElementById("transactionType").value = type;
-
-  updateCategories();
-}
-
-
-/* =========================
-   CATEGORIES
-========================= */
-
-function updateCategories(){
-
-  const type =
-    document.getElementById("transactionType").value;
-
-  const category =
-    document.getElementById("category");
-
-  category.innerHTML = "";
-
-  let list = [];
-
-  if(type === "income"){
-
-    list = [
-      "Salary",
-      "Business",
-      "Rent Received",
-      "Interest",
-      "Other Income"
-    ];
-
-  }else{
-
-    list = [
-      "Groceries",
-      "Food",
-      "Travel",
-      "Electricity",
-      "Water",
-      "School",
-      "Medical",
-      "Shopping",
-      "Bills",
-      "UPI Payment",
-      "Other Expense"
-    ];
+    return "₹" + Number(amount).toFixed(2);
 
   }
 
-  list.forEach(item=>{
 
-    const option =
-      document.createElement("option");
+  function showPage(pageId) {
 
-    option.value = item;
-    option.textContent = item;
+    document
+      .querySelectorAll(".page")
+      .forEach(page => page.classList.remove("active"));
 
-    category.appendChild(option);
+    const page = document.getElementById(pageId);
 
-  });
-
-}
-
-
-/* =========================
-   SAVE TRANSACTION
-========================= */
-
-function saveTransaction(){
-
-  const type =
-    document.getElementById("transactionType").value;
-
-  const amount =
-    Number(document.getElementById("amount").value);
-
-  const category =
-    document.getElementById("category").value;
-
-  const description =
-    document.getElementById("description").value.trim();
-
-  if(!amount || amount <= 0){
-
-    alert("Please enter a valid amount.");
-
-    return;
-  }
-
-  const transaction = {
-
-    id: Date.now(),
-
-    type: type,
-
-    amount: amount,
-
-    category: category,
-
-    description:
-      description || category,
-
-    date: new Date().toISOString()
-
-  };
-
-  transactions.unshift(transaction);
-
-  localStorage.setItem(
-    "familyTransactions",
-    JSON.stringify(transactions)
-  );
-
-  document.getElementById("amount").value = "";
-
-  document.getElementById("description").value = "";
-
-  updateDashboard();
-
-  alert(
-    type === "income"
-      ? "Income saved successfully."
-      : "Expense saved successfully."
-  );
-
-  showPage("homePage");
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-function updateDashboard(){
-
-  let income = 0;
-  let expense = 0;
-
-  transactions.forEach(t=>{
-
-    if(t.type === "income"){
-      income += Number(t.amount);
+    if (page) {
+      page.classList.add("active");
     }
 
-    if(t.type === "expense"){
-      expense += Number(t.amount);
+    document
+      .querySelectorAll("nav button")
+      .forEach(button => button.classList.remove("active-nav"));
+
+    if (pageId === "homePage") {
+      document.getElementById("navHome").classList.add("active-nav");
     }
 
-  });
-
-  const balance = income - expense;
-
-  document.getElementById("totalIncome").textContent =
-    money(income);
-
-  document.getElementById("totalExpense").textContent =
-    money(expense);
-
-  document.getElementById("balance").textContent =
-    money(balance);
-
-  document.getElementById("reportIncome").textContent =
-    money(income);
-
-  document.getElementById("reportExpense").textContent =
-    money(expense);
-
-  document.getElementById("reportBalance").textContent =
-    money(balance);
-
-  renderRecent();
-
-  renderHistory();
-
-  renderReports();
-
-}
-
-
-/* =========================
-   RECENT
-========================= */
-
-function renderRecent(){
-
-  const box =
-    document.getElementById("recentTransactions");
-
-  if(!transactions.length){
-
-    box.innerHTML =
-      '<div class="empty">No transactions yet.</div>';
-
-    return;
-  }
-
-  box.innerHTML = "";
-
-  transactions.slice(0,5).forEach(t=>{
-
-    box.appendChild(createTransactionElement(t));
-
-  });
-
-}
-
-
-/* =========================
-   HISTORY
-========================= */
-
-function renderHistory(){
-
-  const box =
-    document.getElementById("allTransactions");
-
-  if(!box) return;
-
-  if(!transactions.length){
-
-    box.innerHTML =
-      '<div class="empty">No transactions yet.</div>';
-
-    return;
-  }
-
-  box.innerHTML = "";
-
-  transactions.forEach(t=>{
-
-    box.appendChild(createTransactionElement(t,true));
-
-  });
-
-}
-
-
-/* =========================
-   TRANSACTION ELEMENT
-========================= */
-
-function createTransactionElement(t, showDelete=false){
-
-  const div =
-    document.createElement("div");
-
-  div.className = "transaction";
-
-  const date =
-    new Date(t.date);
-
-  const sign =
-    t.type === "income" ? "+" : "-";
-
-  const cls =
-    t.type === "income"
-      ? "income-text"
-      : "expense-text";
-
-  div.innerHTML = `
-
-    <div class="transaction-top">
-
-      <div>
-
-        <div class="transaction-name">
-          ${escapeHTML(t.description)}
-        </div>
-
-        <div class="transaction-date">
-          ${escapeHTML(t.category)}
-          •
-          ${date.toLocaleDateString("en-IN")}
-          ${date.toLocaleTimeString("en-IN",{
-            hour:"2-digit",
-            minute:"2-digit"
-          })}
-        </div>
-
-      </div>
-
-      <div class="${cls}">
-        ${sign}${money(t.amount)}
-      </div>
-
-    </div>
-
-    ${
-      showDelete
-      ? `
-        <div style="margin-top:9px;text-align:right;">
-          <button
-            class="outline"
-            onclick="deleteTransaction(${t.id})">
-            Delete
-          </button>
-        </div>
-      `
-      : ""
+    if (pageId === "historyPage") {
+      document.getElementById("navHistory").classList.add("active-nav");
+      renderHistory();
     }
 
-  `;
+    if (pageId === "reportsPage") {
+      document.getElementById("navReports").classList.add("active-nav");
+      updateReports();
+    }
 
-  return div;
-}
+    if (pageId === "receivePage") {
+      document.getElementById("navReceive").classList.add("active-nav");
+      generateReceiveQR();
+    }
 
+    if (pageId === "scanPage") {
+      startScanner();
+    }
 
-/* =========================
-   DELETE
-========================= */
+    updateDashboard();
 
-function deleteTransaction(id){
-
-  if(!confirm("Delete this transaction?")){
-    return;
   }
 
-  transactions =
-    transactions.filter(t=>t.id !== id);
 
-  localStorage.setItem(
-    "familyTransactions",
-    JSON.stringify(transactions)
-  );
+  function setType(type) {
 
-  updateDashboard();
-}
+    document.getElementById("transactionType").value = type;
+
+    if (type === "income") {
+
+      document.getElementById("transactionTitle").innerText =
+        "Add Income";
+
+    } else {
+
+      document.getElementById("transactionTitle").innerText =
+        "Add Expense";
+
+    }
+
+  }
 
 
-/* =========================
-   REPORTS
-========================= */
+  function saveTransaction() {
 
-function renderReports(){
+    const type =
+      document.getElementById("transactionType").value;
 
-  const report =
-    document.getElementById("categoryReport");
+    const amount =
+      parseFloat(document.getElementById("amount").value);
 
-  if(!report) return;
+    const description =
+      document.getElementById("description").value.trim();
 
-  const totals = {};
 
-  transactions
-    .filter(t=>t.type === "expense")
-    .forEach(t=>{
+    if (!amount || amount <= 0) {
 
-      if(!totals[t.category]){
-        totals[t.category] = 0;
+      alert("Please enter a valid amount.");
+
+      return;
+
+    }
+
+
+    if (!description) {
+
+      alert("Please enter a description.");
+
+      return;
+
+    }
+
+
+    const transaction = {
+
+      id: Date.now(),
+
+      type: type,
+
+      amount: amount,
+
+      description: description,
+
+      date: new Date().toLocaleString()
+
+    };
+
+
+    transactions.unshift(transaction);
+
+
+    localStorage.setItem(
+      "myMoneyTransactions",
+      JSON.stringify(transactions)
+    );
+
+
+    document.getElementById("amount").value = "";
+
+    document.getElementById("description").value = "";
+
+
+    alert("Transaction saved successfully.");
+
+    updateDashboard();
+
+    showPage("historyPage");
+
+  }
+
+
+  function updateDashboard() {
+
+    let income = 0;
+
+    let expense = 0;
+
+
+    transactions.forEach(transaction => {
+
+      if (transaction.type === "income") {
+
+        income += Number(transaction.amount);
+
+      } else {
+
+        expense += Number(transaction.amount);
+
       }
 
-      totals[t.category] += Number(t.amount);
-
     });
 
-  const keys =
-    Object.keys(totals);
 
-  if(!keys.length){
+    const balance = income - expense;
 
-    report.innerHTML =
-      '<div class="empty">No expense data yet.</div>';
 
-    return;
+    document.getElementById("balance").innerText =
+      formatMoney(balance);
+
+    document.getElementById("totalIncome").innerText =
+      formatMoney(income);
+
+    document.getElementById("totalExpense").innerText =
+      formatMoney(expense);
+
+
+    updateReports();
+
   }
 
-  report.innerHTML = "";
 
-  keys
-    .sort((a,b)=>totals[b]-totals[a])
-    .forEach(category=>{
+  function renderHistory() {
 
-      const row =
-        document.createElement("div");
+    const list =
+      document.getElementById("historyList");
 
-      row.className = "report-row";
 
-      row.innerHTML = `
+    if (transactions.length === 0) {
 
-        <span>${escapeHTML(category)}</span>
-
-        <strong class="expense-text">
-          ${money(totals[category])}
-        </strong>
-
+      list.innerHTML = `
+        <div class="empty">
+          No transactions yet.
+        </div>
       `;
 
-      report.appendChild(row);
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    transactions.forEach(transaction => {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "transaction";
+
+
+      const left =
+        document.createElement("div");
+
+      left.className = "transaction-left";
+
+
+      const name =
+        document.createElement("div");
+
+      name.className = "transaction-name";
+
+      name.innerText = transaction.description;
+
+
+      const date =
+        document.createElement("div");
+
+      date.className = "transaction-date";
+
+      date.innerText = transaction.date;
+
+
+      left.appendChild(name);
+
+      left.appendChild(date);
+
+
+      const amount =
+        document.createElement("div");
+
+
+      if (transaction.type === "income") {
+
+        amount.className = "amount-income";
+
+        amount.innerText =
+          "+" + formatMoney(transaction.amount);
+
+      } else {
+
+        amount.className = "amount-expense";
+
+        amount.innerText =
+          "-" + formatMoney(transaction.amount);
+
+      }
+
+
+      div.appendChild(left);
+
+      div.appendChild(amount);
+
+
+      list.appendChild(div);
 
     });
 
-}
+  }
 
 
-/* =========================
-   RECEIVE QR
-========================= */
+  function updateReports() {
 
-function generateReceiveQR(){
+    let income = 0;
 
-  const container =
-    document.getElementById("receiveQR");
-
-  if(!container) return;
-
-  container.innerHTML = "";
-
-  /*
-    IMPORTANT:
-    This is the actual UPI URI encoded into the QR.
-    It is NOT a dummy image.
-  */
-
-  const upiURI =
-    "upi://pay?pa=" +
-    encodeURIComponent(RECEIVE_UPI) +
-    "&pn=" +
-    encodeURIComponent("Family Money Manager") +
-    "&cu=INR";
-
-  new QRCode(container,{
-
-    text: upiURI,
-
-    width:250,
-
-    height:250,
-
-    correctLevel:
-      QRCode.CorrectLevel.H
-
-  });
-
-}
+    let expense = 0;
 
 
-/* =========================
-   COPY UPI
-========================= */
+    transactions.forEach(transaction => {
 
-async function copyUPI(){
+      if (transaction.type === "income") {
 
-  try{
+        income += Number(transaction.amount);
 
-    await navigator.clipboard.writeText(RECEIVE_UPI);
+      } else {
 
-    alert("UPI ID copied.");
+        expense += Number(transaction.amount);
 
-  }catch(error){
+      }
 
-    alert("UPI ID: " + RECEIVE_UPI);
+    });
+
+
+    const balance = income - expense;
+
+
+    document.getElementById("reportIncome").innerText =
+      formatMoney(income);
+
+    document.getElementById("reportExpense").innerText =
+      formatMoney(expense);
+
+    document.getElementById("reportBalance").innerText =
+      formatMoney(balance);
 
   }
 
-}
+
+  function generateReceiveQR() {
+
+    const qrContainer =
+      document.getElementById("qrcode");
 
 
-/* =========================
-   DOWNLOAD QR
-========================= */
+    if (!qrContainer) {
+      return;
+    }
 
-function downloadQR(){
 
-  const container =
-    document.getElementById("receiveQR");
+    qrContainer.innerHTML = "";
 
-  const canvas =
-    container.querySelector("canvas");
 
-  const image =
-    container.querySelector("img");
+    const upiUrl =
+      "upi://pay?pa=" +
+      encodeURIComponent(RECEIVE_UPI) +
+      "&pn=" +
+      encodeURIComponent("My Money") +
+      "&cu=INR";
 
-  let url = "";
 
-  if(canvas){
+    new QRCode(qrContainer, {
 
-    url = canvas.toDataURL("image/png");
+      text: upiUrl,
 
-  }else if(image){
+      width: 220,
 
-    url = image.src;
+      height: 220,
+
+      correctLevel: QRCode.CorrectLevel.H
+
+    });
 
   }
 
-  if(!url){
 
-    alert("QR is not ready yet.");
+  function copyUPI() {
 
-    return
+    navigator.clipboard
+      .writeText(RECEIVE_UPI)
+      .then(() => {
+
+        alert("UPI ID copied: " + RECEIVE_UPI);
+
+      })
+      .catch(() => {
+
+        alert("UPI ID: " + RECEIVE_UPI);
+
+      });
+
+  }
+
+
+  function startScanner() {
+
+    const reader =
+      document.getElementById("reader");
+
+
+    if (!reader) {
+      return;
+    }
+
+
+    if (scanner) {
+      return;
+    }
+
+
+    scanner =
+      new Html5Qrcode("reader");
+
+
+    scanner
+      .start(
+
+        { facingMode: "environment" },
+
+        {
+          fps: 10,
+          qrbox: 250
+        },
+
+        qrCodeMessage => {
+
+          handleQRCode(qrCodeMessage);
+
+        },
+
+        errorMessage => {
+
+          // Scanner is continuing normally.
+
+        }
+
+      )
+      .catch(error => {
+
+        document.getElementById("scanResult").innerHTML = `
+          <div class="note">
+            Camera could not be started.
+            Please allow camera permission.
+          </div>
+        `;
+
+      });
+
+  }
+
+
+  function stopScanner() {
+
+    if (!scanner) {
+      return;
+    }
+
+
+    scanner
+      .stop()
+      .then(() => {
+
+        scanner.clear();
+
+        scanner = null;
+
+      })
+      .catch(() => {
+
+        scanner = null;
+
+      });
+
+  }
+
+
+  function handleQRCode(qrText) {
+
+    stopScanner();
+
+
+    let upiId = null;
+
+
+    try {
+
+      const url =
+        new URL(qrText);
+
+
+      if (url.protocol === "upi:") {
+
+        upiId =
+          url.searchParams.get("pa");
+
+      }
+
+    } catch (error) {
+
+      // Continue with regex detection.
+
+    }
+
+
+    if (!upiId) {
+
+      const match =
+        qrText.match(
+          /[A-Za-z0-9._-]+@[A-Za-z0-9.-]+/
+        );
+
+
+      if (match) {
+
+        upiId = match[0];
+
+      }
+
+    }
+
+
+    if (!upiId) {
+
+      document.getElementById("scanResult").innerHTML = `
+        <div class="note">
+          UPI ID was not detected in this QR.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    document.getElementById("scanResult").innerHTML = `
+
+      <div class="form-card">
+
+        <h3>UPI Detected</h3>
+
+        <p style="margin-top:10px;">
+          ${escapeHtml(upiId)}
+        </p>
+
+        <button
+          class="green"
+          onclick="openUPIPayment('${escapeAttribute(upiId)}')"
+        >
+          Open UPI Payment
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+
+  function escapeHtml(text) {
+
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function escapeAttribute(text) {
+
+    return String(text)
+      .replace(/\\/g, "\\\\")
+      .replace(/'/g, "\\'");
+
+  }
+
+
+  function openUPIPayment(upiId) {
+
+    const amount =
+      prompt("Enter payment amount");
+
+
+    if (!amount) {
+      return;
+    }
+
+
+    const numericAmount =
+      parseFloat(amount);
+
+
+    if (
+      isNaN(numericAmount) ||
+      numericAmount <= 0
+    ) {
+
+      alert("Please enter a valid amount.");
+
+      return;
+
+    }
+
+
+    const upiUrl =
+      "upi://pay?pa=" +
+      encodeURIComponent(upiId) +
+      "&am=" +
+      encodeURIComponent(numericAmount.toFixed(2)) +
+      "&cu=INR";
+
+
+    /*
+      This only opens the UPI app.
+      It does NOT verify whether the payment succeeded.
+    */
+
+
+    const transaction = {
+
+      id: Date.now(),
+
+      type: "expense",
+
+      amount: numericAmount,
+
+      description: "UPI Payment - " + upiId,
+
+      date: new Date().toLocaleString()
+
+    };
+
+
+    transactions.unshift(transaction);
+
+
+    localStorage.setItem(
+      "myMoneyTransactions",
+      JSON.stringify(transactions)
+    );
+
+
+    window.location.href = upiUrl;
+
+  }
+
+
+  // Initial dashboard update
+  updateDashboard();
+
+
+  // Service Worker
+  if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch(error => {
+
+          console.log(
+            "Service Worker registration failed:",
+            error
+          );
+
+        });
+
+    });
+
+  }
+
+</script>
+
+</body>
+</html>
