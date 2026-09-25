@@ -175,6 +175,7 @@ input,select{
     </div>
 
     <div class="cards">
+
         <div class="card income">
             <div>Income</div>
             <strong id="incomeAmount">₹0.00</strong>
@@ -184,6 +185,7 @@ input,select{
             <div>Payments</div>
             <strong id="paymentAmount">₹0.00</strong>
         </div>
+
     </div>
 
     <div class="buttons">
@@ -221,33 +223,61 @@ input,select{
         </button>
 
     </div>
+
 </div>
 
 
 <!-- ADD TRANSACTION -->
 <div id="addPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <h2 id="transactionTitle">Add Income</h2>
+    <h2 id="transactionTitle">
+        Add Income
+    </h2>
 
     <label>Amount</label>
-    <input id="amount" type="number" placeholder="Enter amount">
+
+    <input
+        id="amount"
+        type="number"
+        placeholder="Enter amount">
 
     <label>Description</label>
-    <input id="description" type="text" placeholder="Example: Salary">
+
+    <input
+        id="description"
+        type="text"
+        placeholder="Example: Salary">
 
     <label>Category</label>
+
     <select id="category">
-        <option value="Income">Income</option>
-        <option value="Other Expense">Other Expense</option>
-        <option value="Hand Cash">Hand Cash</option>
+
+        <option value="Income">
+            Income
+        </option>
+
+        <option value="Other Expense">
+            Other Expense
+        </option>
+
+        <option value="Hand Cash">
+            Hand Cash
+        </option>
+
     </select>
 
-    <button onclick="saveTransaction()" style="width:100%">
+    <button
+        onclick="saveTransaction()"
+        style="width:100%">
+
         Save Transaction
+
     </button>
 
 </div>
@@ -256,22 +286,32 @@ input,select{
 <!-- HAND CASH -->
 <div id="cashPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>💵 Hand Cash</h2>
 
-    <input id="cashAmount"
-           type="number"
-           placeholder="Enter amount">
+    <input
+        id="cashAmount"
+        type="number"
+        placeholder="Enter amount">
 
-    <input id="cashDescription"
-           type="text"
-           placeholder="Description">
+    <input
+        id="cashDescription"
+        type="text"
+        placeholder="Description">
 
-    <button onclick="saveCash()" style="width:100%">
+    <button
+        onclick="saveCash()"
+        style="width:100%">
+
         Save Hand Cash
+
     </button>
 
 </div>
@@ -280,22 +320,32 @@ input,select{
 <!-- RECEIVE -->
 <div id="receivePage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>📥 Receive Money</h2>
 
-    <input id="receiveAmount"
-           type="number"
-           placeholder="Received amount">
+    <input
+        id="receiveAmount"
+        type="number"
+        placeholder="Received amount">
 
-    <input id="receiveDescription"
-           type="text"
-           placeholder="From / Description">
+    <input
+        id="receiveDescription"
+        type="text"
+        placeholder="From / Description">
 
-    <button onclick="saveReceived()" style="width:100%">
+    <button
+        onclick="saveReceived()"
+        style="width:100%">
+
         Save Received Money
+
     </button>
 
 </div>
@@ -304,8 +354,12 @@ input,select{
 <!-- PAYMENTS -->
 <div id="paymentsPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>💳 Payments</h2>
@@ -318,22 +372,35 @@ input,select{
 <!-- SCAN -->
 <div id="scanPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>📷 Scan Shop QR</h2>
 
     <p style="margin:15px 0">
-        QR scanner will open when supported by your browser.
+
+        QR scanner will open when supported
+        by your browser.
+
     </p>
 
-    <button onclick="startQR()" style="width:100%">
+    <button
+        onclick="startQR()"
+        style="width:100%">
+
         Start QR Scan
+
     </button>
 
-    <div id="qrResult"
-         style="margin-top:15px">
+    <div
+        id="qrResult"
+        style="margin-top:15px">
+
     </div>
 
 </div>
@@ -342,8 +409,12 @@ input,select{
 <!-- HISTORY -->
 <div id="historyPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>📜 Transaction History</h2>
@@ -356,30 +427,46 @@ input,select{
 <!-- REPORTS -->
 <div id="reportsPage" class="page">
 
-    <button class="back" onclick="showPage('homePage')">
+    <button
+        class="back"
+        onclick="showPage('homePage')">
+
         ← Back
+
     </button>
 
     <h2>📊 Reports</h2>
 
     <div class="report">
+
         <b>Today</b>
+
         <div id="todayReport"></div>
+
     </div>
 
     <div class="report">
+
         <b>This Month</b>
+
         <div id="monthReport"></div>
+
     </div>
 
     <div class="report">
+
         <b>This Year</b>
+
         <div id="yearReport"></div>
+
     </div>
 
     <div class="report">
+
         <b>Overall</b>
+
         <div id="overallReport"></div>
+
     </div>
 
 </div>
@@ -411,17 +498,23 @@ function loadTransactions(){
 
         if(saved){
 
-            const parsed = JSON.parse(saved);
+            const parsed =
+                JSON.parse(saved);
 
             if(Array.isArray(parsed)){
+
                 transactions = parsed;
+
             }
 
         }
 
     }catch(error){
 
-        console.log("Data read error:",error);
+        console.log(
+            "Data read error:",
+            error
+        );
 
         transactions = [];
 
@@ -461,17 +554,22 @@ function showPage(pageId){
     document
         .querySelectorAll(".page")
         .forEach(page=>{
+
             page.classList.remove("active");
+
         });
+
 
     const page =
         document.getElementById(pageId);
+
 
     if(page){
 
         page.classList.add("active");
 
     }
+
 
     updateUI();
 
@@ -484,21 +582,44 @@ function showPage(pageId){
 
 function getDateTime(){
 
-    const now = new Date();
+    const now =
+        new Date();
+
 
     return {
-        timestamp: now.getTime(),
-        date: now.toLocaleDateString("en-IN"),
-        time: now.toLocaleTimeString("en-IN"),
-        day: now.toLocaleDateString(
-            "en-IN",
-            {weekday:"long"}
-        ),
-        month: now.toLocaleDateString(
-            "en-IN",
-            {month:"long"}
-        ),
-        year: now.getFullYear()
+
+        timestamp:
+            now.getTime(),
+
+        date:
+            now.toLocaleDateString(
+                "en-IN"
+            ),
+
+        time:
+            now.toLocaleTimeString(
+                "en-IN"
+            ),
+
+        day:
+            now.toLocaleDateString(
+                "en-IN",
+                {
+                    weekday:"long"
+                }
+            ),
+
+        month:
+            now.toLocaleDateString(
+                "en-IN",
+                {
+                    month:"long"
+                }
+            ),
+
+        year:
+            now.getFullYear()
+
     };
 
 }
@@ -512,69 +633,101 @@ function saveTransaction(){
 
     const amount =
         Number(
-            document.getElementById("amount").value
+            document.getElementById(
+                "amount"
+            ).value
         );
 
+
     const description =
-        document.getElementById("description").value
-        .trim();
+        document.getElementById(
+            "description"
+        ).value.trim();
+
 
     const category =
-        document.getElementById("category").value;
+        document.getElementById(
+            "category"
+        ).value;
 
 
     if(!amount || amount <= 0){
 
-        alert("Please enter amount");
+        alert(
+            "Please enter amount"
+        );
 
         return;
 
     }
 
 
-    const dt = getDateTime();
+    const dt =
+        getDateTime();
 
 
     const transaction = {
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         type:
             category === "Income"
             ? "income"
             : "expense",
 
-        category: category,
+        category:
+            category,
 
-        amount: amount,
+        amount:
+            amount,
 
         description:
-            description || category,
+            description ||
+            category,
 
-        date: dt.date,
+        date:
+            dt.date,
 
-        time: dt.time,
+        time:
+            dt.time,
 
-        day: dt.day,
+        day:
+            dt.day,
 
-        month: dt.month,
+        month:
+            dt.month,
 
-        year: dt.year,
+        year:
+            dt.year,
 
-        timestamp: dt.timestamp
+        timestamp:
+            dt.timestamp
 
     };
 
 
-    transactions.push(transaction);
+    transactions.push(
+        transaction
+    );
+
 
     saveData();
 
-    document.getElementById("amount").value = "";
 
-    document.getElementById("description").value = "";
+    document.getElementById(
+        "amount"
+    ).value = "";
 
-    showPage("homePage");
+
+    document.getElementById(
+        "description"
+    ).value = "";
+
+
+    showPage(
+        "homePage"
+    );
 
 }
 
@@ -585,15 +738,21 @@ function saveTransaction(){
 
 function openExpense(){
 
-    showPage("addPage");
+    showPage(
+        "addPage"
+    );
+
 
     document.getElementById(
         "transactionTitle"
-    ).innerText = "Add Expense";
+    ).innerText =
+        "Add Expense";
+
 
     document.getElementById(
         "category"
-    ).value = "Other Expense";
+    ).value =
+        "Other Expense";
 
 }
 
@@ -606,8 +765,11 @@ function saveCash(){
 
     const amount =
         Number(
-            document.getElementById("cashAmount").value
+            document.getElementById(
+                "cashAmount"
+            ).value
         );
+
 
     const description =
         document.getElementById(
@@ -617,55 +779,74 @@ function saveCash(){
 
     if(!amount || amount <= 0){
 
-        alert("Please enter amount");
+        alert(
+            "Please enter amount"
+        );
 
         return;
 
     }
 
 
-    const dt = getDateTime();
+    const dt =
+        getDateTime();
 
 
     transactions.push({
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
-        type:"expense",
+        type:
+            "expense",
 
-        category:"Hand Cash",
+        category:
+            "Hand Cash",
 
-        amount:amount,
+        amount:
+            amount,
 
         description:
-            description || "Hand Cash",
+            description ||
+            "Hand Cash",
 
-        date:dt.date,
+        date:
+            dt.date,
 
-        time:dt.time,
+        time:
+            dt.time,
 
-        day:dt.day,
+        day:
+            dt.day,
 
-        month:dt.month,
+        month:
+            dt.month,
 
-        year:dt.year,
+        year:
+            dt.year,
 
-        timestamp:dt.timestamp
+        timestamp:
+            dt.timestamp
 
     });
 
 
     saveData();
 
+
     document.getElementById(
         "cashAmount"
     ).value = "";
+
 
     document.getElementById(
         "cashDescription"
     ).value = "";
 
-    showPage("homePage");
+
+    showPage(
+        "homePage"
+    );
 
 }
 
@@ -683,6 +864,7 @@ function saveReceived(){
             ).value
         );
 
+
     const description =
         document.getElementById(
             "receiveDescription"
@@ -691,40 +873,54 @@ function saveReceived(){
 
     if(!amount || amount <= 0){
 
-        alert("Please enter amount");
+        alert(
+            "Please enter amount"
+        );
 
         return;
 
     }
 
 
-    const dt = getDateTime();
+    const dt =
+        getDateTime();
 
 
     transactions.push({
 
-        id:Date.now(),
+        id:
+            Date.now(),
 
-        type:"income",
+        type:
+            "income",
 
-        category:"Received Money",
+        category:
+            "Received Money",
 
-        amount:amount,
+        amount:
+            amount,
 
         description:
-            description || "Received Money",
+            description ||
+            "Received Money",
 
-        date:dt.date,
+        date:
+            dt.date,
 
-        time:dt.time,
+        time:
+            dt.time,
 
-        day:dt.day,
+        day:
+            dt.day,
 
-        month:dt.month,
+        month:
+            dt.month,
 
-        year:dt.year,
+        year:
+            dt.year,
 
-        timestamp:dt.timestamp
+        timestamp:
+            dt.timestamp
 
     });
 
@@ -736,12 +932,15 @@ function saveReceived(){
         "receiveAmount"
     ).value = "";
 
+
     document.getElementById(
         "receiveDescription"
     ).value = "";
 
 
-    showPage("homePage");
+    showPage(
+        "homePage"
+    );
 
 }
 
@@ -750,37 +949,54 @@ function saveReceived(){
    PAYMENT
 ================================ */
 
-function addPayment(amount, description, upi){
+function addPayment(
+    amount,
+    description,
+    upi
+){
 
-    const dt = getDateTime();
+    const dt =
+        getDateTime();
 
 
     transactions.push({
 
-        id:Date.now(),
+        id:
+            Date.now(),
 
-        type:"expense",
+        type:
+            "expense",
 
-        category:"Payments",
+        category:
+            "Payments",
 
-        amount:Number(amount),
+        amount:
+            Number(amount),
 
         description:
-            description || "UPI Payment",
+            description ||
+            "UPI Payment",
 
-        upi:upi || "",
+        upi:
+            upi || "",
 
-        date:dt.date,
+        date:
+            dt.date,
 
-        time:dt.time,
+        time:
+            dt.time,
 
-        day:dt.day,
+        day:
+            dt.day,
 
-        month:dt.month,
+        month:
+            dt.month,
 
-        year:dt.year,
+        year:
+            dt.year,
 
-        timestamp:dt.timestamp
+        timestamp:
+            dt.timestamp
 
     });
 
@@ -799,7 +1015,10 @@ function addPayment(amount, description, upi){
 function startQR(){
 
     const result =
-        document.getElementById("qrResult");
+        document.getElementById(
+            "qrResult"
+        );
+
 
     result.innerHTML =
         "<p>QR scanner ready.</p>" +
@@ -815,7 +1034,10 @@ function startQR(){
 function updateHistory(){
 
     const box =
-        document.getElementById("historyList");
+        document.getElementById(
+            "historyList"
+        );
+
 
     if(!box) return;
 
@@ -846,6 +1068,7 @@ function updateHistory(){
                 ? "+"
                 : "-";
 
+
             const cls =
                 t.type === "income"
                 ? "income"
@@ -853,39 +1076,61 @@ function updateHistory(){
 
 
             return `
+
                 <div class="transaction">
 
                     <div class="top">
 
                         <span>
+
                             ${escapeHTML(
-                                t.category || "Transaction"
+                                t.category ||
+                                "Transaction"
                             )}
+
                         </span>
 
                         <span class="${cls}">
-                            ${sign} ₹${Number(
+
+                            ${sign}
+                            ₹${Number(
                                 t.amount || 0
                             ).toFixed(2)}
+
                         </span>
 
                     </div>
 
                     <div>
+
                         ${escapeHTML(
                             t.description || ""
                         )}
+
                     </div>
 
                     <div class="small">
-                        ${escapeHTML(t.date || "")}
+
+                        ${escapeHTML(
+                            t.date || ""
+                        )}
+
                         ·
-                        ${escapeHTML(t.time || "")}
+
+                        ${escapeHTML(
+                            t.time || ""
+                        )}
+
                         ·
-                        ${escapeHTML(t.day || "")}
+
+                        ${escapeHTML(
+                            t.day || ""
+                        )}
+
                     </div>
 
                 </div>
+
             `;
 
         }).join("");
@@ -904,13 +1149,16 @@ function updatePayments(){
             "paymentsList"
         );
 
+
     if(!box) return;
 
 
     const payments =
         transactions
-        .filter(t =>
-            t.category === "Payments"
+        .filter(
+            t =>
+                t.category ===
+                "Payments"
         )
         .sort(
             (a,b)=>
@@ -937,24 +1185,36 @@ function updatePayments(){
                 <div class="top">
 
                     <span>
+
                         ${escapeHTML(
                             t.description ||
                             "Payment"
                         )}
+
                     </span>
 
                     <span class="expense">
+
                         - ₹${Number(
                             t.amount || 0
                         ).toFixed(2)}
+
                     </span>
 
                 </div>
 
                 <div class="small">
-                    ${escapeHTML(t.date || "")}
+
+                    ${escapeHTML(
+                        t.date || ""
+                    )}
+
                     ·
-                    ${escapeHTML(t.time || "")}
+
+                    ${escapeHTML(
+                        t.time || ""
+                    )}
+
                 </div>
 
             </div>
@@ -980,7 +1240,9 @@ function calculate(list){
     list.forEach(t=>{
 
         const amount =
-            Number(t.amount || 0);
+            Number(
+                t.amount || 0
+            );
 
 
         if(t.type === "income"){
@@ -989,7 +1251,10 @@ function calculate(list){
 
         }else{
 
-            if(t.category === "Payments"){
+            if(
+                t.category ===
+                "Payments"
+            ){
 
                 payments += amount;
 
@@ -1013,7 +1278,9 @@ function calculate(list){
         other,
 
         balance:
-            income - payments - other
+            income -
+            payments -
+            other
 
     };
 
@@ -1022,13 +1289,19 @@ function calculate(list){
 
 function updateReports(){
 
-    const now = new Date();
+    const now =
+        new Date();
+
 
     const today =
-        now.toLocaleDateString("en-IN");
+        now.toLocaleDateString(
+            "en-IN"
+        );
+
 
     const month =
         now.getMonth();
+
 
     const year =
         now.getFullYear();
@@ -1036,7 +1309,8 @@ function updateReports(){
 
     const todayList =
         transactions.filter(
-            t=>t.date === today
+            t =>
+                t.date === today
         );
 
 
@@ -1048,8 +1322,11 @@ function updateReports(){
                     t.timestamp || 0
                 );
 
-            return d.getMonth() === month &&
-                   d.getFullYear() === year;
+
+            return (
+                d.getMonth() === month &&
+                d.getFullYear() === year
+            );
 
         });
 
@@ -1062,170 +1339,33 @@ function updateReports(){
                     t.timestamp || 0
                 );
 
-            return d.getFullYear() === year;
+
+            return (
+                d.getFullYear() === year
+            );
 
         });
 
 
     const overall =
-        calculate(transactions);
+        calculate(
+            transactions
+        );
+
 
     const todayData =
-        calculate(todayList);
+        calculate(
+            todayList
+        );
+
 
     const monthData =
-        calculate(monthList);
+        calculate(
+            monthList
+        );
+
 
     const yearData =
-        calculate(yearList);
-
-
-    document.getElementById(
-        "todayReport"
-    ).innerHTML =
-        reportHTML(todayData);
-
-
-    document.getElementById(
-        "monthReport"
-    ).innerHTML =
-        reportHTML(monthData);
-
-
-    document.getElementById(
-        "yearReport"
-    ).innerHTML =
-        reportHTML(yearData);
-
-
-    document.getElementById(
-        "overallReport"
-    ).innerHTML =
-        reportHTML(overall);
-
-}
-
-
-function reportHTML(data){
-
-    return `
-        Income: ₹${data.income.toFixed(2)}<br>
-        Payments: ₹${data.payments.toFixed(2)}<br>
-        Other Expenses: ₹${data.other.toFixed(2)}<br>
-        <b>Balance: ₹${data.balance.toFixed(2)}</b>
-    `;
-
-}
-
-
-/* ================================
-   HOME TOTALS
-================================ */
-
-function updateHome(){
-
-    let income = 0;
-
-    let expense = 0;
-
-    let payments = 0;
-
-
-    transactions.forEach(t=>{
-
-        const amount =
-            Number(t.amount || 0);
-
-
-        if(t.type === "income"){
-
-            income += amount;
-
-        }else{
-
-            expense += amount;
-
-            if(t.category === "Payments"){
-
-                payments += amount;
-
-            }
-
-        }
-
-    });
-
-
-    const balance =
-        income - expense;
-
-
-    document.getElementById(
-        "incomeAmount"
-    ).innerText =
-        "₹" + income.toFixed(2);
-
-
-    document.getElementById(
-        "paymentAmount"
-    ).innerText =
-        "₹" + payments.toFixed(2);
-
-
-    document.getElementById(
-        "balanceAmount"
-    ).innerText =
-        "₹" + balance.toFixed(2);
-
-}
-
-
-/* ================================
-   UI
-================================ */
-
-function updateUI(){
-
-    updateHome();
-
-    updateHistory();
-
-    updatePayments();
-
-    updateReports();
-
-}
-
-
-/* ================================
-   SECURITY
-================================ */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-/* ================================
-   START
-================================ */
-
-loadTransactions();
-
-updateUI();
-
-
-/* ================================
-   SERVICE WORKER
-================================ */
-
-if(
-    "serviceWorker
+        calculate(
+        
     
