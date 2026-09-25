@@ -2,15 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<meta name="theme-color" content="#f5b400">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f4c400">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<link rel="manifest" href="manifest.json">
 
 <title>My Money</title>
+
+<link rel="manifest" href="manifest.json">
 
 <style>
 *{
@@ -21,339 +19,143 @@
 }
 
 body{
-    background:#fff8e1;
+    background:#fffdf5;
     color:#222;
-    min-height:100vh;
 }
 
 header{
-    background:#f5b400;
-    color:#fff;
-    padding:18px 15px;
+    background:#f4c400;
+    padding:18px;
     text-align:center;
-    font-size:25px;
+    font-size:24px;
     font-weight:bold;
-    position:sticky;
-    top:0;
-    z-index:1000;
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:15px;
+}
+
+.balance{
+    background:#fff;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:15px;
+    box-shadow:0 3px 10px #ddd;
+    text-align:center;
+}
+
+.balance h2{
+    margin-bottom:8px;
+}
+
+.amount{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.card{
+    background:#fff;
+    padding:18px 10px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 2px 8px #ddd;
+}
+
+.income{
+    color:green;
+}
+
+.expense{
+    color:#d00;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:15px 10px;
+    font-size:16px;
+    font-weight:bold;
+    background:#f4c400;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.97);
 }
 
 .page{
     display:none;
-    padding:15px;
-    padding-bottom:90px;
 }
 
 .page.active{
     display:block;
 }
 
-.balance-card{
-    background:linear-gradient(135deg,#f5b400,#ffca28);
-    color:#fff;
-    border-radius:18px;
-    padding:22px;
-    margin-bottom:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-}
-
-.balance-title{
-    font-size:15px;
-    opacity:.9;
-}
-
-.balance{
-    font-size:34px;
-    font-weight:bold;
-    margin-top:8px;
-}
-
-.summary{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-bottom:18px;
-}
-
-.summary-box{
-    background:#fff;
-    padding:16px;
-    border-radius:15px;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-.summary-box h3{
-    font-size:14px;
-    margin-bottom:7px;
-}
-
-.income{
-    color:#188038;
-}
-
-.expense{
-    color:#d93025;
-}
-
-.amount{
-    font-size:22px;
-    font-weight:bold;
-}
-
-.section-title{
-    font-size:19px;
-    font-weight:bold;
-    margin:18px 0 12px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.action{
-    border:0;
-    border-radius:15px;
-    padding:18px 10px;
-    background:#fff;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-    font-size:15px;
-    font-weight:bold;
-    cursor:pointer;
-    min-height:72px;
-}
-
-.action:active{
-    transform:scale(.97);
-}
-
-.action span{
-    display:block;
-    font-size:25px;
-    margin-bottom:6px;
-}
-
-.btn{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    padding:14px;
-    margin-top:10px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.primary{
-    background:#f5b400;
-    color:#fff;
-}
-
-.green{
-    background:#188038;
-    color:#fff;
-}
-
-.red{
-    background:#d93025;
-    color:#fff;
-}
-
-.blue{
-    background:#1a73e8;
-    color:#fff;
-}
-
-.gray{
-    background:#666;
-    color:#fff;
-}
-
-.form-box{
-    background:#fff;
-    padding:18px;
-    border-radius:16px;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-label{
-    display:block;
-    margin-top:12px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:14px;
+.back{
+    margin-bottom:15px;
+    background:#eee;
 }
 
 input,select{
     width:100%;
     padding:13px;
-    border:1px solid #ddd;
+    margin:8px 0 12px;
+    border:1px solid #ccc;
     border-radius:10px;
     font-size:16px;
-    background:#fff;
-}
-
-.back{
-    background:#fff;
-    color:#333;
-    border:1px solid #ddd;
-    margin-bottom:15px;
 }
 
 .transaction{
     background:#fff;
-    border-radius:14px;
-    padding:15px;
-    margin-bottom:10px;
-    box-shadow:0 3px 10px rgba(0,0,0,.07);
-    border-left:5px solid #f5b400;
+    padding:14px;
+    margin:10px 0;
+    border-radius:12px;
+    box-shadow:0 2px 7px #ddd;
 }
 
-.transaction.income-border{
-    border-left-color:#188038;
-}
-
-.transaction.expense-border{
-    border-left-color:#d93025;
-}
-
-.transaction-top{
+.transaction .top{
     display:flex;
     justify-content:space-between;
-    gap:10px;
-}
-
-.transaction-title{
     font-weight:bold;
 }
 
-.transaction-amount{
-    font-weight:bold;
-    white-space:nowrap;
-}
-
-.transaction-meta{
-    margin-top:8px;
+.small{
     color:#666;
-    font-size:12px;
-    line-height:1.6;
+    font-size:13px;
+    margin-top:6px;
 }
 
-.filter-row{
-    display:flex;
-    gap:7px;
-    overflow-x:auto;
-    margin-bottom:15px;
-}
-
-.filter-btn{
-    border:1px solid #ddd;
+.report{
     background:#fff;
-    border-radius:20px;
-    padding:9px 14px;
-    white-space:nowrap;
-    cursor:pointer;
+    padding:15px;
+    margin:10px 0;
+    border-radius:12px;
+    box-shadow:0 2px 7px #ddd;
 }
 
-.filter-btn.active{
-    background:#f5b400;
-    color:#fff;
-    border-color:#f5b400;
-}
-
-.report-box{
-    background:#fff;
-    border-radius:15px;
-    padding:17px;
-    margin-bottom:12px;
-    box-shadow:0 3px 10px rgba(0,0,0,.07);
-}
-
-.report-row{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid #eee;
-}
-
-.report-row:last-child{
-    border-bottom:0;
+.hidden{
+    display:none;
 }
 
 .empty{
     text-align:center;
-    padding:30px 10px;
     color:#777;
-}
-
-#reader{
-    width:100%;
-    background:#000;
-    border-radius:15px;
-    overflow:hidden;
-    margin-top:10px;
-}
-
-.qr-box{
-    background:#fff;
-    padding:20px;
-    border-radius:16px;
-    text-align:center;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-#qrcode{
-    display:flex;
-    justify-content:center;
-    margin:20px 0;
-}
-
-.note{
-    background:#fff3cd;
-    border-radius:10px;
-    padding:12px;
-    font-size:13px;
-    line-height:1.5;
-    margin-top:10px;
-}
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:65px;
-    background:#fff;
-    box-shadow:0 -2px 10px rgba(0,0,0,.12);
-    display:flex;
-    z-index:2000;
-}
-
-.bottom-nav button{
-    flex:1;
-    border:0;
-    background:#fff;
-    font-size:12px;
-    cursor:pointer;
-}
-
-.bottom-nav button span{
-    display:block;
-    font-size:21px;
-    margin-bottom:3px;
-}
-
-.bottom-nav button.active{
-    color:#f5b400;
-    font-weight:bold;
-}
-
-.small-total{
-    font-size:13px;
-    color:#666;
-    margin-bottom:12px;
+    padding:25px;
 }
 </style>
 </head>
@@ -362,681 +164,264 @@ input,select{
 
 <header>My Money</header>
 
+<div class="container">
+
 <!-- HOME -->
-<section id="homePage" class="page active">
+<div id="homePage" class="page active">
 
-    <div class="balance-card">
-        <div class="balance-title">Current Balance</div>
-        <div class="balance" id="balanceAmount">₹0.00</div>
+    <div class="balance">
+        <h2>Current Balance</h2>
+        <div class="amount" id="balanceAmount">₹0.00</div>
     </div>
 
-    <div class="summary">
-        <div class="summary-box">
-            <h3 class="income">Total Income</h3>
-            <div class="amount income" id="incomeAmount">₹0.00</div>
+    <div class="cards">
+        <div class="card income">
+            <div>Income</div>
+            <strong id="incomeAmount">₹0.00</strong>
         </div>
 
-        <div class="summary-box">
-            <h3 class="expense">Total Expense</h3>
-            <div class="amount expense" id="expenseAmount">₹0.00</div>
+        <div class="card expense">
+            <div>Payments</div>
+            <strong id="paymentAmount">₹0.00</strong>
         </div>
     </div>
 
-    <div class="section-title">Quick Actions</div>
+    <div class="buttons">
 
-    <div class="grid">
-
-        <button class="action" onclick="safeShowPage('addPage'); setTransactionType('income')">
-            <span>➕</span>
-            Add Income
+        <button onclick="showPage('addPage')">
+            + Income
         </button>
 
-        <button class="action" onclick="safeShowPage('addPage'); setTransactionType('expense')">
-            <span>➖</span>
-            Add Expense
+        <button onclick="openExpense()">
+            + Expense
         </button>
 
-        <button class="action" onclick="safeShowPage('receivePage')">
-            <span>📥</span>
-            Receive Money
+        <button onclick="showPage('cashPage')">
+            💵 Hand Cash
         </button>
 
-        <button class="action" onclick="safeShowPage('scanPage')">
-            <span>📷</span>
-            Scan Shop QR
+        <button onclick="showPage('receivePage')">
+            📥 Receive Money
         </button>
 
-        <button class="action" onclick="safeShowPage('cashPage')">
-            <span>💵</span>
-            Hand Cash
+        <button onclick="showPage('scanPage')">
+            📷 Scan Shop QR
         </button>
 
-        <button class="action" onclick="safeShowPage('paymentsPage')">
-            <span>💳</span>
-            Payments
+        <button onclick="showPage('paymentsPage')">
+            💳 Payments
+        </button>
+
+        <button onclick="showPage('historyPage')">
+            📜 History
+        </button>
+
+        <button onclick="showPage('reportsPage')">
+            📊 Reports
         </button>
 
     </div>
-
-    <div class="section-title">Recent Transactions</div>
-
-    <div id="homeTransactions"></div>
-
-</section>
+</div>
 
 
 <!-- ADD TRANSACTION -->
-<section id="addPage" class="page">
+<div id="addPage" class="page">
 
-    <button class="btn back" onclick="safeShowPage('homePage')">
+    <button class="back" onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <div class="section-title">Add Transaction</div>
+    <h2 id="transactionTitle">Add Income</h2>
 
-    <div class="form-box">
+    <label>Amount</label>
+    <input id="amount" type="number" placeholder="Enter amount">
 
-        <label>Transaction Type</label>
+    <label>Description</label>
+    <input id="description" type="text" placeholder="Example: Salary">
 
-        <select id="transactionType">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-        </select>
+    <label>Category</label>
+    <select id="category">
+        <option value="Income">Income</option>
+        <option value="Other Expense">Other Expense</option>
+        <option value="Hand Cash">Hand Cash</option>
+    </select>
 
-        <label>Amount</label>
-
-        <input
-            id="transactionAmount"
-            type="number"
-            inputmode="decimal"
-            placeholder="Enter amount"
-            min="0"
-            step="0.01"
-        >
-
-        <label>Category</label>
-
-        <select id="transactionCategory">
-
-            <option value="General Income">General Income</option>
-
-            <option value="Salary">Salary</option>
-
-            <option value="Business">Business</option>
-
-            <option value="Food">Food</option>
-
-            <option value="Travel">Travel</option>
-
-            <option value="Shopping">Shopping</option>
-
-            <option value="Bills">Bills</option>
-
-            <option value="Education">Education</option>
-
-            <option value="Medical">Medical</option>
-
-            <option value="Other Expense">Other Expense</option>
-
-        </select>
-
-        <label>Description</label>
-
-        <input
-            id="transactionDescription"
-            type="text"
-            placeholder="Description"
-        >
-
-        <button class="btn primary" onclick="saveTransaction()">
-            Save Transaction
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- RECEIVE MONEY -->
-<section id="receivePage" class="page">
-
-    <button class="btn back" onclick="safeShowPage('homePage')">
-        ← Back
+    <button onclick="saveTransaction()" style="width:100%">
+        Save Transaction
     </button>
 
-    <div class="section-title">Receive Money</div>
-
-    <div class="qr-box">
-
-        <div>
-            UPI ID
-        </div>
-
-        <strong id="upiDisplay">xyzts@ptyes</strong>
-
-        <div id="qrcode"></div>
-
-        <button class="btn green" onclick="copyUPI()">
-            📋 Copy UPI ID
-        </button>
-
-        <button class="btn primary" onclick="openReceiveAmount()">
-            + Record Received Money
-        </button>
-
-    </div>
-
-    <div class="note">
-        QR ద్వారా money receive అయినప్పుడు bank confirmation appకి
-        automatically రావాలంటే actual UPI/bank integration అవసరం.
-        ఇక్కడ received amount manually record చేయవచ్చు.
-    </div>
-
-</section>
-
-
-<!-- SCAN QR -->
-<section id="scanPage" class="page">
-
-    <button class="btn back" onclick="stopScannerAndBack()">
-        ← Back
-    </button>
-
-    <div class="section-title">Scan Shop QR</div>
-
-    <div class="form-box">
-
-        <div id="reader"></div>
-
-        <div id="scanResult" class="note" style="display:none;"></div>
-
-        <button
-            id="startScanButton"
-            class="btn blue"
-            onclick="startScanner()"
-        >
-            📷 Start QR Scanner
-        </button>
-
-        <button
-            class="btn gray"
-            onclick="stopScanner()"
-        >
-            Stop Scanner
-        </button>
-
-    </div>
-
-</section>
+</div>
 
 
 <!-- HAND CASH -->
-<section id="cashPage" class="page">
+<div id="cashPage" class="page">
 
-    <button class="btn back" onclick="safeShowPage('homePage')">
+    <button class="back" onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <div class="section-title">Hand Cash</div>
+    <h2>💵 Hand Cash</h2>
 
-    <div class="form-box">
+    <input id="cashAmount"
+           type="number"
+           placeholder="Enter amount">
 
-        <label>Type</label>
+    <input id="cashDescription"
+           type="text"
+           placeholder="Description">
 
-        <select id="cashType">
-            <option value="income">Cash Received</option>
-            <option value="expense">Cash Expense</option>
-        </select>
+    <button onclick="saveCash()" style="width:100%">
+        Save Hand Cash
+    </button>
 
-        <label>Amount</label>
+</div>
 
-        <input
-            id="cashAmount"
-            type="number"
-            inputmode="decimal"
-            placeholder="Enter cash amount"
-            min="0"
-            step="0.01"
-        >
 
-        <label>Description</label>
+<!-- RECEIVE -->
+<div id="receivePage" class="page">
 
-        <input
-            id="cashDescription"
-            type="text"
-            placeholder="Example: House expense"
-        >
+    <button class="back" onclick="showPage('homePage')">
+        ← Back
+    </button>
 
-        <button class="btn green" onclick="saveCashTransaction()">
-            Save Hand Cash
-        </button>
+    <h2>📥 Receive Money</h2>
 
-    </div>
+    <input id="receiveAmount"
+           type="number"
+           placeholder="Received amount">
 
-</section>
+    <input id="receiveDescription"
+           type="text"
+           placeholder="From / Description">
+
+    <button onclick="saveReceived()" style="width:100%">
+        Save Received Money
+    </button>
+
+</div>
 
 
 <!-- PAYMENTS -->
-<section id="paymentsPage" class="page">
+<div id="paymentsPage" class="page">
 
-    <button class="btn back" onclick="safeShowPage('homePage')">
+    <button class="back" onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <div class="section-title">Payments</div>
-
-    <div class="summary-box">
-        <h3>Total Payments</h3>
-        <div class="amount expense" id="paymentsTotal">
-            ₹0.00
-        </div>
-    </div>
-
-    <div style="height:12px;"></div>
+    <h2>💳 Payments</h2>
 
     <div id="paymentsList"></div>
 
-</section>
+</div>
+
+
+<!-- SCAN -->
+<div id="scanPage" class="page">
+
+    <button class="back" onclick="showPage('homePage')">
+        ← Back
+    </button>
+
+    <h2>📷 Scan Shop QR</h2>
+
+    <p style="margin:15px 0">
+        QR scanner will open when supported by your browser.
+    </p>
+
+    <button onclick="startQR()" style="width:100%">
+        Start QR Scan
+    </button>
+
+    <div id="qrResult"
+         style="margin-top:15px">
+    </div>
+
+</div>
 
 
 <!-- HISTORY -->
-<section id="historyPage" class="page">
+<div id="historyPage" class="page">
 
-    <button class="btn back" onclick="safeShowPage('homePage')">
+    <button class="back" onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <div class="section-title">History</div>
-
-    <div class="filter-row">
-
-        <button
-            class="filter-btn active"
-            id="filterToday"
-            onclick="setHistoryFilter('today')"
-        >
-            Today
-        </button>
-
-        <button
-            class="filter-btn"
-            id="filterMonth"
-            onclick="setHistoryFilter('month')"
-        >
-            This Month
-        </button>
-
-        <button
-            class="filter-btn"
-            id="filterYear"
-            onclick="setHistoryFilter('year')"
-        >
-            This Year
-        </button>
-
-        <button
-            class="filter-btn"
-            id="filterAll"
-            onclick="setHistoryFilter('all')"
-        >
-            All
-        </button>
-
-    </div>
+    <h2>📜 Transaction History</h2>
 
     <div id="historyList"></div>
 
-</section>
+</div>
 
 
 <!-- REPORTS -->
-<section id="reportsPage" class="page">
+<div id="reportsPage" class="page">
 
-    <button class="btn back" onclick="safeShowPage('homePage')">
+    <button class="back" onclick="showPage('homePage')">
         ← Back
     </button>
 
-    <div class="section-title">Reports</div>
+    <h2>📊 Reports</h2>
 
-    <div class="report-box">
-
-        <div class="report-row">
-            <span>Today Income</span>
-            <strong class="income" id="reportTodayIncome">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Today Payments</span>
-            <strong class="expense" id="reportTodayPayments">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Today Other Expenses</span>
-            <strong class="expense" id="reportTodayOther">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>This Month Income</span>
-            <strong class="income" id="reportMonthIncome">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>This Month Payments</span>
-            <strong class="expense" id="reportMonthPayments">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>This Year Income</span>
-            <strong class="income" id="reportYearIncome">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>This Year Payments</span>
-            <strong class="expense" id="reportYearPayments">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Overall Income</span>
-            <strong class="income" id="reportOverallIncome">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Overall Payments</span>
-            <strong class="expense" id="reportOverallPayments">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Overall Other Expenses</span>
-            <strong class="expense" id="reportOverallOther">₹0.00</strong>
-        </div>
-
-        <div class="report-row">
-            <span>Current Balance</span>
-            <strong id="reportBalance">₹0.00</strong>
-        </div>
-
+    <div class="report">
+        <b>Today</b>
+        <div id="todayReport"></div>
     </div>
 
-</section>
+    <div class="report">
+        <b>This Month</b>
+        <div id="monthReport"></div>
+    </div>
 
+    <div class="report">
+        <b>This Year</b>
+        <div id="yearReport"></div>
+    </div>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
+    <div class="report">
+        <b>Overall</b>
+        <div id="overallReport"></div>
+    </div>
 
-    <button
-        id="navHome"
-        class="active"
-        onclick="safeShowPage('homePage')"
-    >
-        <span>🏠</span>
-        Home
-    </button>
+</div>
 
-    <button
-        id="navHistory"
-        onclick="safeShowPage('historyPage')"
-    >
-        <span>📜</span>
-        History
-    </button>
-
-    <button
-        id="navReports"
-        onclick="safeShowPage('reportsPage')"
-    >
-        <span>📊</span>
-        Reports
-    </button>
-
-</nav>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
+</div>
 
 
 <script>
 
-/* =========================================================
-   MY MONEY
-   SAFE DATA + BUTTON SYSTEM
-   ========================================================= */
+/* ================================
+   SAFE STORAGE
+================================ */
 
 const STORAGE_KEY = "myMoneyTransactions";
 
-const MY_UPI_ID = "xyzts@ptyes";
-
 let transactions = [];
 
-let historyFilter = "today";
 
-let html5QrCode = null;
-
-let scannerRunning = false;
-
-
-/* =========================================================
-   BASIC HELPERS
-   ========================================================= */
-
-function money(value){
-
-    const number = Number(value) || 0;
-
-    return "₹" + number.toLocaleString("en-IN",{
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-    });
-}
-
-
-function makeId(){
-
-    return Date.now().toString() +
-           Math.random().toString(36).substring(2,8);
-
-}
-
-
-function safeDate(value){
-
-    if(!value){
-
-        return null;
-
-    }
-
-    const d = new Date(value);
-
-    if(isNaN(d.getTime())){
-
-        return null;
-
-    }
-
-    return d;
-
-}
-
-
-/* =========================================================
-   OLD DATA COMPATIBILITY
-   ========================================================= */
-
-function normalizeTransaction(old){
-
-    if(!old || typeof old !== "object"){
-
-        return null;
-
-    }
-
-    let type =
-        String(old.type || "").toLowerCase() === "income"
-        ? "income"
-        : "expense";
-
-
-    let amount = Number(old.amount);
-
-    if(!Number.isFinite(amount)){
-
-        amount = 0;
-
-    }
-
-
-    let timestamp = old.timestamp || null;
-
-
-    if(!timestamp && old.date){
-
-        const legacyDate = safeDate(old.date);
-
-        if(legacyDate){
-
-            timestamp = legacyDate.toISOString();
-
-        }
-
-    }
-
-
-    if(!timestamp && old.createdAt){
-
-        const created = safeDate(old.createdAt);
-
-        if(created){
-
-            timestamp = created.toISOString();
-
-        }
-
-    }
-
-
-    if(!timestamp){
-
-        timestamp = new Date().toISOString();
-
-    }
-
-
-    let category = old.category;
-
-
-    if(!category){
-
-        if(type === "income"){
-
-            category = "General Income";
-
-        }else{
-
-            category = "Other Expense";
-
-        }
-
-    }
-
-
-    let method = old.method || "Manual";
-
-    let status = old.status || "Recorded";
-
-
-    let description =
-        old.description ||
-        old.note ||
-        old.title ||
-        category;
-
-
-    return {
-
-        id: old.id || makeId(),
-
-        type: type,
-
-        amount: amount,
-
-        category: category,
-
-        method: method,
-
-        description: description,
-
-        status: status,
-
-        timestamp: timestamp
-
-    };
-
-}
-
-
-/* =========================================================
-   LOAD DATA WITHOUT DELETING OLD DATA
-   ========================================================= */
+/* ================================
+   LOAD OLD DATA
+================================ */
 
 function loadTransactions(){
 
     try{
 
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
-        if(!raw){
+        if(saved){
 
-            transactions = [];
+            const parsed = JSON.parse(saved);
 
-            return;
-
-        }
-
-
-        const parsed = JSON.parse(raw);
-
-
-        if(!Array.isArray(parsed)){
-
-            transactions = [];
-
-            return;
+            if(Array.isArray(parsed)){
+                transactions = parsed;
+            }
 
         }
 
+    }catch(error){
 
-        transactions = parsed
-
-            .map(normalizeTransaction)
-
-            .filter(Boolean);
-
-
-        /*
-          IMPORTANT:
-          Old data is normalized and saved back.
-          It is NOT deleted.
-        */
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(transactions)
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "My Money data load error:",
-            error
-        );
-
-        /*
-          Do NOT erase localStorage here.
-          This protects existing data.
-        */
+        console.log("Data read error:",error);
 
         transactions = [];
 
@@ -1045,11 +430,11 @@ function loadTransactions(){
 }
 
 
-/* =========================================================
+/* ================================
    SAVE DATA
-   ========================================================= */
+================================ */
 
-function saveTransactions(){
+function saveData(){
 
     try{
 
@@ -1058,47 +443,789 @@ function saveTransactions(){
             JSON.stringify(transactions)
         );
 
-        return true;
+    }catch(error){
 
-    }
-    catch(error){
-
-        console.error(
-            "Save error:",
-            error
-        );
-
-        alert(
-            "Data save కాలేదు. Browser storage issue."
-        );
-
-        return false;
+        alert("Data save failed");
 
     }
 
 }
 
 
-/* =========================================================
-   ADD TRANSACTION
-   ========================================================= */
+/* ================================
+   PAGE NAVIGATION
+================================ */
 
-function addTransaction(data){
+function showPage(pageId){
 
-    const amount = Number(data.amount);
+    document
+        .querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+    const page =
+        document.getElementById(pageId);
+
+    if(page){
+
+        page.classList.add("active");
+
+    }
+
+    updateUI();
+
+}
 
 
-    if(!Number.isFinite(amount) || amount <= 0){
+/* ================================
+   DATE / TIME
+================================ */
 
-        alert("Please enter a valid amount.");
+function getDateTime(){
 
-        return false;
+    const now = new Date();
+
+    return {
+        timestamp: now.getTime(),
+        date: now.toLocaleDateString("en-IN"),
+        time: now.toLocaleTimeString("en-IN"),
+        day: now.toLocaleDateString(
+            "en-IN",
+            {weekday:"long"}
+        ),
+        month: now.toLocaleDateString(
+            "en-IN",
+            {month:"long"}
+        ),
+        year: now.getFullYear()
+    };
+
+}
+
+
+/* ================================
+   ADD INCOME
+================================ */
+
+function saveTransaction(){
+
+    const amount =
+        Number(
+            document.getElementById("amount").value
+        );
+
+    const description =
+        document.getElementById("description").value
+        .trim();
+
+    const category =
+        document.getElementById("category").value;
+
+
+    if(!amount || amount <= 0){
+
+        alert("Please enter amount");
+
+        return;
 
     }
 
 
+    const dt = getDateTime();
+
+
     const transaction = {
 
-        id: makeId(),
+        id: Date.now(),
 
-        type
+        type:
+            category === "Income"
+            ? "income"
+            : "expense",
+
+        category: category,
+
+        amount: amount,
+
+        description:
+            description || category,
+
+        date: dt.date,
+
+        time: dt.time,
+
+        day: dt.day,
+
+        month: dt.month,
+
+        year: dt.year,
+
+        timestamp: dt.timestamp
+
+    };
+
+
+    transactions.push(transaction);
+
+    saveData();
+
+    document.getElementById("amount").value = "";
+
+    document.getElementById("description").value = "";
+
+    showPage("homePage");
+
+}
+
+
+/* ================================
+   EXPENSE
+================================ */
+
+function openExpense(){
+
+    showPage("addPage");
+
+    document.getElementById(
+        "transactionTitle"
+    ).innerText = "Add Expense";
+
+    document.getElementById(
+        "category"
+    ).value = "Other Expense";
+
+}
+
+
+/* ================================
+   HAND CASH
+================================ */
+
+function saveCash(){
+
+    const amount =
+        Number(
+            document.getElementById("cashAmount").value
+        );
+
+    const description =
+        document.getElementById(
+            "cashDescription"
+        ).value.trim();
+
+
+    if(!amount || amount <= 0){
+
+        alert("Please enter amount");
+
+        return;
+
+    }
+
+
+    const dt = getDateTime();
+
+
+    transactions.push({
+
+        id: Date.now(),
+
+        type:"expense",
+
+        category:"Hand Cash",
+
+        amount:amount,
+
+        description:
+            description || "Hand Cash",
+
+        date:dt.date,
+
+        time:dt.time,
+
+        day:dt.day,
+
+        month:dt.month,
+
+        year:dt.year,
+
+        timestamp:dt.timestamp
+
+    });
+
+
+    saveData();
+
+    document.getElementById(
+        "cashAmount"
+    ).value = "";
+
+    document.getElementById(
+        "cashDescription"
+    ).value = "";
+
+    showPage("homePage");
+
+}
+
+
+/* ================================
+   RECEIVE MONEY
+================================ */
+
+function saveReceived(){
+
+    const amount =
+        Number(
+            document.getElementById(
+                "receiveAmount"
+            ).value
+        );
+
+    const description =
+        document.getElementById(
+            "receiveDescription"
+        ).value.trim();
+
+
+    if(!amount || amount <= 0){
+
+        alert("Please enter amount");
+
+        return;
+
+    }
+
+
+    const dt = getDateTime();
+
+
+    transactions.push({
+
+        id:Date.now(),
+
+        type:"income",
+
+        category:"Received Money",
+
+        amount:amount,
+
+        description:
+            description || "Received Money",
+
+        date:dt.date,
+
+        time:dt.time,
+
+        day:dt.day,
+
+        month:dt.month,
+
+        year:dt.year,
+
+        timestamp:dt.timestamp
+
+    });
+
+
+    saveData();
+
+
+    document.getElementById(
+        "receiveAmount"
+    ).value = "";
+
+    document.getElementById(
+        "receiveDescription"
+    ).value = "";
+
+
+    showPage("homePage");
+
+}
+
+
+/* ================================
+   PAYMENT
+================================ */
+
+function addPayment(amount, description, upi){
+
+    const dt = getDateTime();
+
+
+    transactions.push({
+
+        id:Date.now(),
+
+        type:"expense",
+
+        category:"Payments",
+
+        amount:Number(amount),
+
+        description:
+            description || "UPI Payment",
+
+        upi:upi || "",
+
+        date:dt.date,
+
+        time:dt.time,
+
+        day:dt.day,
+
+        month:dt.month,
+
+        year:dt.year,
+
+        timestamp:dt.timestamp
+
+    });
+
+
+    saveData();
+
+    updateUI();
+
+}
+
+
+/* ================================
+   QR
+================================ */
+
+function startQR(){
+
+    const result =
+        document.getElementById("qrResult");
+
+    result.innerHTML =
+        "<p>QR scanner ready.</p>" +
+        "<p>Camera permission is required.</p>";
+
+}
+
+
+/* ================================
+   DISPLAY HISTORY
+================================ */
+
+function updateHistory(){
+
+    const box =
+        document.getElementById("historyList");
+
+    if(!box) return;
+
+
+    if(transactions.length === 0){
+
+        box.innerHTML =
+            '<div class="empty">No transactions yet</div>';
+
+        return;
+
+    }
+
+
+    const sorted =
+        [...transactions].sort(
+            (a,b)=>
+                (b.timestamp || 0) -
+                (a.timestamp || 0)
+        );
+
+
+    box.innerHTML =
+        sorted.map(t=>{
+
+            const sign =
+                t.type === "income"
+                ? "+"
+                : "-";
+
+            const cls =
+                t.type === "income"
+                ? "income"
+                : "expense";
+
+
+            return `
+                <div class="transaction">
+
+                    <div class="top">
+
+                        <span>
+                            ${escapeHTML(
+                                t.category || "Transaction"
+                            )}
+                        </span>
+
+                        <span class="${cls}">
+                            ${sign} ₹${Number(
+                                t.amount || 0
+                            ).toFixed(2)}
+                        </span>
+
+                    </div>
+
+                    <div>
+                        ${escapeHTML(
+                            t.description || ""
+                        )}
+                    </div>
+
+                    <div class="small">
+                        ${escapeHTML(t.date || "")}
+                        ·
+                        ${escapeHTML(t.time || "")}
+                        ·
+                        ${escapeHTML(t.day || "")}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* ================================
+   PAYMENTS LIST
+================================ */
+
+function updatePayments(){
+
+    const box =
+        document.getElementById(
+            "paymentsList"
+        );
+
+    if(!box) return;
+
+
+    const payments =
+        transactions
+        .filter(t =>
+            t.category === "Payments"
+        )
+        .sort(
+            (a,b)=>
+                (b.timestamp || 0) -
+                (a.timestamp || 0)
+        );
+
+
+    if(payments.length === 0){
+
+        box.innerHTML =
+            '<div class="empty">No Payments</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+        payments.map(t=>`
+
+            <div class="transaction">
+
+                <div class="top">
+
+                    <span>
+                        ${escapeHTML(
+                            t.description ||
+                            "Payment"
+                        )}
+                    </span>
+
+                    <span class="expense">
+                        - ₹${Number(
+                            t.amount || 0
+                        ).toFixed(2)}
+                    </span>
+
+                </div>
+
+                <div class="small">
+                    ${escapeHTML(t.date || "")}
+                    ·
+                    ${escapeHTML(t.time || "")}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* ================================
+   REPORTS
+================================ */
+
+function calculate(list){
+
+    let income = 0;
+
+    let payments = 0;
+
+    let other = 0;
+
+
+    list.forEach(t=>{
+
+        const amount =
+            Number(t.amount || 0);
+
+
+        if(t.type === "income"){
+
+            income += amount;
+
+        }else{
+
+            if(t.category === "Payments"){
+
+                payments += amount;
+
+            }else{
+
+                other += amount;
+
+            }
+
+        }
+
+    });
+
+
+    return {
+
+        income,
+
+        payments,
+
+        other,
+
+        balance:
+            income - payments - other
+
+    };
+
+}
+
+
+function updateReports(){
+
+    const now = new Date();
+
+    const today =
+        now.toLocaleDateString("en-IN");
+
+    const month =
+        now.getMonth();
+
+    const year =
+        now.getFullYear();
+
+
+    const todayList =
+        transactions.filter(
+            t=>t.date === today
+        );
+
+
+    const monthList =
+        transactions.filter(t=>{
+
+            const d =
+                new Date(
+                    t.timestamp || 0
+                );
+
+            return d.getMonth() === month &&
+                   d.getFullYear() === year;
+
+        });
+
+
+    const yearList =
+        transactions.filter(t=>{
+
+            const d =
+                new Date(
+                    t.timestamp || 0
+                );
+
+            return d.getFullYear() === year;
+
+        });
+
+
+    const overall =
+        calculate(transactions);
+
+    const todayData =
+        calculate(todayList);
+
+    const monthData =
+        calculate(monthList);
+
+    const yearData =
+        calculate(yearList);
+
+
+    document.getElementById(
+        "todayReport"
+    ).innerHTML =
+        reportHTML(todayData);
+
+
+    document.getElementById(
+        "monthReport"
+    ).innerHTML =
+        reportHTML(monthData);
+
+
+    document.getElementById(
+        "yearReport"
+    ).innerHTML =
+        reportHTML(yearData);
+
+
+    document.getElementById(
+        "overallReport"
+    ).innerHTML =
+        reportHTML(overall);
+
+}
+
+
+function reportHTML(data){
+
+    return `
+        Income: ₹${data.income.toFixed(2)}<br>
+        Payments: ₹${data.payments.toFixed(2)}<br>
+        Other Expenses: ₹${data.other.toFixed(2)}<br>
+        <b>Balance: ₹${data.balance.toFixed(2)}</b>
+    `;
+
+}
+
+
+/* ================================
+   HOME TOTALS
+================================ */
+
+function updateHome(){
+
+    let income = 0;
+
+    let expense = 0;
+
+    let payments = 0;
+
+
+    transactions.forEach(t=>{
+
+        const amount =
+            Number(t.amount || 0);
+
+
+        if(t.type === "income"){
+
+            income += amount;
+
+        }else{
+
+            expense += amount;
+
+            if(t.category === "Payments"){
+
+                payments += amount;
+
+            }
+
+        }
+
+    });
+
+
+    const balance =
+        income - expense;
+
+
+    document.getElementById(
+        "incomeAmount"
+    ).innerText =
+        "₹" + income.toFixed(2);
+
+
+    document.getElementById(
+        "paymentAmount"
+    ).innerText =
+        "₹" + payments.toFixed(2);
+
+
+    document.getElementById(
+        "balanceAmount"
+    ).innerText =
+        "₹" + balance.toFixed(2);
+
+}
+
+
+/* ================================
+   UI
+================================ */
+
+function updateUI(){
+
+    updateHome();
+
+    updateHistory();
+
+    updatePayments();
+
+    updateReports();
+
+}
+
+
+/* ================================
+   SECURITY
+================================ */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* ================================
+   START
+================================ */
+
+loadTransactions();
+
+updateUI();
+
+
+/* ================================
+   SERVICE WORKER
+================================ */
+
+if(
+    "serviceWorker
+    
